@@ -75,6 +75,7 @@
             android:id="@+id/tous"
             android:layout_weight="1"
             android:background="#5769f0"
+            android:textColor="#FFFFFFFF"
             android:allowUndo="true" />
     </LinearLayout>
 </RelativeLayout>

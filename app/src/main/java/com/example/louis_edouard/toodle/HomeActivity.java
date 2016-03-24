@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class AccuilActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     ListView lv;
     public final int n = 30; // ca devrait etre egale la taille reelle de l'evenements
     Button btnCours,btnMess,btnCalend,btnTous;
@@ -23,7 +23,7 @@ public class AccuilActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_accuil);
+        setContentView(R.layout.activity_home);
 
         lv = (ListView)findViewById(R.id.listv);
 

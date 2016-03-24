@@ -7,14 +7,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.louis_edouard.toodle.AccuilActivity">
+    tools:context="com.example.louis_edouard.toodle.AccuilActivity"
+    android:background="#f4acac">
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listv"
+        android:id="@+id/listViewHome"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/linearLayout" />
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginBottom="5dp"
+        android:longClickable="false"
+        android:background="#ffffff" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -29,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="Cours"
-            android:id="@+id/cours"
+            android:id="@+id/btnCoursHome"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -41,8 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="Calendrier"
-            android:id="@+id/calendrier"
-            android:layout_alignBottom="@+id/cours"
+            android:id="@+id/btnCalendHome"
+            android:layout_alignBottom="@+id/btnCoursHome"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_weight="1"
@@ -63,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="Messagerie"
-            android:id="@+id/messagerie"
+            android:id="@+id/btnMessHome"
             android:layout_weight="1"
             android:background="#5769f0"
             android:textColor="#FFFFFFFF" />
@@ -72,10 +76,11 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="Tousb"
-            android:id="@+id/tous"
+            android:id="@+id/btnTousHome"
             android:layout_weight="1"
             android:background="#5769f0"
             android:textColor="#FFFFFFFF"
             android:allowUndo="true" />
     </LinearLayout>
+
 </RelativeLayout>

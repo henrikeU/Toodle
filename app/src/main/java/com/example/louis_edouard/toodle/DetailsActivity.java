@@ -6,18 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class DetailsActivity extends AppCompatActivity {
-    TextView name;
+    TextView home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        name = (TextView)findViewById(R.id.name);
+        home = (TextView)findViewById(R.id.home);
 
         Intent intent = getIntent();
 
-        String s =intent.getStringExtra("name");
+        String s =intent.getStringExtra("home");
 
-        name.setText(s);
+        home.setText(s);
     }
 }

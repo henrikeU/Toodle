@@ -13,50 +13,72 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    ListView lv;
-    public final int n = 30; // ca devrait etre egale la taille reelle de l'evenements
-    Button btnCours,btnMess,btnCalend,btnTous;
+    ListView listViewHome;
+    Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     //pour remplir le listView on utilise un adaptor
-    LVAdapter adapter;
-    public String[] donne = {"Matiar","Rania", "Ronna","Arian", "Iris" };
+    HomeAdapter adapter;
+    private String[] donne = {"Cours IFT2905 dans 10 mins",
+            "Examen Intra de IFT1025 dans une semaine",
+            "La date limite pour abandonner avec frais dans 2 semaines",
+            "Cours IFT2905 dans 10 mins",
+            "Examen Intra de IFT1025 dans une semaine",
+            "La date limite pour abandonner avec frais dans 2 semaines",
+            "Cours IFT2905 dans 10 mins",
+            "Examen Intra de IFT1025 dans une semaine",
+            "La date limite pour abandonner avec frais dans 2 semaines",
+            "Cours IFT2905 dans 10 mins",
+            "Examen Intra de IFT1025 dans une semaine",
+            "La date limite pour abandonner avec frais dans 2 semaines",
+            "Cours IFT2905 dans 10 mins",
+            "Examen Intra de IFT1025 dans une semaine",
+            "La date limite pour abandonner avec frais dans 2 semaines"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        lv = (ListView)findViewById(R.id.listv);
+        listViewHome = (ListView)findViewById(R.id.listViewHome);
 
-        btnCours = (Button)findViewById(R.id.cours);
-        btnMess = (Button)findViewById(R.id.messagerie);
-        btnCalend = (Button)findViewById(R.id.calendrier);
-        btnTous = (Button)findViewById(R.id.tous);
-        btnCours.setOnClickListener(this);
-        btnMess.setOnClickListener(this);
-        btnCalend.setOnClickListener(this);
-        btnTous.setOnClickListener(this);
+        btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
+        btnMessHome = (Button)findViewById(R.id.btnMessHome);
+        btnCalendHome = (Button)findViewById(R.id.btnCalendHome);
+        btnTousHome = (Button)findViewById(R.id.btnTousHome);
+        btnCoursHome.setOnClickListener(this);
+        btnMessHome.setOnClickListener(this);
+        btnCalendHome.setOnClickListener(this);
+        btnTousHome.setOnClickListener(this);
 
-        adapter = new LVAdapter();
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(this);
+        adapter = new HomeAdapter();
+        listViewHome.setAdapter(adapter);
+
+        listViewHome.setOnItemClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent;
 
         switch (v.getId()) {
-            case R.id.cours:
-                intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+            case R.id.btnCoursHome:
+                intent = new Intent(this,CoursActivity.class);
+                startActivity(intent);
+                //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
-            case R.id.calendrier:
-                intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+            case R.id.btnCalendHome:
+//                intent = new Intent(this,CalenderActivity.class);
+//                startActivity(intent);
+                //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
-            case R.id.messagerie:
-                intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+            case R.id.btnMessHome:
+                //intent = new Intent(this,MessageActivity.class);
+                //startActivity(intent);
+                // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
-            case R.id.tous:
-                intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+            case R.id.btnTousHome:
+                //intent = new Intent(this,AllActivity.class);
+                //startActivity(intent);
+                // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
         }
     }
@@ -77,21 +99,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,DetailsActivity.class);
-        String name = donne[position];
-        intent.putExtra("name",name);
+        String home = donne[position];
+        intent.putExtra("home",home);
         startActivity(intent);
     }
 
 
-    private class LVAdapter extends BaseAdapter {
-        LayoutInflater lf;
-        public LVAdapter() {
-            lf= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+    private class HomeAdapter extends BaseAdapter {
+        LayoutInflater inflaterHome;
+        public HomeAdapter() {
+
+            inflaterHome= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
         public int getCount() {
-            return donne.length;//la propriete final n = 30
+            return donne.length;
         }
 
         @Override
@@ -106,14 +129,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if(v==null){
-                v=lf.inflate(android.R.layout.simple_list_item_1,parent,false);
+            View vHome = convertView;
+            if(vHome==null){
+                vHome=inflaterHome.inflate(android.R.layout.simple_list_item_1,parent,false);
             }
 
-            TextView text = (TextView)v.findViewById(android.R.id.text1);
+            TextView text = (TextView)vHome.findViewById(android.R.id.text1);
             text.setText(donne[position]);
-            return v;
+            return vHome;
         }
     }
 }

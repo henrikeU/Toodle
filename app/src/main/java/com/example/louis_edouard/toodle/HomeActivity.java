@@ -16,7 +16,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     //pour remplir le listView on utilise un adaptor
-    HomeAdapter adapter;
+    HomeAdapter homeAdapter;
     private String[] donne = {"Cours IFT2905 dans 10 mins",
             "Examen Intra de IFT1025 dans une semaine",
             "La date limite pour abandonner avec frais dans 2 semaines",
@@ -49,10 +49,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         btnCalendHome.setOnClickListener(this);
         btnTousHome.setOnClickListener(this);
 
-        adapter = new HomeAdapter();
-        listViewHome.setAdapter(adapter);
+        homeAdapter = new HomeAdapter();
+        listViewHome.setAdapter(homeAdapter);
 
         listViewHome.setOnItemClickListener(this);
+        setTitle("Matiar Erfanian");
     }
 
     @Override

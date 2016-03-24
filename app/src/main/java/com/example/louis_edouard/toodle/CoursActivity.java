@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class CoursActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     TextView txtNotifCours;
     ListView listViewCours;
-    CoursAdapter adapter;
+    CoursAdapter coursAdapter;
 
     private String[] donne = {"IFT2905 Interface person-machine",
             "IFT1025 Programmation 2",
@@ -47,8 +47,8 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         txtNotifCours = (TextView)findViewById(R.id.txtNotifCours);
         listViewCours = (ListView)findViewById(R.id.listViewCours);
 
-        adapter = new CoursAdapter();
-        listViewCours.setAdapter(adapter);
+        coursAdapter = new CoursAdapter();
+        listViewCours.setAdapter(coursAdapter);
 
         listViewCours.setOnItemClickListener(this);
         listViewCours.setOnItemLongClickListener(this);
@@ -69,9 +69,9 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this,DetailsActivity.class);
+        Intent intent = new Intent(this,CoursContentActivity.class);
         String cours = donne[position];
-        intent.putExtra("cours",cours);
+        intent.putExtra("coursTitle",cours);
         startActivity(intent);
     }
 
@@ -97,6 +97,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         LayoutInflater inflaterCours;
         public CoursAdapter() {
             inflaterCours= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+            setTitle("Cours");
         }
 
         /**

@@ -7,14 +7,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.louis_edouard.toodle.CoursActivity">
+    tools:context="com.example.louis_edouard.toodle.CoursActivity"
+    android:background="#ffffff">
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewCours"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/txtNotifCours" />
+        android:layout_below="@+id/txtNotifCours"
+        android:dividerHeight="5sp"
+        android:drawSelectorOnTop="true"
+        android:longClickable="true"
+        android:nestedScrollingEnabled="true"
+        android:headerDividersEnabled="false"
+        android:background="#f5f5f5"
+        android:divider="#ffffff" />
 
     <TextView
         android:layout_width="match_parent"

@@ -21,7 +21,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".DetailsActivity" />
-        <activity android:name=".CoursActivity"></activity>
+        <activity android:name=".CoursActivity" />
+        <activity android:name=".CoursContentActivity"></activity>
     </application>
 
 </manifest>

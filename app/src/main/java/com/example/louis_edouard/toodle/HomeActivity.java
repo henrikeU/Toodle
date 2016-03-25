@@ -38,6 +38,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("USER_NAME");
+
         listViewHome = (ListView)findViewById(R.id.listViewHome);
 
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
@@ -53,7 +56,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         listViewHome.setAdapter(homeAdapter);
 
         listViewHome.setOnItemClickListener(this);
-        setTitle("Matiar Erfanian");
+        setTitle(name);
     }
 
     @Override

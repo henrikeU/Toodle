@@ -2,13 +2,12 @@ package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
@@ -47,9 +46,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(UserProfile userProfile) {
             super.onPostExecute(userProfile);
 
-            if(userProfile.username == null)
+            if(userProfile.username == null) {
                 txtErrorMsg.setVisibility(View.VISIBLE);
-            else {
+
+            }else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 intent.putExtra("USER_TOKEN", userKey);

@@ -1,37 +1,33 @@
 package com.example.louis_edouard.toodle;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CoursContentFragment.OnFragmentInteractionListener} interface
+ * {@link CoursForumFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CoursContentFragment#newInstance} factory method to
+ * Use the {@link CoursForumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CoursContentFragment extends Fragment {
+public class CoursForumFragment extends Fragment {
+    ListView lsvForum;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //****Pour mettre le text_fragment sur chaque fragmenet suivi de ce qu'on a fait sur MainActivity from here to "return"
-        View v = inflater.inflate(R.layout.fragment_cours_content,container,false);
-        TextView text = (TextView)v.findViewById(R.id.txt_frag_cours_content);
-        Bundle args = getArguments();
-        int fragmentid = args.getInt("ID");
-        text.setText("Fragment "+ fragmentid);
-        return  v;
-    }
+        View v = inflater.inflate(R.layout.fragment_cours_forum, container, false);
+        //TODO: filling the list view of forum
+        lsvForum = (ListView)v.findViewById(R.id.lsv_frag_cours_forum);
 
+        return v;
+    }
 
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +40,7 @@ public class CoursContentFragment extends Fragment {
 //
 //    private OnFragmentInteractionListener mListener;
 //
-//    public CoursContentFragment() {
+//    public CoursForumFragment() {
 //        // Required empty public constructor
 //    }
 //
@@ -54,11 +50,11 @@ public class CoursContentFragment extends Fragment {
 //     *
 //     * @param param1 Parameter 1.
 //     * @param param2 Parameter 2.
-//     * @return A new instance of fragment CoursContentFragment.
+//     * @return A new instance of fragment CoursForumFragment.
 //     */
 //    // TODO: Rename and change types and number of parameters
-//    public static CoursContentFragment newInstance(String param1, String param2) {
-//        CoursContentFragment fragment = new CoursContentFragment();
+//    public static CoursForumFragment newInstance(String param1, String param2) {
+//        CoursForumFragment fragment = new CoursForumFragment();
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
 //        args.putString(ARG_PARAM2, param2);
@@ -79,7 +75,7 @@ public class CoursContentFragment extends Fragment {
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container,
 //                             Bundle savedInstanceState) {
 //        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_cours_content, container, false);
+//        return inflater.inflate(R.layout.fragment_cours_forum, container, false);
 //    }
 //
 //    // TODO: Rename method, update argument and hook method into UI event
@@ -111,7 +107,7 @@ public class CoursContentFragment extends Fragment {
 //     * fragment to allow an interaction in this fragment to be communicated
 //     * to the activity and potentially other fragments contained in that
 //     * activity.
-//     * <p>
+//     * <p/>
 //     * See the Android Training lesson <a href=
 //     * "http://developer.android.com/training/basics/fragments/communicating.html"
 //     * >Communicating with Other Fragments</a> for more information.

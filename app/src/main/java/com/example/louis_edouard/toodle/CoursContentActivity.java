@@ -43,11 +43,18 @@ public class CoursContentActivity extends AppCompatActivity {
          */
         @Override
         public Fragment getItem(int position) {
-            CoursContentFragment coursContentFragment = new CoursContentFragment();
+            CoursFichFragment fich = new CoursFichFragment();
+            CoursContenuFragment contenu = new CoursContenuFragment();
+            CoursForumFragment forum = new CoursForumFragment();
             Bundle args = new Bundle();
-            args.putInt("ID", position);
-            coursContentFragment.setArguments(args);
-            return coursContentFragment;
+            if(position==0) {
+                return fich;
+            }else if(position ==1){
+                return contenu;
+            }else if(position ==2){
+                return  forum;
+            }
+            return null;
         }
 
         /**

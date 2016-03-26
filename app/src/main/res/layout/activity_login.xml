@@ -7,38 +7,37 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.louis_edouard.toodle.LoginActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Se connecter"
-        android:id="@+id/btn_CreateProfil"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:clickable="true"
-        android:textColor="#ffffffff"
-        android:background="#0070FF" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_UserKey"
         android:layout_above="@+id/btn_CreateProfil"
         android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:hint="Entrée votre clé"
+        android:hint="@string/txt_user_token_hint"
         android:padding="5dp"
         android:singleLine="true"
-        android:selectAllOnFocus="true" />
+        android:selectAllOnFocus="false"
+        android:background="@drawable/edittext_login"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_login"
+        android:id="@+id/btn_CreateProfil"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:textColor="#ffffffff"
+        android:background="@drawable/button_rounded_corners" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="La clé fournit n&apos;est pas valide. Assurez-vous d&apos;entrer la clé trouver dans les préférences de votre profil moodle."
+        android:text="@string/login_error_message"
         android:id="@+id/txt_errorMsg"
         android:layout_below="@+id/btn_CreateProfil"
         android:layout_centerHorizontal="true"

@@ -1,6 +1,7 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
 import java.io.IOException;
@@ -19,15 +21,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button btnLogin;
     TextView txtErrorMsg;
     //variables
-    String userKey;
+    String userToken;
     UserProfile userProfile;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        preferences = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        String token = preferences.getString(Globals.KEY_USER_TOKEN, null);
         txtUserKey = (EditText)findViewById(R.id.txt_UserKey);
+        txtUserKey.setText(token);
         btnLogin = (Button)findViewById(R.id.btn_CreateProfil);
         txtErrorMsg = (TextView)findViewById(R.id.txt_errorMsg);
 
@@ -36,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        userKey = txtUserKey.getText().toString();
+        userToken = txtUserKey.getText().toString();
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
     }
@@ -52,16 +57,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                intent.putExtra("USER_TOKEN", userKey);
-                intent.putExtra("USER_ID", userProfile.userid);
-                intent.putExtra("USER_NAME", userProfile.fullname);
+
+                // saving user's data to shared preferences file
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Globals.KEY_USER_TOKEN, userToken);
+                editor.putInt(Globals.KEY_USER_ID, userProfile.userid);
+                editor.putString(Globals.KEY_USER_NAME, userProfile.fullname);
+                editor.apply();
+
                 startActivity(intent);
             }
         }
 
         @Override
         protected UserProfile doInBackground(String... params) {
-            WebAPI webAPI = new WebAPI(userKey);
+            WebAPI webAPI = new WebAPI(userToken);
             try {
                 userProfile = webAPI.run();
             }

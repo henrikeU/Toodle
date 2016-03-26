@@ -1,6 +1,7 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.louis_edouard.toodle.moodle.Globals;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     ListView listViewHome;
@@ -39,7 +42,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_home);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("USER_NAME");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        //String name = intent.getStringExtra("USER_NAME");
+        String name = pref.getString(Globals.KEY_USER_NAME, null);
 
         listViewHome = (ListView)findViewById(R.id.listViewHome);
 

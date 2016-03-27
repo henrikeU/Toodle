@@ -78,7 +78,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="Tousb"
+            android:text="Tous"
             android:id="@+id/btnTousHome"
             android:layout_weight="1"
             android:background="#5769f0"

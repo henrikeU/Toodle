@@ -68,7 +68,7 @@ public class CoursContentActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             String tabTitle="";
             if(position==0){
-                tabTitle = "FICHE";
+                tabTitle = "Fiche";
             }else if(position==1){
                 tabTitle = "Contenu";
             }else if(position ==2){

@@ -45,12 +45,13 @@
             android:layout_marginLeft="20dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Horaires:"
             android:id="@+id/txt_frag_cours_fich_hours"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            style="bor" />
 
         <TextView
             android:layout_width="wrap_content"

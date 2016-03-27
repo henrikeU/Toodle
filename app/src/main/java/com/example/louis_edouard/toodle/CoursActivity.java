@@ -5,14 +5,16 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 import com.example.louis_edouard.toodle.moodle.Globals;
@@ -28,29 +30,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
     String courseTitle;
     int userId;
 
-    private String[] donne = {"IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique","IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique",
-            "IFT2905 Interface person-machine",
-            "IFT1025 Programmation 2",
-            "IFT2105 Introduction a l'informatique theorique"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +41,8 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
 
         txtNotifCours = (TextView)findViewById(R.id.txtNotifCours);
         listViewCours = (ListView)findViewById(R.id.listViewCours);
-
+        registerForContextMenu(listViewCours);
+        //listViewCours.setOnItemLongClickListener(this);
         RunAPI run = new RunAPI();
         run.execute();
     }
@@ -75,10 +56,48 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
-    //@Override
-    //public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-     //   return false;
-    //}
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.listViewCours) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+
+
+            case R.id.archive:
+                // archive stuff here
+                return true;
+            case R.id.delete:
+                // delete stuff here
+
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+//    @Override
+//    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//        Toast.makeText(getApplicationContext(),"Item "+position,Toast.LENGTH_SHORT).show();
+//        LayoutInflater inflater=null;
+//        View v = view;
+//        if (v == null) {
+//            v = inflater.inflate(R.layout.row_delete_archive, parent, false); // pour recuperer un layout et le mettre dans un view
+//        }
+//        TextView tv = (TextView)v.findViewById(R.id.txt_row_del_arch);
+//        CheckBox cb = (CheckBox)v.findViewById(R.id.checkBox_row_del_arch);
+//        String title = course.get(position).shortname;
+//
+//        tv.setText(title);
+//        return true;
+//    }
 
     public class RunAPI extends AsyncTask<String, Object, List<EnrolledCourse>> {
 
@@ -102,7 +121,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
             listViewCours.setAdapter(coursAdapter);
             //for make clickable the links
             listViewCours.setOnItemClickListener(CoursActivity.this);//implements onItemClick
-            // listViewCours.setOnItemLongClickListener(this);
+
         }
     }
 

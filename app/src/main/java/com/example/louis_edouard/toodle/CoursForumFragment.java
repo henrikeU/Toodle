@@ -3,6 +3,8 @@ package com.example.louis_edouard.toodle;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,30 @@ public class CoursForumFragment extends Fragment {
         return v;
     }
 
+    private class CoursForumFragAdaptor extends FragmentPagerAdapter {
+
+        public CoursForumFragAdaptor(FragmentManager fm) {
+            super(fm);
+        }
+
+        /**
+         * Return the Fragment associated with a specified position.
+         *
+         * @param position
+         */
+        @Override
+        public Fragment getItem(int position) {
+            return null;
+        }
+
+        /**
+         * Return the number of views available.
+         */
+        @Override
+        public int getCount() {
+            return 0;
+        }
+    }
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";

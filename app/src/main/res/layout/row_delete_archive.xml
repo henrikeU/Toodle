@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:layout_width="48dp"
+        android:layout_height="70dp"
+        android:id="@+id/checkBox_row_del_arch"
+        android:checked="false" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/txt_row_del_arch"
+        android:layout_toRightOf="@+id/checkBox_row_del_arch"
+        android:layout_toEndOf="@+id/checkBox_row_del_arch" />
+
+</RelativeLayout>

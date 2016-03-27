@@ -3,6 +3,8 @@ package com.example.louis_edouard.toodle;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,30 @@ public class CoursContenuFragment extends Fragment {
         return v;
     }
 
+    private class CoursCntntFragAdaptor extends FragmentPagerAdapter {
+
+        public CoursCntntFragAdaptor(FragmentManager fm) {
+            super(fm);
+        }
+
+        /**
+         * Return the Fragment associated with a specified position.
+         *
+         * @param position
+         */
+        @Override
+        public Fragment getItem(int position) { //TODO:get items for two listviews
+            return null;
+        }
+
+        /**
+         * Return the number of views available.
+         */
+        @Override
+        public int getCount() {
+            return 0;
+        }
+    }
 
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

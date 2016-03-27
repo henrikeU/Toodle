@@ -10,5 +10,4 @@ public class Globals {
     public final static String KEY_USER_TOKEN = "userToken";
     public final static String KEY_USER_ID = "userID";
     public final static String KEY_USER_NAME = "userFullName";
-    public static List<Course> shortname;
 }

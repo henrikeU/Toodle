@@ -12,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.example.louis_edouard.toodle.moodle.Globals;
 
@@ -20,6 +22,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     //pour remplir le listView on utilise un adaptor
     HomeAdapter homeAdapter;
+
     private String[] donne = {"Cours IFT2905 dans 10 mins",
             "Examen Intra de IFT1025 dans une semaine",
             "La date limite pour abandonner avec frais dans 2 semaines",
@@ -93,19 +96,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * Callback method to be invoked when an item in this AdapterView has
-     * been clicked.
-     * <p>
-     * Implementers can call getItemAtPosition(position) if they need
-     * to access the data associated with the selected item.
-     *
-     * @param parent   The AdapterView where the click happened.
-     * @param view     The view within the AdapterView that was clicked (this
-     *                 will be a view provided by the adapter)
-     * @param position The position of the view in the adapter.
-     * @param id       The row id of the item that was clicked.
-     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,DetailsActivity.class);

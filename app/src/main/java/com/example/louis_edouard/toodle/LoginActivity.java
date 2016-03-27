@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button btnLogin;
     TextView txtErrorMsg;
     //variables
-    public static String userToken;
+    String userToken;
     UserProfile userProfile;
     SharedPreferences preferences;
 

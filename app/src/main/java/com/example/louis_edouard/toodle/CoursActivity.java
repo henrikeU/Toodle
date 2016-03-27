@@ -1,6 +1,6 @@
 package com.example.louis_edouard.toodle;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -10,11 +10,19 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.louis_edouard.toodle.moodle.Course;
+import com.example.louis_edouard.toodle.moodle.Globals;
+
+import java.io.IOException;
 
 public class CoursActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     TextView txtNotifCours;
     ListView listViewCours;
     CoursAdapter coursAdapter;
+    Course course;
+    String courseTitle;
 
     private String[] donne = {"IFT2905 Interface person-machine",
             "IFT1025 Programmation 2",
@@ -44,6 +52,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cours);
 
+        //Intent intent = getIntent();
         txtNotifCours = (TextView)findViewById(R.id.txtNotifCours);
         listViewCours = (ListView)findViewById(R.id.listViewCours);
 
@@ -52,6 +61,9 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
 
         listViewCours.setOnItemClickListener(this);
         listViewCours.setOnItemLongClickListener(this);
+
+        RunAPI run = new RunAPI();
+        run.execute();
     }
 
     /**
@@ -69,10 +81,12 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this,CoursContentActivity.class);
-        String cours = donne[position];
-        intent.putExtra("coursTitle",cours);
-        startActivity(intent);
+        Toast.makeText(getApplicationContext(), "Item " + position, Toast.LENGTH_SHORT).show();
+
+//        Intent intent = new Intent(this,CoursContentActivity.class);
+//        String cours = donne[position];
+//        intent.putExtra("coursTitle",cours);
+//        startActivity(intent);
     }
 
     /**
@@ -93,6 +107,43 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         return false;
     }
 
+    public class RunAPI extends AsyncTask<String, Object, Course> {
+
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to {@link #execute}
+         * by the caller of this task.
+         * <p/>
+         * This method can call {@link #publishProgress} to publish updates
+         * on the UI thread.
+         *
+         * @param params The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected Course doInBackground(String... params) {
+            WebAPI web = new WebAPI(LoginActivity.userToken);
+
+            try {
+                course = web.runCours();
+            }
+            catch(IOException e){ }
+
+            return course;
+        }
+
+        @Override
+        protected void onPostExecute(Course course){
+            super.onPostExecute(course);
+            coursAdapter = new CoursAdapter();
+            listViewCours.setAdapter(coursAdapter);
+            //for make clickable the links
+            listViewCours.setOnItemClickListener(CoursActivity.this);//implements onItemClick
+        }
+    }
     private class CoursAdapter extends BaseAdapter {
         LayoutInflater inflaterCours;
         public CoursAdapter() {
@@ -107,7 +158,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
          */
         @Override
         public int getCount() {
-            return donne.length;
+            return Globals.shortname.size();
         }
 
         /**
@@ -159,7 +210,8 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
             }
 
             TextView text = (TextView)vCours.findViewById(android.R.id.text1);
-            text.setText(donne[position]);
+            String title = Globals.shortname.get(position).shortname;
+            text.setText(title);
             return vCours;
         }
     }

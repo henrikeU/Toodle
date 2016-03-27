@@ -71,8 +71,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnCoursHome:
                 intent = new Intent(this,CoursActivity.class);
-                startActivity(intent);
+
                 //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+                startActivity(intent);
                 break;
             case R.id.btnCalendHome:
 //                intent = new Intent(this,CalenderActivity.class);

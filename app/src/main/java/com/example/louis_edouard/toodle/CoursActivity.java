@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 import com.example.louis_edouard.toodle.moodle.Globals;
@@ -47,12 +48,11 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         run.execute();
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,CoursContentActivity.class);
-        String coursTitle = course.get(position).fullname;
-        intent.putExtra("coursTitle",coursTitle);
+        intent.putExtra("COURSE_ID", course.get(position).id);
+        intent.putExtra("COURSE_TITLE",course.get(position).fullname);
         startActivity(intent);
     }
 

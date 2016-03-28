@@ -1,5 +1,8 @@
 package com.example.louis_edouard.toodle;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,28 +11,32 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.louis_edouard.toodle.moodle.CourseContent;
+import com.example.louis_edouard.toodle.moodle.Globals;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.zip.Inflater;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CoursContenuFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CoursContenuFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CoursContenuFragment extends Fragment {
+
+public class CoursContenuFragment extends Fragment implements AdapterView.OnItemClickListener {
     TextView currentWeek, weekDecription;
     ListView lsvPdf, lsvPrvsWeeks;
+    CoursAdapter coursAdapter;
+    List<CourseContent> courseContents;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v =inflater.inflate(R.layout.fragment_cours_contenu,container,false);
         currentWeek = (TextView)v.findViewById(R.id.txt_frag_cours_cntnu_currentWeek);
         weekDecription = (TextView)v.findViewById(R.id.txt_frag_cours_cntnu_weekDscrpt);
@@ -37,11 +44,16 @@ public class CoursContenuFragment extends Fragment {
         lsvPdf=(ListView)v.findViewById(R.id.lsv_frag_cours_cntnu_pdf);
         lsvPrvsWeeks = (ListView)v.findViewById(R.id.lsv_frag_cours_cntun_prvsWeeks);
         //TODO: filling these list views above
-
         currentWeek.setText("this week");
         weekDecription.setText("content of this week");
-
+        RunAPI run = new RunAPI();
+        run.execute();
         return v;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     private class CoursCntntFragAdaptor extends FragmentPagerAdapter {
@@ -50,11 +62,6 @@ public class CoursContenuFragment extends Fragment {
             super(fm);
         }
 
-        /**
-         * Return the Fragment associated with a specified position.
-         *
-         * @param position
-         */
         @Override
         public Fragment getItem(int position) { //TODO:get items for two listviews
             return null;
@@ -66,6 +73,63 @@ public class CoursContenuFragment extends Fragment {
         @Override
         public int getCount() {
             return 0;
+        }
+    }
+
+    public class RunAPI extends AsyncTask<String, Object, List<CourseContent>> {
+
+        @Override
+        protected List<CourseContent> doInBackground(String... params) {
+            WebAPI web = new WebAPI(CoursContentActivity.USER_TOKEN);
+            try {
+                courseContents = web.getCourseContent(CoursContentActivity.COURSE_ID);
+            }
+            catch(IOException e){ }
+
+            return courseContents;
+        }
+
+        @Override
+        protected void onPostExecute(List<CourseContent> courseContents){
+            super.onPostExecute(courseContents);
+            coursAdapter = new CoursAdapter();
+            lsvPrvsWeeks.setAdapter(coursAdapter);
+            //for make clickable the links
+            lsvPrvsWeeks.setOnItemClickListener(CoursContenuFragment.this);//implements onItemClick
+        }
+    }
+
+    private class CoursAdapter extends BaseAdapter {
+        LayoutInflater inflaterCours;
+
+        public CoursAdapter() {
+            inflaterCours= (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() { return courseContents.size(); }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View vCours = convertView;
+            if(vCours==null){
+                vCours=inflaterCours.inflate(android.R.layout.simple_list_item_1,parent,false);
+            }
+
+            TextView text = (TextView)vCours.findViewById(android.R.id.text1);
+            String title = courseContents.get(position).name;
+            text.setText(title);
+            return vCours;
         }
     }
 

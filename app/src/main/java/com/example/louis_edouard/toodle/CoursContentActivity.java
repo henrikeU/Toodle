@@ -1,6 +1,8 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,12 +11,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.louis_edouard.toodle.moodle.CourseContent;
+import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
+import com.example.louis_edouard.toodle.moodle.Globals;
+
+import java.io.IOException;
+import java.util.List;
+
 public class CoursContentActivity extends AppCompatActivity {
     TabLayout tabCoursContent;
     ViewPager pagerCoursContent;
     CoursContentAdaptor coursContentAdaptor;
-    public final int nb = 3;
-
+    public final int nbTab = 3;
+    static String USER_TOKEN;
+    static int COURSE_ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +36,13 @@ public class CoursContentActivity extends AppCompatActivity {
         pagerCoursContent.setAdapter(coursContentAdaptor);
         tabCoursContent.setupWithViewPager(pagerCoursContent);
         Intent intent = getIntent();
-        String coursTitle =intent.getStringExtra("coursTitle");
+        COURSE_ID = intent.getIntExtra("COURSE_ID", 0);
+        String coursTitle =intent.getStringExtra("COURSE_TITLE");
         setTitle(coursTitle);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        USER_TOKEN = pref.getString(Globals.KEY_USER_TOKEN, null);
+
     }
 
     private class CoursContentAdaptor extends FragmentPagerAdapter{
@@ -62,7 +77,7 @@ public class CoursContentActivity extends AppCompatActivity {
          */
         @Override
         public int getCount() {
-            return nb;
+            return nbTab;
         }
         @Override
         public CharSequence getPageTitle(int position) {
@@ -78,4 +93,5 @@ public class CoursContentActivity extends AppCompatActivity {
         }
 
     }
+
 }

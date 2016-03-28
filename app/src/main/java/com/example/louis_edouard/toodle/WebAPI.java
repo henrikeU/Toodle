@@ -2,6 +2,7 @@ package com.example.louis_edouard.toodle;
 
 import android.util.Log;
 
+import com.example.louis_edouard.toodle.moodle.CourseContent;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 import com.squareup.moshi.JsonAdapter;
@@ -63,8 +64,27 @@ public class WebAPI {
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
         JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
         List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(json);
-       // Log.d("ENROLLEDCOURSES", enrolledCourses.get(0).fullname);
         return enrolledCourses;
+    }
+
+    public List<CourseContent> getCourseContent(int courseId) throws IOException {
+        String apifunction = "&wsfunction=core_course_get_contents";
+        url += apifunction + "&courseid=" + courseId + "&moodlewsrestformat=json";
+
+        //retrieve the content of the html from the url
+        OkHttpClient client = new OkHttpClient();
+        //request / response
+        Request request = new Request.Builder().url(url).build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+
+        // parse JSON content from the string
+        Moshi moshi = new Moshi.Builder().build();
+        Type courseContentList = Types.newParameterizedType(List.class, CourseContent.class);
+        JsonAdapter<List<CourseContent>> jsonAdapter = moshi.adapter(courseContentList);
+        List<CourseContent> courseContents = jsonAdapter.fromJson(json);
+
+        return courseContents;
     }
 
 }

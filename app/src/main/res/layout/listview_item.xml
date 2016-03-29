@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<com.daimajia.swipe.SwipeLayout
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#F0F8FF"
+        android:tag="Bottom3"
+        android:weightSum="10"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/trash"
+            android:layout_width="27dp"
+            android:layout_height="30dp"
+            android:textColor="#333"
+            android:textStyle="bold"
+            android:layout_weight="1.65"
+            android:gravity="left" />
+
+        <Button
+            android:id="@+id/archive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="#f0f0f0"
+            android:text="Archiver"
+            android:textColor="#007FFF" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="#f0f0f0"
+            android:text="Supprimer"
+            android:textColor="#C40233" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_selector"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#002366"/>
+
+        <TextView
+            android:id="@+id/text_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:tag="Hover"
+            android:layout_marginTop="5dp"
+            android:text="Vous avez 2 nouvelles notifications" />
+    </LinearLayout>
+
+</com.daimajia.swipe.SwipeLayout>

@@ -1,7 +1,9 @@
 package com.example.louis_edouard.toodle;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -16,12 +18,16 @@ import android.widget.Toast;
 
 
 import com.example.louis_edouard.toodle.moodle.Globals;
+import com.example.louis_edouard.toodle.moodle.UserProfile;
+
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     //pour remplir le listView on utilise un adaptor
     HomeAdapter homeAdapter;
+    private UserProfile userProfile;
 
     private String[] donne = {"Cours IFT2905 dans 10 mins",
             "Examen Intra de IFT1025 dans une semaine",
@@ -30,24 +36,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             "Examen Intra de IFT1025 dans une semaine",
             "La date limite pour abandonner avec frais dans 2 semaines",
             "Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine",
-            "La date limite pour abandonner avec frais dans 2 semaines",
-            "Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine",
-            "La date limite pour abandonner avec frais dans 2 semaines",
-            "Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine",
-            "La date limite pour abandonner avec frais dans 2 semaines"};
+            "Examen Intra de IFT1025 dans une semaine"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Intent intent = getIntent();
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-        //String name = intent.getStringExtra("USER_NAME");
-        String name = pref.getString(Globals.KEY_USER_NAME, null);
+        RunAPI runAPI = new RunAPI();
+        runAPI.execute();
 
         listViewHome = (ListView)findViewById(R.id.listViewHome);
 
@@ -64,7 +61,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         listViewHome.setAdapter(homeAdapter);
 
         listViewHome.setOnItemClickListener(this);
-        setTitle(name);
     }
 
     @Override
@@ -79,8 +75,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.btnCalendHome:
-//                intent = new Intent(this,CalenderActivity.class);
-//                startActivity(intent);
+                intent = new Intent(this,CalendarActivity.class);
+                startActivity(intent);
                 //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnMessHome:
@@ -103,7 +99,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("home",home);
         startActivity(intent);
     }
-
 
     private class HomeAdapter extends BaseAdapter {
         LayoutInflater inflaterHome;
@@ -137,6 +132,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             TextView text = (TextView)vHome.findViewById(android.R.id.text1);
             text.setText(donne[position]);
             return vHome;
+        }
+    }
+
+    public class RunAPI extends AsyncTask<String, Object, UserProfile> {
+
+        @Override
+        protected void onPostExecute(UserProfile userProfile) {
+            super.onPostExecute(userProfile);
+            setTitle(userProfile.fullname);
+        }
+
+        @Override
+        protected UserProfile doInBackground(String... params) {
+            SharedPreferences preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+            WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
+            try {
+                userProfile = webAPI.run();
+            }
+            catch(IOException e){ }
+
+            return userProfile;
         }
     }
 }

@@ -11,27 +11,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_UserKey"
-        android:layout_above="@+id/btn_CreateProfil"
-        android:layout_centerHorizontal="true"
         android:hint="@string/txt_user_token_hint"
         android:padding="5dp"
         android:singleLine="true"
         android:selectAllOnFocus="false"
-        android:background="@drawable/edittext_login"/>
+        android:background="@drawable/edittext_login"
+        android:layout_marginBottom="73dp"
+        android:layout_above="@+id/btn_CreateProfil"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_Password"
+        android:hint="Mot de passe"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:selectAllOnFocus="false"
+        android:background="@drawable/edittext_login"
+        android:layout_above="@+id/btn_CreateProfil"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="34dp"
+        android:inputType="textPassword" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_login"
         android:id="@+id/btn_CreateProfil"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:clickable="true"
         android:textColor="#ffffffff"
-        android:background="@drawable/button_rounded_corners" />
+        android:background="@drawable/button_rounded_corners"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="match_parent"

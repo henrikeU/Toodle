@@ -1,13 +1,10 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,22 +12,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.CourseContent;
-import com.example.louis_edouard.toodle.moodle.Globals;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 public class CoursContenuFragment extends Fragment implements AdapterView.OnItemClickListener {
     TextView currentWeek, weekDecription;
     ListView lsvPdf, lsvPrvsWeeks;
-    CoursAdapter coursAdapter;
+    CoursCntntAdapter coursCntntAdapter;
     List<CourseContent> courseContents;
 
     @Nullable
@@ -56,26 +48,6 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
 
     }
 
-    private class CoursCntntFragAdaptor extends FragmentPagerAdapter {
-
-        public CoursCntntFragAdaptor(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) { //TODO:get items for two listviews
-            return null;
-        }
-
-        /**
-         * Return the number of views available.
-         */
-        @Override
-        public int getCount() {
-            return 0;
-        }
-    }
-
     public class RunAPI extends AsyncTask<String, Object, List<CourseContent>> {
 
         @Override
@@ -92,17 +64,17 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
         @Override
         protected void onPostExecute(List<CourseContent> courseContents){
             super.onPostExecute(courseContents);
-            coursAdapter = new CoursAdapter();
-            lsvPrvsWeeks.setAdapter(coursAdapter);
+            coursCntntAdapter = new CoursCntntAdapter();
+            lsvPrvsWeeks.setAdapter(coursCntntAdapter);
             //for make clickable the links
             lsvPrvsWeeks.setOnItemClickListener(CoursContenuFragment.this);//implements onItemClick
         }
     }
 
-    private class CoursAdapter extends BaseAdapter {
+    private class CoursCntntAdapter extends BaseAdapter {
         LayoutInflater inflaterCours;
 
-        public CoursAdapter() {
+        public CoursCntntAdapter() {
             inflaterCours= (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 

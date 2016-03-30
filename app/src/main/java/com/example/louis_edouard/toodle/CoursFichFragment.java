@@ -1,12 +1,21 @@
 package com.example.louis_edouard.toodle;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.louis_edouard.toodle.moodle.CourseContent;
+
+import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -17,8 +26,9 @@ import android.widget.TextView;
  * Use the {@link CoursFichFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CoursFichFragment extends Fragment {
+public class CoursFichFragment extends Fragment implements AdapterView.OnItemClickListener {
     TextView coursPlan, profName, dispoHrs,theoDys,tpDys;
+    List<CourseContent> courseContents;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,16 +40,52 @@ public class CoursFichFragment extends Fragment {
         theoDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_theoDys);
         tpDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_tpDys);
 
-//        Bundle args = getArguments();
-//        int fragmentid = args.getInt("ID");
-//        text.setText("Fragment "+ fragmentid);
-        coursPlan.setText("Plan du cours");// TODO: a remplire correctement
-        profName.setText("Sebastian Roy");// TODO: a remplire par le API
-        dispoHrs.setText("Mardi 12:00 14:00");// TODO: a remplire par le API
-        theoDys.setText("Lundi 10:30 - 12:30 /n Jeudi 10:30 - 11:30");// TODO: a remplire par le API
-        tpDys.setText("Jeudi 11:30 - 13:30");// TODO: a remplire par le API
+        RunAPI run = new RunAPI();
+        run.execute();
         return  v;
     }
+
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p/>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    public class RunAPI extends AsyncTask<String, Object, List<CourseContent>> {
+
+        @Override
+        protected List<CourseContent> doInBackground(String... params) {
+            WebAPI web = new WebAPI(CoursContentActivity.USER_TOKEN);
+            try {
+                courseContents = web.getCourseContent(CoursContentActivity.COURSE_ID);
+            }
+            catch(IOException e){ }
+
+            return courseContents;
+        }
+
+        @Override
+        protected void onPostExecute(List<CourseContent> courseContents){
+            super.onPostExecute(courseContents);
+
+            coursPlan.setText(courseContents.get(0).summary);
+            }
+
+    }
+
+
 
 
 //    // TODO: Rename parameter arguments, choose names that match

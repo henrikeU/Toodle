@@ -1,8 +1,5 @@
 package com.example.louis_edouard.toodle;
 
-import android.util.Log;
-import android.webkit.WebView;
-
 import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.CourseContent;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
@@ -26,7 +23,6 @@ import okhttp3.Response;
 public class WebAPI {
     public String url;
     private String token;
-    public String course;
     public int id;
 
     public WebAPI(){}
@@ -87,6 +83,7 @@ public class WebAPI {
         return userProfile;
     }
 
+
     public List<EnrolledCourse> runCours(int userId)throws IOException{
         String apifunction = "&wsfunction=core_enrol_get_users_courses";
         url += apifunction + "&userid=" + userId + "&moodlewsrestformat=json";
@@ -99,6 +96,7 @@ public class WebAPI {
         return enrolledCourses;
     }
 
+    //http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=31b687ca4d71f78ccde0436da7cff38c&wsfunction=core_course_get_contents&courseid=2&moodlewsrestformat=json
     public List<CourseContent> getCourseContent(int courseId) throws IOException {
         String apifunction = "&wsfunction=core_course_get_contents";
         url += apifunction + "&courseid=" + courseId + "&moodlewsrestformat=json";

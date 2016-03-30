@@ -19,7 +19,8 @@
         android:layout_marginBottom="73dp"
         android:layout_above="@+id/btn_CreateProfil"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:autoText="false" />
 
     <EditText
         android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
@@ -27,18 +28,20 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class CoursFichFragment extends Fragment implements AdapterView.OnItemClickListener {
-    TextView coursPlan, profName, dispoHrs,theoDys,tpDys;
+    TextView coursPlan, prof, dispoHrs, theoDys, tpDys;
     List<CourseContent> courseContents;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //****Pour mettre le text_fragment sur chaque fragmenet suivi de ce qu'on a fait sur MainActivity from here to "return"
         View v = inflater.inflate(R.layout.fragment_cours_fich,container,false);
+
         coursPlan = (TextView)v.findViewById(R.id.txt_frag_cours_fich_plan);
-        profName = (TextView)v.findViewById(R.id.txt_frag_cours_fich_prof);
+        prof = (TextView)v.findViewById(R.id.txt_frag_cours_fich_prof);
         dispoHrs = (TextView)v.findViewById(R.id.txt_frag_cours_fich_dispoHrs);
         theoDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_theoDys);
         tpDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_tpDys);
+
 
         RunAPI run = new RunAPI();
         run.execute();

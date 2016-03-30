@@ -9,23 +9,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
@@ -41,6 +35,8 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
     TextView txtNotifCours;
     List<EnrolledCourse> course;
     String courseTitle;
+    CheckBox checkBox;
+    boolean showCheckBox = false;
     int userId;
 
     private ListView mListView;
@@ -52,6 +48,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cours);
         mListView = (ListView) findViewById(R.id.listview);
+        checkBox = (CheckBox)findViewById(R.id.checkBox);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {
@@ -78,10 +75,20 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
             }
         });
 
+
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(mContext, "OnItemLongClickListener", Toast.LENGTH_SHORT).show();
+                showCheckBox = !showCheckBox;
+
+                    if(showCheckBox){
+                        findViewById(R.id.checkBox).setVisibility(View.VISIBLE);
+                    }else{
+                        findViewById(R.id.checkBox).setVisibility(View.GONE);
+                    }
+
+                mAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -161,6 +168,13 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
         @Override
         public View generateView(int position, ViewGroup parent) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
+
+            if(showCheckBox){
+                v.findViewById(R.id.checkBox).setVisibility(View.VISIBLE);
+            }else{
+                v.findViewById(R.id.checkBox).setVisibility(View.GONE);
+            }
+
             SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
             swipeLayout.addSwipeListener(new SimpleSwipeListener() {
                 @Override
@@ -182,6 +196,7 @@ public class CoursActivity extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(mContext, "click archive", Toast.LENGTH_SHORT).show();
                 }
             });
+
 
             return v;
         }

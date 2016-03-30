@@ -7,7 +7,8 @@
         android:layout_width="48dp"
         android:layout_height="70dp"
         android:id="@+id/checkBox_row_del_arch"
-        android:checked="false" />
+        android:checked="false"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="fill_parent"

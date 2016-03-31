@@ -16,27 +16,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
-            android:id="@+id/txt_frag_cours_cntnu_currentWeek"
+            android:id="@+id/textview_alert"
             android:layout_marginTop="20dp" />
 
-        <TextView
+        <ExpandableListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/txt_frag_cours_cntnu_weekDscrpt" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="130dp"
-            android:id="@+id/lsv_frag_cours_cntnu_pdf"
-            android:layout_marginTop="10dp" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lsv_frag_cours_cntun_prvsWeeks"
-            android:layout_marginTop="20dp" />
+            android:id="@+id/expandableListView_pastWeeks"
+         />
 
     </LinearLayout>
 

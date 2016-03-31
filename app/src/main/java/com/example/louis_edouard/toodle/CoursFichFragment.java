@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +16,16 @@ import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.CourseContent;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CoursFichFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CoursFichFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CoursFichFragment extends Fragment implements AdapterView.OnItemClickListener {
-    TextView coursPlan, prof, dispoHrs, theoDys, tpDys;
+    TextView coursPlan, prof, theoDys, tpDys;
     List<CourseContent> courseContents;
     @Nullable
     @Override
@@ -38,7 +35,6 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
 
         coursPlan = (TextView)v.findViewById(R.id.txt_frag_cours_fich_plan);
         prof = (TextView)v.findViewById(R.id.txt_frag_cours_fich_prof);
-        dispoHrs = (TextView)v.findViewById(R.id.txt_frag_cours_fich_dispoHrs);
         theoDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_theoDys);
         tpDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_tpDys);
 
@@ -48,19 +44,6 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
         return  v;
     }
 
-    /**
-     * Callback method to be invoked when an item in this AdapterView has
-     * been clicked.
-     * <p/>
-     * Implementers can call getItemAtPosition(position) if they need
-     * to access the data associated with the selected item.
-     *
-     * @param parent   The AdapterView where the click happened.
-     * @param view     The view within the AdapterView that was clicked (this
-     *                 will be a view provided by the adapter)
-     * @param position The position of the view in the adapter.
-     * @param id       The row id of the item that was clicked.
-     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -82,9 +65,24 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
         @Override
         protected void onPostExecute(List<CourseContent> courseContents){
             super.onPostExecute(courseContents);
-
-            coursPlan.setText(courseContents.get(0).summary);
+            String html = courseContents.get(0).summary;
+            Document doc = Jsoup.parseBodyFragment(html);
+            Element body  = doc.body();
+            Element teacher  = doc.getElementsByClass("teacher").first();
+            Elements theories = doc.getElementsByClass("theorie");
+            Elements tps = doc.getElementsByClass("horaire-tp");
+            String horaireTheorie = "";
+            String horaireTp = "";
+            for(Element horaire : theories){
+                horaireTheorie += horaire.text() + "\n";
             }
+            for(Element horaire: tps){
+                horaireTp += horaire.text() + "\n";
+            }
+            prof.setText(teacher.text());
+            theoDys.setText(horaireTheorie.substring(0, horaireTheorie.length() - 1));
+            tpDys.setText(horaireTp.substring(0, horaireTp.length() - 1));
+        }
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,9 +23,9 @@ import java.util.List;
 
 
 public class CoursContenuFragment extends Fragment implements AdapterView.OnItemClickListener {
-    TextView currentWeek, weekDecription;
-    ListView lsvPdf, lsvPrvsWeeks;
-    CoursCntntAdapter coursCntntAdapter;
+    TextView alert;
+    ExpandableListView pastWeeks;
+    PastWeekAdapter pastWeekAdapter;
     List<CourseContent> courseContents;
 
     @Nullable
@@ -30,14 +33,11 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v =inflater.inflate(R.layout.fragment_cours_contenu,container,false);
-        currentWeek = (TextView)v.findViewById(R.id.txt_frag_cours_cntnu_currentWeek);
-        weekDecription = (TextView)v.findViewById(R.id.txt_frag_cours_cntnu_weekDscrpt);
+        alert = (TextView)v.findViewById(R.id.textview_alert);
         //TODO: getting information from API for these text views above
-        lsvPdf=(ListView)v.findViewById(R.id.lsv_frag_cours_cntnu_pdf);
-        lsvPrvsWeeks = (ListView)v.findViewById(R.id.lsv_frag_cours_cntun_prvsWeeks);
-        //TODO: filling these list views above
-        currentWeek.setText("this week");
-        weekDecription.setText("content of this week");
+        alert.setText("Du nouveau contenu!");
+
+        pastWeeks = (ExpandableListView)v.findViewById(R.id.expandableListView_pastWeeks);
         RunAPI run = new RunAPI();
         run.execute();
         return v;
@@ -55,6 +55,7 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
             WebAPI web = new WebAPI(CoursContentActivity.USER_TOKEN);
             try {
                 courseContents = web.getCourseContent(CoursContentActivity.COURSE_ID);
+                courseContents.remove(0); // supprime la première section (FICHE)
             }
             catch(IOException e){ }
 
@@ -64,46 +65,88 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
         @Override
         protected void onPostExecute(List<CourseContent> courseContents){
             super.onPostExecute(courseContents);
-            coursCntntAdapter = new CoursCntntAdapter();
-            lsvPrvsWeeks.setAdapter(coursCntntAdapter);
-            //for make clickable the links
-            lsvPrvsWeeks.setOnItemClickListener(CoursContenuFragment.this);//implements onItemClick
+            pastWeekAdapter = new PastWeekAdapter();
+            pastWeeks.setAdapter(pastWeekAdapter);
+
+            //TODO: Calculer la position de la semaine courante
+            int currentWeekPosition = courseContents.size() - 1;
+            // ouvre et focus sur la semaine courante
+            pastWeeks.expandGroup(currentWeekPosition);
+            pastWeeks.setSelectedGroup(currentWeekPosition);
         }
     }
 
-    private class CoursCntntAdapter extends BaseAdapter {
-        LayoutInflater inflaterCours;
+    private class PastWeekAdapter extends BaseExpandableListAdapter{
 
-        public CoursCntntAdapter() {
-            inflaterCours= (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @Override
+        public int getGroupCount() {
+            return courseContents.size();
         }
 
         @Override
-        public int getCount() { return courseContents.size(); }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
+        public int getChildrenCount(int groupPosition) {
+            return courseContents.get(groupPosition).modules.size();
         }
 
         @Override
-        public long getItemId(int position) {
-            return 0;
+        public Object getGroup(int groupPosition) {
+            return courseContents.get(groupPosition).name;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View vCours = convertView;
-            if(vCours==null){
-                vCours=inflaterCours.inflate(android.R.layout.simple_list_item_1,parent,false);
+        public Object getChild(int groupPosition, int childPosition) {
+            return courseContents.get(groupPosition).modules.get(childPosition).name;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            String headerTitle = (String)getGroup(groupPosition);
+            if(convertView == null){
+                LayoutInflater infalInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.list_group, null);
+            }
+            TextView lblListHeader = (TextView)convertView.findViewById(R.id.lblListHeader);
+            lblListHeader.setTypeface(null, Typeface.BOLD);
+            lblListHeader.setText(headerTitle);
+            return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            final String childText = (String) getChild(groupPosition, childPosition);
+
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.list_item, null);
             }
 
-            TextView text = (TextView)vCours.findViewById(android.R.id.text1);
-            String title = courseContents.get(position).name;
-            text.setText(title);
-            return vCours;
+            TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
+
+            txtListChild.setText(childText);
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return false;
         }
     }
+
 
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

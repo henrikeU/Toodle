@@ -2,11 +2,8 @@
     <string name="app_name">Toodle</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="btn_login">Se connecter</string>
-    <string name="txt_user_token_hint">Entrée votre clé</string>
-    <string name="login_error_message">
-        La clé fournit n\'est pas valide. Assurez-vous d\'entrer la clé trouver dans les
-        préférences de votre profil moodle.
-    </string>
+    <string name="txt_user_token_hint">Nom d\'utilisateur</string>
+    <string name="login_error_message">Le nom d\'utlisateur ou mot de passe fournit n\'est pas valide.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

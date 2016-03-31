@@ -1,19 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.louis_edouard.toodle.CoursContentFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <TextView
-            android:layout_width="318dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Plan du cours"
@@ -21,40 +21,34 @@
             android:layout_gravity="left|top" />
 
         <TextView
-            android:layout_width="248dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:textColor="#111e5a"
             android:id="@+id/txt_frag_cours_fich_prof"
             android:layout_weight="0.05"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:textIsSelectable="false" />
+    </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Disponibilité"
-            android:id="@+id/txt_frag_cours_fich_dispo" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/txt_frag_cours_fich_dispoHrs"
-            android:layout_marginLeft="20dp" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#eee"
+        android:layout_marginTop="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Horaires:"
+            android:padding="5dp"
+            android:text="Horaire"
             android:id="@+id/txt_frag_cours_fich_hours"
-            android:layout_marginTop="20dp"
-            style="bor" />
+            android:background="#ccc"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Théorie"
@@ -63,7 +57,7 @@
             android:layout_marginTop="10dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
@@ -71,7 +65,7 @@
             android:layout_marginLeft="40dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Travaux Pratiques"
@@ -80,12 +74,11 @@
             android:layout_marginLeft="20dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/txt_frag_cours_fich_tpDys"
-            android:layout_marginLeft="40dp" />
+            android:layout_marginLeft="40dp"/>
     </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

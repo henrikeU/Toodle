@@ -9,4 +9,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_edit">Archive</string>
     <string name="menu_delete">Delete</string>
+    <string name="btn_send">Envoyer</string>
+    <string name="title_activity_message">MessageActivity</string>
 </resources>

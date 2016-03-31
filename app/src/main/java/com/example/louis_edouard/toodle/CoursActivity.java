@@ -32,9 +32,8 @@ import java.util.List;
 
 public class CoursActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    TextView txtNotifCours;
+
     List<EnrolledCourse> course;
-    String courseTitle;
     CheckBox checkBox;
     boolean showCheckBox = false;
     int userId;

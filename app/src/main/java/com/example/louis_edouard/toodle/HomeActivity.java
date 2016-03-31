@@ -1,6 +1,5 @@
 package com.example.louis_edouard.toodle;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -14,8 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
@@ -80,8 +77,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnMessHome:
-                //intent = new Intent(this,MessageActivity.class);
-                //startActivity(intent);
+                intent = new Intent(this,MessageActivity.class);
+                startActivity(intent);
                 // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnTousHome:

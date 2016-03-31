@@ -67,7 +67,6 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
             super.onPostExecute(courseContents);
             String html = courseContents.get(0).summary;
             Document doc = Jsoup.parseBodyFragment(html);
-            Element body  = doc.body();
             Element teacher  = doc.getElementsByClass("teacher").first();
             Elements theories = doc.getElementsByClass("theorie");
             Elements tps = doc.getElementsByClass("horaire-tp");

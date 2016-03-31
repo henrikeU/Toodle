@@ -1,0 +1,14 @@
+package com.example.louis_edouard.toodle.moodle;
+
+/**
+ * Created by Louis-Edouard on 3/31/2016.
+ */
+public class UserProfileSearch {
+    public int id;
+    public String fullname;
+    public String email;
+    public String address;
+    public String phone1;
+    public String city;
+    public String country;
+}

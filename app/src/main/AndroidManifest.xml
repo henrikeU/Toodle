@@ -16,12 +16,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".DetailsActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".CoursActivity" />
-        <activity android:name=".CoursContentActivity" />
+        <activity android:name=".CoursActivity"
+                  android:parentActivityName=".HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomeActivity"/>
+        </activity>
+        <activity android:name=".CoursContentActivity"
+                  android:parentActivityName=".CoursActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CoursActivity"/>
+        </activity>
         <activity
             android:name=".CalendarActivity"
             android:label="Calendrier" />
@@ -29,6 +41,7 @@
             android:name=".MessageActivity"
             android:label="@string/title_activity_message"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".SendMessageActivity"></activity>
     </application>
 

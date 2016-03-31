@@ -2,7 +2,6 @@ package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,12 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.louis_edouard.toodle.moodle.CourseContent;
-import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 import com.example.louis_edouard.toodle.moodle.Globals;
-
-import java.io.IOException;
-import java.util.List;
 
 public class CoursContentActivity extends AppCompatActivity {
     TabLayout tabCoursContent;
@@ -29,6 +23,9 @@ public class CoursContentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cours_content);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         tabCoursContent=(TabLayout)findViewById(R.id.tabCoursContent);
         pagerCoursContent = (ViewPager)findViewById(R.id.pagerCoursContent);

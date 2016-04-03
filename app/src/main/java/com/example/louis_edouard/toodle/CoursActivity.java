@@ -121,13 +121,7 @@ public class CoursActivity extends AppCompatActivity
      */
     @Override
     public void onBackPressed() {
-        View v = LayoutInflater.from(this).inflate(R.layout.listview_item,null);
-        CheckBox cb = (CheckBox)v.findViewById(R.id.checkBox);
-        for(int i=0; i<mListViewsize; i++) deleted.add(true);
-        for (int i = 0; i<mListView.getChildCount(); i++) {
-            deleteMode = false;
-            cb.setVisibility(View.GONE);
-        }
+        //onCreate(new Bundle());
     }
 
 
@@ -162,7 +156,14 @@ public class CoursActivity extends AppCompatActivity
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            for(int i=0;i<mListView.getChildCount();i++) {
+                //Log.d("xyz", "getting child " + i);
+                View v = mListView.getChildAt(i);
+                CheckBox cb = (CheckBox) v.findViewById(R.id.checkBox);
+                deleteMode = false;
+                cb.setChecked(false);
+                cb.setVisibility(View.GONE);
+            }
         }
     };
     @Override
@@ -274,10 +275,10 @@ public class CoursActivity extends AppCompatActivity
                 afficheMode(lv);
             }else {
                 // si on veut on toggle
-                /*
+
                 deleteMode=false;
                 afficheMode(lv);
-                */
+
             }
         }
 

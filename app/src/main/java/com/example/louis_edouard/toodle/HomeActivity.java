@@ -42,7 +42,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
-
         listViewHome = (ListView)findViewById(R.id.listViewHome);
 
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);

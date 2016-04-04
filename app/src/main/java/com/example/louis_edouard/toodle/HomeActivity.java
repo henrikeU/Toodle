@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
@@ -22,9 +24,10 @@ import java.io.IOException;
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
-    //pour remplir le listView on utilise un adaptor
+    SharedPreferences preferences;
     HomeAdapter homeAdapter;
     private UserProfile userProfile;
+    Calendar calendar;
 
     private String[] donne = {"Cours IFT2905 dans 10 mins",
             "Examen Intra de IFT1025 dans une semaine",
@@ -39,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
         listViewHome = (ListView)findViewById(R.id.listViewHome);
@@ -137,14 +140,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(UserProfile userProfile) {
             super.onPostExecute(userProfile);
             setTitle(userProfile.fullname);
+            // saving user's data to shared preferences file
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(Globals.KEY_USER_ID, userProfile.userid);
+            editor.apply();
         }
 
         @Override
         protected UserProfile doInBackground(String... params) {
-            SharedPreferences preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
             WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
             try {
-                userProfile = webAPI.run();
+                userProfile = webAPI.getUserProfile();
+                calendar = webAPI.getEvent();
             }
             catch(IOException e){ }
 

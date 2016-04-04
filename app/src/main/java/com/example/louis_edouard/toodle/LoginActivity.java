@@ -31,10 +31,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         preferences = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-        //String token = preferences.getString(Globals.KEY_USER_TOKEN, null);
+
         txtUserName = (EditText)findViewById(R.id.txt_UserKey);
         txtPassword = (EditText)findViewById(R.id.txt_Password);
-        //txtUserName.setText(token);
         btnLogin = (Button)findViewById(R.id.btn_CreateProfil);
         txtErrorMsg = (TextView)findViewById(R.id.txt_errorMsg);
 
@@ -57,8 +56,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if(token.token == null) {
                 txtErrorMsg.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
             }else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -66,9 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // saving user's data to shared preferences file
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(Globals.KEY_USER_TOKEN, token.token);
-                //editor.putInt(Globals.KEY_USER_ID, userProfile.userid);
-                //editor.putString(Globals.KEY_USER_NAME, userProfile.fullname);
-                //editor.apply();
+                editor.apply();
 
                 startActivity(intent);
             }

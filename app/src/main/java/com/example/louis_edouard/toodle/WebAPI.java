@@ -26,6 +26,7 @@ import okhttp3.Response;
  */
 public class WebAPI {
     public String url;
+    public final String baseUrl = "http://54.209.183.244/moodle/webservice/rest/server.php?";
     private String token;
     public int id;
 
@@ -37,20 +38,26 @@ public class WebAPI {
         url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
     }
 
-    public String baseCode() throws IOException{
-        //retrieve the content of the html from the url
+    private String getJSON() throws IOException{
         OkHttpClient client = new OkHttpClient();
-        //request / response
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
         String json = response.body().string();
         return json;
     }
 
+    private String fullUrl(String apifunction){
+        String wstoken = "wstoken=" + token;
+        String wsfunction = "&wsfunction=" + apifunction;
+        String restformat = "&moodlewsrestformat=json";
+        String url = baseUrl + wstoken + wsfunction + restformat;
+        return url;
+    }
+
     public Token getToken(String username, String password) throws IOException{
         url = "http://54.209.183.244/moodle/login/token.php?username="+username+"&password=" + password +"&service=moodle_mobile_app";
 
-        String json = baseCode();
+        String json = getJSON();
         // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Token> jsonAdapter = moshi.adapter(Token.class);
@@ -60,10 +67,10 @@ public class WebAPI {
     }
 
     public Calendar getEvent() throws IOException{
-        String apifunction = "&wsfunction=core_calendar_get_calendar_events";
-        url += apifunction + "&moodlewsrestformat=json";
+        String apifunction = "core_calendar_get_calendar_events";
+        url = fullUrl(apifunction);
 
-        String json = baseCode();
+        String json = getJSON();
 
         // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
@@ -73,11 +80,11 @@ public class WebAPI {
         return calendar;
     }
 
-    public UserProfile run() throws IOException {
-        String apifunction = "&wsfunction=core_webservice_get_site_info";
-        url += apifunction + "&moodlewsrestformat=json";
+    public UserProfile getUserProfile() throws IOException {
+        String apifunction = "core_webservice_get_site_info";
+        url = fullUrl(apifunction);
 
-        String json = baseCode();
+        String json = getJSON();
 
         // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
@@ -86,26 +93,28 @@ public class WebAPI {
         return userProfile;
     }
 
-    public RootMessage getMessages(int userid) throws IOException {
+    public RootMessage getMessages(int useridto) throws IOException {
+        return getMessages(useridto, 0);
+    }
+
+    public RootMessage getMessages(int useridto, int useridfrom) throws IOException {
+        RootMessage message = getMessage(useridto, useridfrom, 0);
+        message.messages.addAll(getMessage(useridfrom, useridto, 0).messages);
+        message.messages.addAll(getMessage(useridto, useridfrom, 1).messages);
+        message.messages.addAll(getMessage(useridfrom, useridto, 1).messages);
+        return message;
+    }
+
+    private RootMessage getMessage(int userId1, int userId2, int read) throws IOException {
         String baseUrl = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
         String apifunction = "&wsfunction=core_message_get_messages";
+
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<RootMessage> jsonAdapter = moshi.adapter(RootMessage.class);
 
-        url = baseUrl + apifunction + "&useridto=0&useridfrom=" + userid + "&read=0&moodlewsrestformat=json";
-        RootMessage message = jsonAdapter.fromJson(baseCode());
+        url = baseUrl + apifunction + "&useridto=" + userId1 + "&useridfrom=" + userId2 + "&read=" + read + "&moodlewsrestformat=json";
 
-        url = baseUrl + apifunction + "&useridto=" + userid + "&useridfrom=0&read=0&moodlewsrestformat=json";
-        RootMessage message2 = jsonAdapter.fromJson(baseCode());
-        message.messages.addAll(message2.messages);
-
-        url = baseUrl + apifunction + "&useridto=0&useridfrom=" + userid + "&read=1&moodlewsrestformat=json";
-        message2 = jsonAdapter.fromJson(baseCode());
-        message.messages.addAll(message2.messages);
-
-        url = baseUrl + apifunction + "&useridto=" + userid + "&useridfrom=0&read=1&moodlewsrestformat=json";
-        message2 = jsonAdapter.fromJson(baseCode());
-        message.messages.addAll(message2.messages);
+        RootMessage message = jsonAdapter.fromJson(getJSON());
 
         return message;
     }
@@ -118,7 +127,7 @@ public class WebAPI {
             values += "values["+i+"]=" + userIds.get(i) + "&";
         url += apifunction + "&field=id&" + values + "moodlewsrestformat=json";
         Log.d("URL", url);
-        String json = baseCode();
+        String json = getJSON();
 
         Moshi moshi = new Moshi.Builder().build();
         Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
@@ -130,7 +139,7 @@ public class WebAPI {
     public List<EnrolledCourse> runCours(int userId)throws IOException{
         String apifunction = "&wsfunction=core_enrol_get_users_courses";
         url += apifunction + "&userid=" + userId + "&moodlewsrestformat=json";
-        String json = baseCode();
+        String json = getJSON();
         Moshi moshi = new Moshi.Builder().build();
 
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
@@ -139,12 +148,11 @@ public class WebAPI {
         return enrolledCourses;
     }
 
-    //http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=31b687ca4d71f78ccde0436da7cff38c&wsfunction=core_course_get_contents&courseid=2&moodlewsrestformat=json
     public List<CourseContent> getCourseContent(int courseId) throws IOException {
         String apifunction = "&wsfunction=core_course_get_contents";
         url += apifunction + "&courseid=" + courseId + "&moodlewsrestformat=json";
 
-        String json = baseCode();
+        String json = getJSON();
 
         // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();

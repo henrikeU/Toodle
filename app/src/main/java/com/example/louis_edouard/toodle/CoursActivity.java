@@ -37,22 +37,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoursActivity extends AppCompatActivity
-        implements View.OnLongClickListener,View.OnClickListener,
+        implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener,AdapterView.OnItemClickListener {
     List<EnrolledCourse> course;
     int userId;
-
     private ListView mListView;
     private ListViewAdapter mAdapter;
     private Context mContext = this;
     boolean deleteMode;
     int mListViewsize;
     List<Boolean> deleted;
-    ActionMode mActionMode;
+    private ActionMode mActiveActionMode;
+    private ActionMode.Callback mLastCallback;
+    private boolean mInActionMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cours);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListView = (ListView) findViewById(R.id.listview);
@@ -82,13 +84,25 @@ public class CoursActivity extends AppCompatActivity
             }
         });
 
-//        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                //Toast.makeText(mContext, "OnItemLongClickListener", Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                CheckBox checkBox=(CheckBox)view.findViewById(R.id.checkBox);
+                checkBox.setChecked(!checkBox.isChecked());
+                onClick(checkBox);
+                /////////  -->
+                mAdapter.setDeleteMode(mListView);
+                mInActionMode = !mInActionMode;
+                updateActionMode();
+                ///////// <--
+                if(mActiveActionMode!= null)
+                    return  false;
+                mActiveActionMode = startActionMode(mLastCallback);
+                view.setSelected(true);
+                return true;
+            }
+        });
 
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -119,15 +133,18 @@ public class CoursActivity extends AppCompatActivity
      * Take care of popping the fragment back stack or finishing the activity
      * as appropriate.
      */
+    /* si tu le met il faut le deffinir si non, le back button ne fonctionne pas
     @Override
     public void onBackPressed() {
         //onCreate(new Bundle());
     }
+    */
 
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    //private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    class SomeCallback implements ActionMode.Callback{
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mActiveActionMode = mode;
             MenuInflater menuInflater = mode.getMenuInflater();
             menuInflater.inflate(R.menu.menu_list,menu);
             return true;
@@ -153,9 +170,10 @@ public class CoursActivity extends AppCompatActivity
             return false;
         }
 
-
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            mActiveActionMode = null;
+            mInActionMode = false;
             for(int i=0;i<mListView.getChildCount();i++) {
                 //Log.d("xyz", "getting child " + i);
                 View v = mListView.getChildAt(i);
@@ -178,7 +196,7 @@ public class CoursActivity extends AppCompatActivity
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         CheckBox cb=(CheckBox)buttonView;
-        Toast.makeText(this,"check box "+isChecked,Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"check box "+isChecked,Toast.LENGTH_SHORT).show();
         int pos = ((Integer) cb.getTag()).intValue();
             Log.d("xyz", "clicked on checkbox tag "+pos + " checked=" +isChecked);
         deleted.set(pos,isChecked);
@@ -199,25 +217,34 @@ public class CoursActivity extends AppCompatActivity
         deleted.set(pos,isChecked);
     }
 
-    /**
-     * Called when a view has been clicked and held.
-     *
-     * @param v The view that was clicked and held.
-     * @return true if the callback consumed the long click, false otherwise.
-     */
+    /*
     @Override
     public boolean onLongClick(View v) {
         CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
         checkBox.setChecked(!checkBox.isChecked());
         onClick(checkBox);
+        /////////  -->
         mAdapter.setDeleteMode(mListView);
-        if(mActionMode!= null)
+        mInActionMode = !mInActionMode;
+        updateActionMode();
+        ///////// <--
+        if(mActiveActionMode!= null)
             return  false;
-        mActionMode = startActionMode(mActionModeCallback);
+        mActiveActionMode = startActionMode(mLastCallback);
         v.setSelected(true);
         return false;
-    }
 
+    }
+    */
+
+    void updateActionMode(){
+        if(!mInActionMode && mActiveActionMode !=null){
+            mActiveActionMode.finish();
+        }else if(mInActionMode && mActiveActionMode == null){
+            if(mLastCallback==null) mLastCallback = new SomeCallback();
+            //startActivity(mLastCallback);
+        }
+    }
     private class RunAPI extends AsyncTask<String, Object, List<EnrolledCourse>> {
         @Override
         protected List<EnrolledCourse> doInBackground(String... params) {
@@ -228,7 +255,6 @@ public class CoursActivity extends AppCompatActivity
                 course = web.runCours(userId);
             }
             catch(IOException e){ }
-
             return course;
         }
 
@@ -310,7 +336,7 @@ public class CoursActivity extends AppCompatActivity
 //            cb.setOnClickListener(MainActivity.this);
             cb.setOnCheckedChangeListener(CoursActivity.this);
 
-            v.setOnLongClickListener(CoursActivity.this);
+           // v.setOnLongClickListener(CoursActivity.this);
 
             SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
             swipeLayout.addSwipeListener(new SimpleSwipeListener() {

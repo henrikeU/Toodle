@@ -127,7 +127,6 @@ public class WebAPI {
         return userProfileSearches;
     }
 
-
     public List<EnrolledCourse> runCours(int userId)throws IOException{
         String apifunction = "&wsfunction=core_enrol_get_users_courses";
         url += apifunction + "&userid=" + userId + "&moodlewsrestformat=json";

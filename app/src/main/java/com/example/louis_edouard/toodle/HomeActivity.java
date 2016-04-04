@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
+import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
@@ -27,16 +28,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences preferences;
     HomeAdapter homeAdapter;
     private UserProfile userProfile;
-    Calendar calendar;
+    private Calendar calendar;
 
-    private String[] donne = {"Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine",
-            "La date limite pour abandonner avec frais dans 2 semaines",
-            "Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine",
-            "La date limite pour abandonner avec frais dans 2 semaines",
-            "Cours IFT2905 dans 10 mins",
-            "Examen Intra de IFT1025 dans une semaine"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +49,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         btnCalendHome.setOnClickListener(this);
         btnTousHome.setOnClickListener(this);
 
-        homeAdapter = new HomeAdapter();
-        listViewHome.setAdapter(homeAdapter);
+
 
         listViewHome.setOnItemClickListener(this);
     }
@@ -94,7 +86,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,DetailsActivity.class);
-        String home = donne[position];
+        String home = calendar.events.get(position).name;
         intent.putExtra("home",home);
         startActivity(intent);
     }
@@ -108,7 +100,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public int getCount() {
-            return donne.length;
+            return calendar.events.size();
         }
 
         @Override
@@ -129,7 +121,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             TextView text = (TextView)vHome.findViewById(android.R.id.text1);
-            text.setText(donne[position]);
+            text.setText(calendar.events.get(position).name);
+            //time.setText(Globals.ConvertDate(message.timecreated));
+            Log.d("time_test", calendar.events.get(position).timestart+"");
+            CalendarEvent calendarEvent = calendar.events.get(position);
+            Globals.EventConvertDate(calendarEvent.timestart);
             return vHome;
         }
     }
@@ -139,6 +135,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(UserProfile userProfile) {
             super.onPostExecute(userProfile);
+            homeAdapter = new HomeAdapter();
+            listViewHome.setAdapter(homeAdapter);
             setTitle(userProfile.fullname);
             // saving user's data to shared preferences file
             SharedPreferences.Editor editor = preferences.edit();

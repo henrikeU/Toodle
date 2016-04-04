@@ -1,8 +1,9 @@
 package com.example.louis_edouard.toodle.moodle;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -25,8 +26,34 @@ public class Globals {
             return "Hier";
         else
             sdf = new SimpleDateFormat("yyyy-MM-dd"); // the format of your date
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formatting (see comment at the bottom
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
+
+    public static String EventConvertDate(long unixSeconds){
+        Date now  = new Date();
+        long diff = now.getTime() - unixSeconds*1000L;
+        Date date = new Date(diff); // *1000 is to convert seconds to milliseconds
+
+        long dayToSec = 24*3600;
+        long hourToSec= 3600;
+        long minToSec= 60;
+        SimpleDateFormat sdf;
+        String unit;
+        if (unixSeconds > dayToSec) {
+            sdf = new SimpleDateFormat("dd");
+            unit = unixSeconds > 2 * dayToSec ? "days" : "day";
+        }else if (unixSeconds > hourToSec) {
+            sdf = new SimpleDateFormat("HH");
+            unit = unixSeconds > 2 * hourToSec ? "hrs" : "hr";
+        }else {
+            sdf = new SimpleDateFormat("mm");
+            unit = unixSeconds > 2 * minToSec ? "mins" : "min";
+        }
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formating (see comment at the bottom
         String formattedDate = sdf.format(date);
+        Log.d("time_test", formattedDate+" "+unit);
         return formattedDate;
     }
 }

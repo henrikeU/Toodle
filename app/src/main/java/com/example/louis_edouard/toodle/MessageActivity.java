@@ -79,9 +79,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, ConversationActivity.class);
         intent.putExtra("USER_ID_FROM", rootMessage.messages.get(position).useridfrom);
-        intent.putExtra("USER_FROM_FULLNAME", rootMessage.messages.get(position).userfromfullname);
         intent.putExtra("USER_ID_TO",rootMessage.messages.get(position).useridto);
-        intent.putExtra("USER_TO_FULLNAME",rootMessage.messages.get(position).usertofullname);
         startActivity(intent);
     }
 

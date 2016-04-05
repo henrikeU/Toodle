@@ -20,6 +20,7 @@ public class Globals {
         long diff = now.getTime() - unixSeconds * 1000L;
         long dayToMil = 24*3600*1000L;
         SimpleDateFormat sdf;
+        // Messagerie only
         if (diff - dayToMil < 0)
             sdf = new SimpleDateFormat("HH:mm"); // the format of your date
         else if (diff - 2 * dayToMil < 0)

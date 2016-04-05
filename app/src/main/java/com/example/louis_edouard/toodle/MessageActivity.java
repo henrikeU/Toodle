@@ -50,7 +50,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        //messageAdaptor = new MessageAdaptor(this); context??!!
+
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
 
@@ -62,11 +62,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         lvMessage.setOnItemClickListener(this);
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this,SendMessageActivity.class);
@@ -114,14 +109,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             if (v == null) {
                 v = inflater.inflate(R.layout.listview_message, parent, false); // pour recuperer un layout et le mettre dans un view
             }
-            //pour changer le color au fond des photos
 
             TextView person = (TextView)v.findViewById(R.id.txt_message_person);
             TextView time = (TextView)v.findViewById(R.id.txt_message_time);
             TextView description = (TextView)v.findViewById(R.id.txt_message_description);
 
-
-            //String title = fullname.LineupItems.get(position).Title;
             Message message = rootMessage.messages.get(position);
             person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
             description.setText(rootMessage.messages.get(position).text);
@@ -143,13 +135,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
             try {
                 rootMessage = web.getMessages(userId);
-                //Comparator<Message> comparator = new Comparator<Message>() {
-                //    @Override
-                //    public int compare(Message lhs, Message rhs) {
-                //        return lhs.useridfrom - rhs.useridfrom;
-                //    }
-                //};
-                //Collections.sort(rootMessage.messages, comparator);
 
                 Message message1, message2;
                 for(int i = 0 ; i < rootMessage.messages.size(); i++){

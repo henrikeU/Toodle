@@ -85,11 +85,12 @@ public class ConversationActivity extends AppCompatActivity {
 
             //String title = fullname.LineupItems.get(position).Title;
             Message message = rootMessage.messages.get(position);
-            TextView text = (TextView)v.findViewById(R.id.textView);
+            TextView txtMessage = (TextView)v.findViewById(R.id.textView_message);
+            TextView timeSent = (TextView)v.findViewById(R.id.textView_timeSent);
             LinearLayout layout = (LinearLayout)v.findViewById(R.id.chatbubble_container);
             LinearLayout chatbuble = (LinearLayout)v.findViewById(R.id.chatbubble);
-
-            text.setText(message.text);
+            timeSent.setText(Globals.ConvertDate(message.timecreated));
+            txtMessage.setText(message.text);
 
             if(message.useridfrom == userid) {
                 chatbuble.setBackgroundDrawable(getResources().getDrawable(R.drawable.chatbubble_outgoing));

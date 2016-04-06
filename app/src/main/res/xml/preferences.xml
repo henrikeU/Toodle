@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="prefs"
+    android:title="@string/app_name">
+
+    <PreferenceCategory
+        android:key="miseajour"
+        android:title="Mise à jour"
+        android:layout="@xml/preference_catagory">
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="savetime"
+            android:numeric="integer"
+            android:title="Persistence"
+            android:summary="A combien de jour on remonte dans le passe?"/>
+        <CheckBoxPreference
+            android:key="autoupdate"
+            android:title="Automatique"
+            android:summary="Mis a jour automatique"/>
+        <EditTextPreference
+            android:defaultValue="10"
+            android:dependency="autoupdate"
+            android:key="intervallewifi"
+            android:numeric="integer"
+            android:title="Intervalle (wifi)"
+            android:summary="Quelle intervalles (en minutes) entre mis a jour,
+            lorsque le wifi est disponible"/>
+        <EditTextPreference
+            android:defaultValue="10"
+            android:dependency="autoupdate"
+            android:key="intervallemobile"
+            android:numeric="integer"
+            android:title="Intervalle (Pas de wifi)"
+            android:summary="Quelle intervalles (en minutes) entre mis a jour,
+            lorsque le wifi n'est disponible"/>
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

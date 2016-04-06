@@ -56,6 +56,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if(token.token == null) {
                 txtErrorMsg.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
             }else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

@@ -50,6 +50,7 @@ public class CoursActivity extends AppCompatActivity
     private ActionMode mActiveActionMode;
     private ActionMode.Callback mLastCallback;
     private boolean mInActionMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +129,6 @@ public class CoursActivity extends AppCompatActivity
             }
         });
     }
-
     /**
      * Take care of popping the fragment back stack or finishing the activity
      * as appropriate.

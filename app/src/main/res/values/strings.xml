@@ -27,15 +27,15 @@
         <item>Contacts</item>
     </string-array>
 
-    <!-- Nav Drawer List Item Icons -->
-    <!-- Keep them in order as the titles are in -->
-    <array name="nav_drawer_icons">
-        <item>@drawable/ic_home_black_24dp</item>
-        <item>@drawable/ic_class_black_24dp</item>
-        <item>@drawable/ic_date_range_black_24dp</item>
-        <item>@drawable/ic_message_black_24dp</item>
-        <item>@drawable/ic_contacts_black_24dp</item>
-    </array>
+    <!--&lt;!&ndash; Nav Drawer List Item Icons &ndash;&gt;-->
+    <!--&lt;!&ndash; Keep them in order as the titles are in &ndash;&gt;-->
+    <!--<array name="nav_drawer_icons">-->
+        <!--<item>@drawable/ic_home_black_24dp</item>-->
+        <!--<item>@drawable/ic_class_black_24dp</item>-->
+        <!--<item>@drawable/ic_date_range_black_24dp</item>-->
+        <!--<item>@drawable/ic_message_black_24dp</item>-->
+        <!--<item>@drawable/ic_contacts_black_24dp</item>-->
+    <!--</array>-->
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>

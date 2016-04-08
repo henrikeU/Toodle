@@ -41,12 +41,12 @@ public class CoursActivity extends AppCompatActivity
         CompoundButton.OnCheckedChangeListener,AdapterView.OnItemClickListener {
     List<EnrolledCourse> course;
     int userId;
-    private ListView mListView;
+    private ListView lvCours;
     private ListViewAdapter mAdapter;
     private Context mContext = this;
-    boolean deleteMode;
-    int mListViewsize;
-    List<Boolean> deleted;
+    private boolean deleteMode;
+    private int mListViewsize;
+    private List<Boolean> deleted;
     private ActionMode mActiveActionMode;
     private ActionMode.Callback mLastCallback;
     private boolean mInActionMode;
@@ -58,7 +58,7 @@ public class CoursActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mListView = (ListView) findViewById(R.id.listview);
+        lvCours = (ListView) findViewById(R.id.lvCours);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar actionBar = getActionBar();
@@ -76,8 +76,8 @@ public class CoursActivity extends AppCompatActivity
         RunAPI run = new RunAPI();
         run.execute();
 
-        mListView.setOnItemClickListener(this);
-        mListView.setOnTouchListener(new View.OnTouchListener() {
+        lvCours.setOnItemClickListener(this);
+        lvCours.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Log.e("ListView", "OnTouch");
@@ -85,7 +85,7 @@ public class CoursActivity extends AppCompatActivity
             }
         });
 
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvCours.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -93,7 +93,7 @@ public class CoursActivity extends AppCompatActivity
                 checkBox.setChecked(!checkBox.isChecked());
                 onClick(checkBox);
                 /////////  -->
-                mAdapter.setDeleteMode(mListView);
+                mAdapter.setDeleteMode(lvCours);
                 mInActionMode = !mInActionMode;
                 updateActionMode();
                 ///////// <--
@@ -105,7 +105,7 @@ public class CoursActivity extends AppCompatActivity
             }
         });
 
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        lvCours.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 Log.e("ListView", "onScrollStateChanged");
@@ -117,7 +117,7 @@ public class CoursActivity extends AppCompatActivity
             }
         });
 
-        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        lvCours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.e("ListView", "onItemSelected:" + position);
@@ -174,9 +174,9 @@ public class CoursActivity extends AppCompatActivity
         public void onDestroyActionMode(ActionMode mode) {
             mActiveActionMode = null;
             mInActionMode = false;
-            for(int i=0;i<mListView.getChildCount();i++) {
+            for(int i=0;i<lvCours.getChildCount();i++) {
                 //Log.d("xyz", "getting child " + i);
-                View v = mListView.getChildAt(i);
+                View v = lvCours.getChildAt(i);
                 CheckBox cb = (CheckBox) v.findViewById(R.id.checkBox);
                 deleteMode = false;
                 cb.setChecked(false);
@@ -261,7 +261,7 @@ public class CoursActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(List<EnrolledCourse> course){
             super.onPostExecute(course);
-            mListView.setAdapter(mAdapter);
+            lvCours.setAdapter(mAdapter);
             mAdapter.setMode(Attributes.Mode.Single);
             mListViewsize = course.size();
             deleteMode = false;
@@ -315,7 +315,7 @@ public class CoursActivity extends AppCompatActivity
 
         @Override
         public View generateView(int position, ViewGroup parent) {
-            View v=LayoutInflater.from(mContext).inflate(R.layout.listview_item, null); ;
+            View v=LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
 
             if( v==null ) {
                 v=LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);

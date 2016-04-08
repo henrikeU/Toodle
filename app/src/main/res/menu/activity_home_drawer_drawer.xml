@@ -4,19 +4,24 @@
     <group android:checkableBehavior="single" android:id="@+id/groupePrincipal">
         <item
             android:id="@+id/nav_home"
-            android:title="Accueil" />
+            android:title="Accueil"
+            android:icon="@drawable/ic_home_black_24dp"/>
         <item
             android:id="@+id/nav_course"
-            android:title="Cours" />
+            android:title="Cours"
+            android:icon="@drawable/ic_book_black_24dp"/>
         <item
             android:id="@+id/nav_calendar"
-            android:title="Calendrier" />
+            android:title="Calendrier"
+            android:icon="@drawable/ic_date_range_black_24dp"/>
         <item
             android:id="@+id/nav_message"
-            android:title="Messagerie" />
+            android:title="Messagerie"
+            android:icon="@drawable/ic_message_black_24dp"/>
         <item
             android:id="@+id/nav_contact"
-            android:title="Contact" />
+            android:title="Contact"
+            android:icon="@drawable/ic_contacts_black_24dp"/>
     </group>
 
     <!--<group android:checkableBehavior="single" android:id="@+id/groupePrincipal">-->

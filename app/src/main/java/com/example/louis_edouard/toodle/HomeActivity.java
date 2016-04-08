@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +30,9 @@ public class HomeActivity extends AppCompatActivity implements
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     SharedPreferences preferences;
-    NavigationView drawerView;
     HomeAdapter homeAdapter;
     private UserProfile userProfile;
     private Calendar calendar;
-    private int switcher =0;
 
 
     @Override
@@ -57,8 +54,8 @@ public class HomeActivity extends AppCompatActivity implements
         prefeditor.putLong("derniereVisite",now);
         prefeditor.apply();
         prefeditor.commit();
-        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         /***************/
+        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
         listViewHome = (ListView)findViewById(R.id.listViewHome);
@@ -138,7 +135,6 @@ public class HomeActivity extends AppCompatActivity implements
     private class HomeAdapter extends BaseAdapter {
         LayoutInflater inflaterHome;
         public HomeAdapter() {
-
             inflaterHome= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         }
 
@@ -196,7 +192,6 @@ public class HomeActivity extends AppCompatActivity implements
                 calendar = webAPI.getEvent();
             }
             catch(IOException e){ }
-
             return userProfile;
         }
     }

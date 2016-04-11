@@ -106,8 +106,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="Contact"
-                android:id="@+id/btnTousHome"
+                android:text="Contacts"
+                android:id="@+id/btnContactHome"
                 android:layout_weight="1"
                 android:background="@drawable/button_section"
                 android:textColor="#fff"

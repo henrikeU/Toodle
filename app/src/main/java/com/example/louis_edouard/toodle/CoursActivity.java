@@ -7,7 +7,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -37,8 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoursActivity extends AppCompatActivity
-        implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemClickListener  {
+    private View header;
     List<EnrolledCourse> course;
     int userId;
     private ListView lvCours;
@@ -54,9 +60,20 @@ public class CoursActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cours);
+        setContentView(R.layout.activity_cours_drawer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        header = (View)navigationView.getHeaderView(0);
+        /*************/
 
         lvCours = (ListView) findViewById(R.id.lvCours);
 
@@ -129,17 +146,69 @@ public class CoursActivity extends AppCompatActivity
             }
         });
     }
-    /**
-     * Take care of popping the fragment back stack or finishing the activity
-     * as appropriate.
-     */
-    /* si tu le met il faut le deffinir si non, le back button ne fonctionne pas
+
     @Override
     public void onBackPressed() {
-        //onCreate(new Bundle());
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
-    */
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.pricipal_drawer_menu, menu);
+//        return true;
+//    }
+/*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+*/
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        Intent intent;
+        if (id == R.id.nav_home) {
+            intent = new Intent(this,HomeDrawerActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_course) {
+            onBackPressed();
+        } else if (id == R.id.nav_calendar) {
+            intent = new Intent(this,CalendarActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_message) {
+            intent = new Intent(this,MessageActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_contact) {
+//            intent = new Intent(this,ContactActivity.class);
+//            startActivity(intent);
+        } else if (id == R.id.nav_send) {
+            intent = new Intent(this, SendMessageActivity.class);
+            startActivity(intent);
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    /****************/
     //private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
     class SomeCallback implements ActionMode.Callback{
         @Override
@@ -166,7 +235,7 @@ public class CoursActivity extends AppCompatActivity
                     //traitmenet pour deleter
                     break;
             }
-            setContentView(R.layout.activity_cours);
+            setContentView(R.layout.activity_cours_drawer);
             return false;
         }
 
@@ -198,9 +267,9 @@ public class CoursActivity extends AppCompatActivity
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         CheckBox cb=(CheckBox)buttonView;
-        Toast.makeText(this,"check box "+isChecked,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "check box " + isChecked, Toast.LENGTH_SHORT).show();
         int pos = ((Integer) cb.getTag()).intValue();
-            Log.d("xyz", "clicked on checkbox tag "+pos + " checked=" +isChecked);
+        Log.d("xyz", "clicked on checkbox tag "+pos + " checked=" +isChecked);
         deleted.set(pos,isChecked);
     }
 
@@ -338,7 +407,7 @@ public class CoursActivity extends AppCompatActivity
 //            cb.setOnClickListener(MainActivity.this);
             cb.setOnCheckedChangeListener(CoursActivity.this);
 
-           // v.setOnLongClickListener(CoursActivity.this);
+            // v.setOnLongClickListener(CoursActivity.this);
 
             SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
             swipeLayout.addSwipeListener(new SimpleSwipeListener() {

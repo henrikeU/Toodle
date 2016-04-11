@@ -19,14 +19,6 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".DetailsActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity
-            android:name=".CoursActivity"
-            android:parentActivityName=".HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity" />
-        </activity>
         <activity
             android:name=".CoursContentActivity"
             android:parentActivityName=".CoursActivity">
@@ -38,18 +30,9 @@
             android:name=".CalendarActivity"
             android:label="Calendrier"
             android:parentActivityName=".HomeActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".HomeActivity"/>
-        </activity>
-        <activity
-            android:name=".MessageActivity"
-            android:label="@string/title_activity_message"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity"/>
+                android:value=".HomeActivity" />
         </activity>
         <activity android:name=".SendMessageActivity" />
         <activity android:name=".ConversationActivity" />
@@ -57,6 +40,14 @@
         <activity
             android:name=".HomeDrawerActivity"
             android:label="@string/title_activity_home_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CoursActivity"
+            android:label="@string/title_activity_cours_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MessageActivity"
+            android:label="@string/title_activity_message_drawer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

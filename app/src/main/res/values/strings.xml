@@ -30,11 +30,11 @@
     <!--&lt;!&ndash; Nav Drawer List Item Icons &ndash;&gt;-->
     <!--&lt;!&ndash; Keep them in order as the titles are in &ndash;&gt;-->
     <!--<array name="nav_drawer_icons">-->
-        <!--<item>@drawable/ic_home_black_24dp</item>-->
-        <!--<item>@drawable/ic_class_black_24dp</item>-->
-        <!--<item>@drawable/ic_date_range_black_24dp</item>-->
-        <!--<item>@drawable/ic_message_black_24dp</item>-->
-        <!--<item>@drawable/ic_contacts_black_24dp</item>-->
+    <!--<item>@drawable/ic_home_black_24dp</item>-->
+    <!--<item>@drawable/ic_class_black_24dp</item>-->
+    <!--<item>@drawable/ic_date_range_black_24dp</item>-->
+    <!--<item>@drawable/ic_message_black_24dp</item>-->
+    <!--<item>@drawable/ic_contacts_black_24dp</item>-->
     <!--</array>-->
 
     <!-- Content Description -->
@@ -43,5 +43,9 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="app_label">toodle</string>
+    <string name="search_hint">search</string>
+    <string name="title_activity_cours_drawer">CoursDrawerActivity</string>
+    <string name="title_activity_message_drawer">MessageDrawerActivity</string>
 
 </resources>

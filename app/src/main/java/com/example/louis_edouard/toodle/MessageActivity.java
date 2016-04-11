@@ -10,6 +10,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -41,9 +45,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageActivity extends AppCompatActivity implements
+public class MessageActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener, AdapterView.OnItemClickListener,
         CompoundButton.OnCheckedChangeListener{
+    private View header;
+    /************************/
     FloatingActionButton fabo;
     private ListView lvMessage;
     private MessageAdaptor messageAdaptor;
@@ -59,14 +66,23 @@ public class MessageActivity extends AppCompatActivity implements
     private ActionMode.Callback mLastCallback;
     private boolean mInActionMode;
     /****************delete*************/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_message_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        header = (View)navigationView.getHeaderView(0);
+        /*******************************/
         /******* drawer menu ******/
         fabo = (FloatingActionButton) findViewById(R.id.fab);
         fabo.setOnClickListener(this);
@@ -141,12 +157,58 @@ public class MessageActivity extends AppCompatActivity implements
             }
         });
         /****************delete*************/
-        /////////////----------////////----///////
-        /////////////---------/////////---///////
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.pricipal_drawer_menu, menu);
+//        return true;
+//    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Intent intent;
+        if (id == R.id.nav_home) {
+            intent = new Intent(this,HomeDrawerActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_course) {
+            intent = new Intent(this,CoursActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_calendar) {
+            intent = new Intent(this,CalendarActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_message) {
+            onBackPressed();
+        } else if (id == R.id.nav_contact) {
+//            intent = new Intent(this,ContactActivity.class);
+//            startActivity(intent);
+        } else if (id == R.id.nav_send) {
+            intent = new Intent(this, SendMessageActivity.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+    /******************************************/
     /****************delete*************/
     class SomeCallback implements ActionMode.Callback{
         @Override
@@ -166,7 +228,7 @@ public class MessageActivity extends AppCompatActivity implements
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             //on va supprimer ou archiver
             if (item.getItemId()==R.id.delete){
-                    //traitmenet pour delete
+                //traitmenet pour delete
             }
             setContentView(R.layout.activity_message);
             return false;
@@ -405,7 +467,7 @@ public class MessageActivity extends AppCompatActivity implements
             TextView t1 =(TextView)convertView.findViewById(R.id.trash);
 //            String title = rootMessage.messages.get(position).usertofullname + " - " + rootMessage.messages.get(position).userfromfullname;
 //            t.setText(title);
-           // t1.setText(rootMessage.messages.get(position).usertofullname);
+            // t1.setText(rootMessage.messages.get(position).usertofullname);
         }
         /***************delete*************/
 
@@ -424,97 +486,5 @@ public class MessageActivity extends AppCompatActivity implements
         public long getItemId(int position) {
             return position;
         }
-
-
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            View v = convertView;
-//            if (v == null) {
-//                v = inflater.inflate(R.layout.listview_message, parent, false); // pour recuperer un layout et le mettre dans un view
-//            }
-//
-//            TextView person = (TextView)v.findViewById(R.id.txt_message_person);
-//            TextView time = (TextView)v.findViewById(R.id.txt_message_time);
-//            TextView description = (TextView)v.findViewById(R.id.txt_message_description);
-//
-//            Message message = rootMessage.messages.get(position);
-//            person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
-//            description.setText(rootMessage.messages.get(position).text);
-//            time.setText(Globals.ConvertDate(message.timecreated));
-//            if(message.timeread == 0 && message.useridfrom != userId){
-//                description.setTextColor(Color.BLUE);
-//                time.setTextColor(Color.DKGRAY);
-//                time.setTypeface(null, Typeface.BOLD);
-//            }
-//
-//            return v;
-//        }
     }
-
-    //////////////-----///////////
-    /////////////------///////////
-    
-    /***************** drawer menu *******************/
-/*
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.drawerSetting) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Intent intent;
-        if (id == R.id.nav_home) {
-            intent = new Intent(this,HomeActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_course) {
-            intent = new Intent(this,CoursActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_calendar) {
-            intent = new Intent(this,CalendarActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_message) {
-            intent = new Intent(this,MessageActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_contact) {
-//            intent = new Intent(this,HomeActivity.class);
-//            startActivity(intent);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    */
 }

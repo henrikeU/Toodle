@@ -105,7 +105,7 @@ public class HomeDrawerActivity extends AppCompatActivity
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
         btnMessHome = (Button)findViewById(R.id.btnMessHome);
         btnCalendHome = (Button)findViewById(R.id.btnCalendHome);
-        btnTousHome = (Button)findViewById(R.id.btnTousHome);
+        btnTousHome = (Button)findViewById(R.id.btnContactHome);
         btnCoursHome.setOnClickListener(this);
         btnMessHome.setOnClickListener(this);
         btnCalendHome.setOnClickListener(this);
@@ -139,6 +139,8 @@ public class HomeDrawerActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.preference) {
+            Intent intent = new Intent(this,Preference.class);
+            startActivity(intent);
             return true;
         }
 
@@ -151,7 +153,9 @@ public class HomeDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent;
-        if (id == R.id.nav_course) {
+        if (id == R.id.nav_home) {
+            onBackPressed();
+        } else if (id == R.id.nav_course) {
             intent = new Intent(this,CoursActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_calendar) {
@@ -164,9 +168,9 @@ public class HomeDrawerActivity extends AppCompatActivity
 //            intent = new Intent(this,ContactActivity.class);
 //            startActivity(intent);
         } else if (id == R.id.nav_send) {
-        intent = new Intent(this,SendMessageActivity.class);
-        startActivity(intent);
-    }
+            intent = new Intent(this, SendMessageActivity.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -194,9 +198,7 @@ public class HomeDrawerActivity extends AppCompatActivity
                 startActivity(intent);
                 // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
-            case R.id.btnTousHome:
-                intent = new Intent(this,HomeDrawerActivity.class);
-                startActivity(intent);
+            case R.id.btnContactHome:
                 // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
         }

@@ -34,8 +34,9 @@ public class CoursContentActivity extends AppCompatActivity {
         tabCoursContent.setupWithViewPager(pagerCoursContent);
         Intent intent = getIntent();
         COURSE_ID = intent.getIntExtra("COURSE_ID", 0);
-        String coursTitle =intent.getStringExtra("COURSE_TITLE");
-        setTitle(coursTitle);
+        String coursTitle = intent.getStringExtra("COURSE_TITLE");
+        String courseCode = intent.getStringExtra("COURSE_CODE");
+        setTitle(courseCode + " - " + coursTitle);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         USER_TOKEN = pref.getString(Globals.KEY_USER_TOKEN, null);

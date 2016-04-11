@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.CourseContent;
 
@@ -24,7 +25,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.List;
 
-public class CoursFichFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class CoursFichFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
     TextView coursPlan, prof, theoDys, tpDys;
     List<CourseContent> courseContents;
     @Nullable
@@ -38,6 +39,7 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
         theoDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_theoDys);
         tpDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_tpDys);
 
+        coursPlan.setOnClickListener(this);
 
         RunAPI run = new RunAPI();
         run.execute();
@@ -47,6 +49,11 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(),"Download plan de cours?",Toast.LENGTH_LONG).show();
     }
 
     public class RunAPI extends AsyncTask<String, Object, List<CourseContent>> {
@@ -81,6 +88,7 @@ public class CoursFichFragment extends Fragment implements AdapterView.OnItemCli
             prof.setText(teacher.text());
             theoDys.setText(horaireTheorie.substring(0, horaireTheorie.length() - 1));
             tpDys.setText(horaireTp.substring(0, horaireTp.length() - 1));
+
         }
 
     }

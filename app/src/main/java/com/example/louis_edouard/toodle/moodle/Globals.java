@@ -2,6 +2,14 @@ package com.example.louis_edouard.toodle.moodle;
 
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -13,6 +21,8 @@ public class Globals {
     public final static String SHARED_PREFERENCES_NAME = "sharedPrefs";
     public final static String KEY_USER_TOKEN = "userToken";
     public final static String KEY_USER_ID = "userID";
+
+    private static final int MEGABYTE = 1024 * 1024;
 
     public static String ConvertDate(long unixSeconds){
         Date now  = new Date();
@@ -56,6 +66,29 @@ public class Globals {
         String formattedDate = sdf.format(date);
         Log.d("time_test", formattedDate+" "+unit);
         return formattedDate;
+    }
+
+    public static void DownloadFile(String fileURL, File directory){
+        try{
+            URL url = new URL(fileURL);
+            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            FileOutputStream fileOutputStream = new FileOutputStream(directory);
+            int totalSize = urlConnection.getContentLength();
+
+            byte[] buffer = new byte[MEGABYTE];
+            int bufferLength = 0;
+            while ((bufferLength = inputStream.read(buffer)) > 0)
+                fileOutputStream.write(buffer, 0, bufferLength);
+
+            fileOutputStream.close();
+
+        }
+        catch (FileNotFoundException e){}
+        catch (MalformedURLException e){}
+        catch (IOException e){}
     }
 }
 

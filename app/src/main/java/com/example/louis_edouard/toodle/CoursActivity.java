@@ -187,8 +187,10 @@ public class CoursActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,CoursContentActivity.class);
-        intent.putExtra("COURSE_ID", course.get(position).id);
-        intent.putExtra("COURSE_TITLE",course.get(position).fullname);
+        EnrolledCourse chosenCourse = course.get(position);
+        intent.putExtra("COURSE_ID", chosenCourse.id);
+        intent.putExtra("COURSE_TITLE",chosenCourse.fullname);
+        intent.putExtra("COURSE_CODE", chosenCourse.shortname);
         startActivity(intent);
     }
 

@@ -4,7 +4,11 @@ import android.util.Log;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.CourseContent;
+import com.example.louis_edouard.toodle.moodle.Discussion;
+import com.example.louis_edouard.toodle.moodle.DiscussionPost;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
+import com.example.louis_edouard.toodle.moodle.Forum;
+import com.example.louis_edouard.toodle.moodle.ForumDiscussion;
 import com.example.louis_edouard.toodle.moodle.RootMessage;
 import com.example.louis_edouard.toodle.moodle.Token;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
@@ -161,6 +165,50 @@ public class WebAPI {
         List<CourseContent> courseContents = jsonAdapter.fromJson(json);
 
         return courseContents;
+    }
+
+    public List<Forum> getForums(int courseid) throws IOException{
+        String apifunction = "mod_forum_get_forums_by_courses";
+        url = fullUrl(apifunction) + "&courseids[0]=" + courseid;
+
+        String json = getJSON();
+
+        // parse JSON content from the string
+        Moshi moshi = new Moshi.Builder().build();
+        Type forumList = Types.newParameterizedType(List.class, Forum.class);
+        JsonAdapter<List<Forum>> jsonAdapter = moshi.adapter(forumList);
+        List<Forum> forums = jsonAdapter.fromJson(json);
+
+        return forums;
+    }
+
+    public ForumDiscussion getDiscussions(int forumid) throws IOException{
+        String apifunction = "mod_forum_get_forum_discussions_paginated";
+        url = fullUrl(apifunction) + "&forumid=" + forumid;
+
+        String json = getJSON();
+
+        // parse JSON content from the string
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<ForumDiscussion> jsonAdapter = moshi.adapter(ForumDiscussion.class);
+        ForumDiscussion forumDiscussion = jsonAdapter.fromJson(json);
+
+        return forumDiscussion;
+    }
+
+    public DiscussionPost getPosts(int discussionid) throws IOException{
+        String apifunction = "mod_forum_get_forum_discussion_posts";
+        url = fullUrl(apifunction) + "&discussionid=" + discussionid;
+
+        String json = getJSON();
+
+        // parse JSON content from the string
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<DiscussionPost> jsonAdapter = moshi.adapter(DiscussionPost.class);
+        DiscussionPost discussionPost = jsonAdapter.fromJson(json);
+
+        return discussionPost;
+
     }
 
 }

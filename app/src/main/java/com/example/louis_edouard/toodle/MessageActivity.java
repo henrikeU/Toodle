@@ -58,6 +58,8 @@ public class MessageActivity extends AppCompatActivity
     private int userId;
     private Context messageConext = this;
     private SendMessageActivity sendMessageActivity;
+    TextView drawer_txt_name;
+    TextView drawer_txt_email;
     /****************delete*************/
     private boolean deleteMode;
     private int lvMessagesize;
@@ -338,6 +340,11 @@ public class MessageActivity extends AppCompatActivity
             deleted = new ArrayList<Boolean>();
             for(int i=0; i<lvMessagesize; i++) deleted.add(false);
             /***************delete*************/
+            drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
+            drawer_txt_name.setText(HomeDrawerActivity.userName);
+            drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
+            //TODO: retrieve user's email address
+            drawer_txt_email.setText(HomeDrawerActivity.userName + "@email.com");
         }
     }
     /////////MMMMM*********M

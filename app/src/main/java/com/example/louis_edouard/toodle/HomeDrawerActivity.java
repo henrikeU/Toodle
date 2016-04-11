@@ -21,7 +21,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.CalendarEvent;
@@ -39,6 +38,7 @@ public class HomeDrawerActivity extends AppCompatActivity
     HomeAdapter homeAdapter;
     TextView drawer_txt_name;
     TextView drawer_txt_email;
+    public static String userName;
     private UserProfile userProfile;
     private Calendar calendar;
     private View header;
@@ -72,17 +72,6 @@ public class HomeDrawerActivity extends AppCompatActivity
         /***********************/
         header = (View)navigationView.getHeaderView(0);
 
-        // changer le menu
-//        Menu m = navigationView.getMenu();
-//        m.clear();
-//        MenuItem j;
-//        j = m.add(R.id.groupePrincipal, 0, 0, "Archives");
-//        j.setIcon(android.R.drawable.ic_menu_gallery);
-//        j = m.add(R.id.groupePrincipal, 1, 1, "Recherche");
-//        j.setIcon(android.R.drawable.ic_menu_search);
-//        m.setGroupCheckable(R.id.groupePrincipal, true, true);
-        /*********/
-
         //overflow menu
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         long now = System.currentTimeMillis();
@@ -90,8 +79,8 @@ public class HomeDrawerActivity extends AppCompatActivity
 
         long delta = (now - last)/1000;
 
-        Toast.makeText(this, "Derniere visite il y a " + delta + " secnodes"
-                , Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Derniere visite il y a " + delta + " secnodes"
+//                , Toast.LENGTH_LONG).show();
         //mettre a jour la derniere visite
         SharedPreferences.Editor prefeditor= prefs.edit();
         prefeditor.putLong("derniereVisite",now);
@@ -259,11 +248,12 @@ public class HomeDrawerActivity extends AppCompatActivity
             listViewHome.setAdapter(homeAdapter);
             setTitle(userProfile.fullname);
 
+            userName = userProfile.fullname;
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(userProfile.fullname);
+            drawer_txt_name.setText(userName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
             //TODO: retrieve user's email address
-            drawer_txt_email.setText(userProfile.fullname + "@email.com");
+            drawer_txt_email.setText(userName + "@email.com");
             // saving user's data to shared preferences file
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt(Globals.KEY_USER_ID, userProfile.userid);

@@ -56,6 +56,8 @@ public class CoursActivity extends AppCompatActivity
     private ActionMode mActiveActionMode;
     private ActionMode.Callback mLastCallback;
     private boolean mInActionMode;
+    TextView drawer_txt_name;
+    TextView drawer_txt_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -338,6 +340,12 @@ public class CoursActivity extends AppCompatActivity
             deleteMode = false;
             deleted = new ArrayList<Boolean>();
             for(int i=0; i<mListViewsize; i++) deleted.add(false);
+
+            drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
+            drawer_txt_name.setText(HomeDrawerActivity.userName);
+            drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
+            //TODO: retrieve user's email address
+            drawer_txt_email.setText(HomeDrawerActivity.userName + "@email.com");
         }
     }
 

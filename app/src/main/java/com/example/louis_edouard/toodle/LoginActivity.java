@@ -58,8 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 txtErrorMsg.setVisibility(View.VISIBLE);
             }else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-
+                Intent intent = new Intent(LoginActivity.this, HomeDrawerActivity.class);
                 // saving user's data to shared preferences file
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(Globals.KEY_USER_TOKEN, token.token);

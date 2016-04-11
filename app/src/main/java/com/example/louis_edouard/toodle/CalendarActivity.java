@@ -2,9 +2,8 @@ package com.example.louis_edouard.toodle;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.Globals;
-import com.example.louis_edouard.toodle.moodle.UserProfile;
 
 import java.io.IOException;
 
@@ -27,6 +25,8 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView)findViewById(R.id.listView_Calendar);
         RunAPI runAPI = new RunAPI();

@@ -10,10 +10,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,14 +43,14 @@ import java.util.List;
 
 public class MessageActivity extends AppCompatActivity implements
         View.OnClickListener, AdapterView.OnItemClickListener,
-        NavigationView.OnNavigationItemSelectedListener,
         CompoundButton.OnCheckedChangeListener{
-
+    FloatingActionButton fabo;
     private ListView lvMessage;
     private MessageAdaptor messageAdaptor;
     private RootMessage rootMessage;
     private int userId;
     private Context messageConext = this;
+    private SendMessageActivity sendMessageActivity;
     /****************delete*************/
     private boolean deleteMode;
     private int lvMessagesize;
@@ -70,28 +66,11 @@ public class MessageActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_message);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         /******* drawer menu ******/
-//        FloatingActionButton fabo = (FloatingActionButton) findViewById(R.id.fab);
-//        fabo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-//
-//        View header = (View)navigationView.getHeaderView(0);
-//        TextView text = (TextView)header.findViewById(R.id.drawer_text1);
-//        text.setText("Bonjour!");
+        fabo = (FloatingActionButton) findViewById(R.id.fab);
+        fabo.setOnClickListener(this);
+
         /**********************************************/
 
         lvMessage = (ListView)findViewById(R.id.lvMessage);
@@ -212,7 +191,7 @@ public class MessageActivity extends AppCompatActivity implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, ConversationActivity.class);
         intent.putExtra("USER_ID_FROM", rootMessage.messages.get(position).useridfrom);
-        intent.putExtra("USER_ID_TO",rootMessage.messages.get(position).useridto);
+        intent.putExtra("USER_ID_TO", rootMessage.messages.get(position).useridto);
         startActivity(intent);
     }
 
@@ -227,18 +206,23 @@ public class MessageActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this,SendMessageActivity.class);
-        startActivity(intent);
-        Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        /***************delete*************/
-        CheckBox cb=(CheckBox)v;
-        Boolean isChecked=((CheckBox) v).isChecked();
-        Toast.makeText(this,"check box "+isChecked,Toast.LENGTH_LONG).show();
-        int pos = ((Integer)v.getTag()).intValue();
-        Log.d("xyz", "clicked on checkbox tag " + pos + " checked=" + isChecked);
-        deleted.set(pos, isChecked);
-        /***************delete*************/
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.fab:
+                intent = new Intent(this, SendMessageActivity.class);
+                //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
+                startActivity(intent);
+                break;
+            default:
+                /***************delete*************/
+                CheckBox cb = (CheckBox) v;
+                Boolean isChecked = ((CheckBox) v).isChecked();
+                Toast.makeText(this, "check box " + isChecked, Toast.LENGTH_LONG).show();
+                int pos = ((Integer) v.getTag()).intValue();
+                Log.d("xyz", "clicked on checkbox tag " + pos + " checked=" + isChecked);
+                deleted.set(pos, isChecked);
+                /***************delete*************/
+        }
     }
 
     void updateActionMode(){
@@ -471,6 +455,7 @@ public class MessageActivity extends AppCompatActivity implements
     /////////////------///////////
     
     /***************** drawer menu *******************/
+/*
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -484,7 +469,7 @@ public class MessageActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_drawer, menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
     }
 
@@ -530,5 +515,6 @@ public class MessageActivity extends AppCompatActivity implements
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    /****************************/
+
+    */
 }

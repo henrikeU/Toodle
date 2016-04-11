@@ -26,7 +26,7 @@ import com.example.louis_edouard.toodle.moodle.UserProfile;
 import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity implements
-        View.OnClickListener, AdapterView.OnItemClickListener {
+        View.OnClickListener, AdapterView.OnItemClickListener{
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
     SharedPreferences preferences;
@@ -73,26 +73,24 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_preference,menu);
-       //getMenuInflater().inflate(R.menu.home_drawer, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id==R.id.preference){
-            Intent intent = new Intent(this,Preference.class);
-            startActivity(intent);
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.preference) {
+            return true;
         }
-//        if (id == R.id.drawerSetting) {
-//            Intent intent = new Intent(this,HomeDrawerActivity.class);
-//            startActivity(intent);
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-        return  true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

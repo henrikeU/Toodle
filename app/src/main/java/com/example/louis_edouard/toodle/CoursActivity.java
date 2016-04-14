@@ -66,6 +66,7 @@ public class CoursActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,7 +95,7 @@ public class CoursActivity extends AppCompatActivity
 
         RunAPI run = new RunAPI();
         run.execute();
-
+        setTitle("Cours");
         lvCours.setOnItemClickListener(this);
         lvCours.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -158,14 +159,13 @@ public class CoursActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.pricipal_drawer_menu, menu);
-//        return true;
-//    }
 /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -174,7 +174,9 @@ public class CoursActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.preference) {
+            Intent intent = new Intent(this,Preference.class);
+            startActivity(intent);
             return true;
         }
 
@@ -237,7 +239,7 @@ public class CoursActivity extends AppCompatActivity
                     //traitmenet pour deleter
                     break;
             }
-            setContentView(R.layout.activity_cours_drawer);
+            setContentView(R.layout.content_cours_drawer);
             return false;
         }
 

@@ -26,14 +26,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CoursActivity" />
         </activity>
-        <activity
-            android:name=".CalendarActivity"
-            android:label="Calendrier"
-            android:parentActivityName=".HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity" />
-        </activity>
         <activity android:name=".SendMessageActivity" />
         <activity android:name=".ConversationActivity" />
         <activity android:name=".Preference" />
@@ -48,6 +40,14 @@
         <activity
             android:name=".MessageActivity"
             android:label="@string/title_activity_message_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar_drawer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContactActivity"
+            android:label="@string/title_activity_contact_drawer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

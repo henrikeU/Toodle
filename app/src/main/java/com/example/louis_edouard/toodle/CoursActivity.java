@@ -121,11 +121,8 @@ public class CoursActivity extends AppCompatActivity
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         userId = pref.getInt(Globals.KEY_USER_ID, 0);
 
-        deleteMode = false;
-        deleted = new ArrayList<Boolean>();
-        for(int i = 0; i < c.getCount(); i++) deleted.add(false);
-
-        lvCours.setAdapter(mAdapter);
+        RunAPI run = new RunAPI();
+        run.execute();
 
         lvCours.setOnItemClickListener(this);
 
@@ -190,14 +187,13 @@ public class CoursActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.pricipal_drawer_menu, menu);
-//        return true;
-//    }
 /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -206,7 +202,9 @@ public class CoursActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.settings) {
+        if (id == R.id.preference) {
+            Intent intent = new Intent(this,Preference.class);
+            startActivity(intent);
             return true;
         }
 
@@ -269,7 +267,7 @@ public class CoursActivity extends AppCompatActivity
                     //traitmenet pour deleter
                     break;
             }
-            setContentView(R.layout.activity_cours_drawer);
+            setContentView(R.layout.content_cours_drawer);
             return false;
         }
 

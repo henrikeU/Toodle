@@ -154,8 +154,8 @@ public class HomeDrawerActivity extends AppCompatActivity
             intent = new Intent(this,MessageActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_contact) {
-//            intent = new Intent(this,ContactActivity.class);
-//            startActivity(intent);
+            intent = new Intent(this,ContactActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
             intent = new Intent(this, SendMessageActivity.class);
             startActivity(intent);
@@ -188,6 +188,8 @@ public class HomeDrawerActivity extends AppCompatActivity
                 // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnContactHome:
+                intent = new Intent(this,ContactActivity.class);
+                startActivity(intent);
                 // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
         }

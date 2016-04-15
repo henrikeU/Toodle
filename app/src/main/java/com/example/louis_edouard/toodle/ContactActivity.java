@@ -1,8 +1,6 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,31 +8,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.louis_edouard.toodle.moodle.Calendar;
-import com.example.louis_edouard.toodle.moodle.Globals;
-
-import java.io.IOException;
-
-public class CalendarActivity extends AppCompatActivity
+public class ContactActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    ListView listView;
-    ListAdapter listAdapter;
-    Calendar calendar;
     private View header;
     TextView drawer_txt_name;
     TextView drawer_txt_email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_drawer);
+        setContentView(R.layout.activity_contact_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,12 +32,14 @@ public class CalendarActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        /*******/
-        listView = (ListView)findViewById(R.id.listView_Calendar);
+
+        setTitle("Contacts");
         header = (View)navigationView.getHeaderView(0);
-        RunAPI runAPI = new RunAPI();
-        runAPI.execute();
-        setTitle("Calendrier");
+        drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
+        drawer_txt_name.setText(HomeDrawerActivity.userName);
+        drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
+        //TODO: retrieve user's email address
+        drawer_txt_email.setText(HomeDrawerActivity.userName + "@email.com");
     }
 
     @Override
@@ -67,7 +55,7 @@ public class CalendarActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.contact_drawer, menu);
         return true;
     }
 
@@ -79,7 +67,7 @@ public class CalendarActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.preference) {
+        if (id == R.id.action_settings) {
             return true;
         }
 
@@ -99,13 +87,13 @@ public class CalendarActivity extends AppCompatActivity
             intent = new Intent(this,CoursActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_calendar) {
-            onBackPressed();
+            intent = new Intent(this,CalendarActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_message) {
             intent = new Intent(this,MessageActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_contact) {
-//            intent = new Intent(this,ContactActivity.class);
-//            startActivity(intent);
+            onBackPressed();
         } else if (id == R.id.nav_send) {
             intent = new Intent(this, SendMessageActivity.class);
             startActivity(intent);
@@ -113,66 +101,5 @@ public class CalendarActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-    /******************/
-    private class ListAdapter extends BaseAdapter {
-        LayoutInflater inflaterHome;
-        public ListAdapter(){
-            inflaterHome= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        }
-        @Override
-        public int getCount() {
-            return calendar.events.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-            if(view==null){
-                view=inflaterHome.inflate(android.R.layout.simple_list_item_1,parent,false);
-            }
-
-            TextView text = (TextView)view.findViewById(android.R.id.text1);
-            text.setText(calendar.events.get(position).name);
-            return view;
-        }
-    }
-
-    public class RunAPI extends AsyncTask<String, Object, Calendar> {
-
-        @Override
-        protected void onPostExecute(Calendar calendar) {
-            super.onPostExecute(calendar);
-            listAdapter = new ListAdapter();
-            listView.setAdapter(listAdapter);
-
-            drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userName);
-
-        }
-
-        @Override
-        protected Calendar doInBackground(String... params) {
-            // recuperer le token de l'utilisateur
-            SharedPreferences preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-
-            WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
-            try {
-                calendar = webAPI.getEvent();
-            }
-            catch(IOException e){ }
-
-            return calendar;
-        }
     }
 }

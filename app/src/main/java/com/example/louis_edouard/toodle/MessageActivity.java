@@ -104,6 +104,7 @@ public class MessageActivity extends AppCompatActivity
         userId = pref.getInt(Globals.KEY_USER_ID, 0);
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
+        setTitle("Messagrie");
         lvMessage.setOnItemClickListener(this);
 
         /****************delete*************/

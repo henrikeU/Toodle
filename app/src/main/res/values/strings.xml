@@ -47,5 +47,7 @@
     <string name="search_hint">search</string>
     <string name="title_activity_cours_drawer">CoursDrawerActivity</string>
     <string name="title_activity_message_drawer">MessageDrawerActivity</string>
+    <string name="title_activity_calendar_drawer">CalendarDrawerActivity</string>
+    <string name="title_activity_contact_drawer">ContactDrawerActivity</string>
 
 </resources>

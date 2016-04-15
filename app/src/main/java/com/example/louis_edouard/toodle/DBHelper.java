@@ -30,6 +30,10 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String COURSE_SUMMARY = "summary";
     static final String COURSE_STATUS = "status";
 
+    static final String TBL_COURSECONTENT = "coursecontent";
+    static final String COURSECONTENT_ID = "_id";
+    static final String COURSECONTENT_SHORTNAME = "name";
+
     public DBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
         if(db == null) db = getWritableDatabase();

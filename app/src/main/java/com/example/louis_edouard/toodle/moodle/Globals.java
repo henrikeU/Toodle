@@ -26,9 +26,9 @@ public class Globals {
 
     public static String ConvertDate(long unixSeconds){
         Date now  = new Date();
-        Date date = new Date(unixSeconds*1000L); // *1000 is to convert seconds to milliseconds
+        Date date = new Date(unixSeconds * 1000L); // *1000 is to convert seconds to milliseconds
         long diff = now.getTime() - unixSeconds * 1000L;
-        long dayToMil = 24*3600*1000L;
+        long dayToMil = 24 * 3600 * 1000L;
         SimpleDateFormat sdf;
         // Messagerie only
         if (diff - dayToMil < 0)
@@ -44,7 +44,7 @@ public class Globals {
 
     public static String EventConvertDate(long unixSeconds){
         Date now  = new Date();
-        long diff = now.getTime() - unixSeconds*1000L;
+        long diff = now.getTime() - unixSeconds * 1000L;
         Date date = new Date(diff); // *1000 is to convert seconds to milliseconds
 
         long dayToSec = 24*3600;
@@ -84,7 +84,6 @@ public class Globals {
                 fileOutputStream.write(buffer, 0, bufferLength);
 
             fileOutputStream.close();
-
         }
         catch (FileNotFoundException e){}
         catch (MalformedURLException e){}

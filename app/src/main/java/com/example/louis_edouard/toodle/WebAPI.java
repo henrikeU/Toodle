@@ -1,5 +1,6 @@
 package com.example.louis_edouard.toodle;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
@@ -33,6 +34,7 @@ public class WebAPI {
     public final String baseUrl = "http://54.209.183.244/moodle/webservice/rest/server.php?";
     private String token;
     public int id;
+    DBHelper dbHelper = null;
 
     public WebAPI(){}
 
@@ -40,6 +42,13 @@ public class WebAPI {
         //url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=aa0c0e61965d7e3dc54c6fc8906fe442&wsfunction=core_course_get_courses&moodlewsrestformat=json";
         this.token = token;
         url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
+    }
+
+    public  WebAPI(Context context, String token){
+        //url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=aa0c0e61965d7e3dc54c6fc8906fe442&wsfunction=core_course_get_courses&moodlewsrestformat=json";
+        this.token = token;
+        url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
+        dbHelper = new DBHelper(context);
     }
 
     private String getJSON() throws IOException{
@@ -140,7 +149,7 @@ public class WebAPI {
         return userProfileSearches;
     }
 
-    public List<EnrolledCourse> runCours(int userId)throws IOException{
+    public List<EnrolledCourse> getCourse(int userId)throws IOException{
         String apifunction = "&wsfunction=core_enrol_get_users_courses";
         url += apifunction + "&userid=" + userId + "&moodlewsrestformat=json";
         String json = getJSON();
@@ -149,7 +158,25 @@ public class WebAPI {
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
         JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
         List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(json);
+
+        dbHelper.addCourses(enrolledCourses);
+
         return enrolledCourses;
+    }
+
+    public int updateCours(int userId)throws IOException{
+        String apifunction = "core_enrol_get_users_courses";
+        url = fullUrl(apifunction) + "&userid=" + userId;
+        String json = getJSON();
+        Moshi moshi = new Moshi.Builder().build();
+
+        Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
+        JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
+        List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(json);
+
+        int nb = dbHelper.addCourses(enrolledCourses);
+
+        return nb;
     }
 
     public List<CourseContent> getCourseContent(int courseId) throws IOException {

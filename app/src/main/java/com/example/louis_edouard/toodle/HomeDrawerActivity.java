@@ -262,10 +262,11 @@ public class HomeDrawerActivity extends AppCompatActivity
 
         @Override
         protected UserProfile doInBackground(String... params) {
-            WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
+            WebAPI webAPI = new WebAPI(HomeDrawerActivity.this, preferences.getString(Globals.KEY_USER_TOKEN, null));
             try {
                 userProfile = webAPI.getUserProfile();
                 calendar = webAPI.getEvent();
+                webAPI.updateCours(userProfile.userid);
             }
             catch(IOException e){ }
             return userProfile;

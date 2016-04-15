@@ -5,10 +5,10 @@ package com.example.louis_edouard.toodle.moodle;
  */
 public class Course {
     public int id;
-    public  String shortname;
+    public String shortname;
     public int categoryid;
     public int categorysortorder;
-    public  String fullname;
+    public String fullname;
     public String idnumber;
     public String summary;
     public String summaryformat;

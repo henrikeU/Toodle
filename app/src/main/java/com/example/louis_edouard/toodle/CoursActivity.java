@@ -101,15 +101,18 @@ public class CoursActivity extends AppCompatActivity
 //
 //            c.moveToNext();
 //        }
+        deleted = new ArrayList<>();
+        for(int i = 0; i < c.getCount(); i++) deleted.add(false);
+
         String[] from = {DBHelper.COURSE_ID, DBHelper.COURSE_SHORTNAME, DBHelper.COURSE_FULLNAME};
         int[] to = {0, R.id.trash, R.id.position };
         mAdapter = new ListViewAdapter(this, R.layout.listview_item, c, from, to, 0);
         mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                if(view.getId() == R.id.position){
+                if (view.getId() == R.id.position) {
                     String title = cursor.getString(3) + " - " + cursor.getString(2);
-                    TextView textView = (TextView)view.findViewById(R.id.position);
+                    TextView textView = (TextView) view.findViewById(R.id.position);
                     textView.setText(title);
                     return true;
                 }
@@ -121,8 +124,7 @@ public class CoursActivity extends AppCompatActivity
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         userId = pref.getInt(Globals.KEY_USER_ID, 0);
 
-        RunAPI run = new RunAPI();
-        run.execute();
+        lvCours.setAdapter(mAdapter);
 
         lvCours.setOnItemClickListener(this);
 

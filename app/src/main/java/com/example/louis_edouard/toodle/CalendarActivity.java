@@ -28,6 +28,7 @@ public class CalendarActivity extends AppCompatActivity
     ListView listView;
     ListAdapter listAdapter;
     Calendar calendar;
+    TextView interval;
     private View header;
     TextView drawer_txt_name;
     TextView drawer_txt_email;
@@ -158,6 +159,8 @@ public class CalendarActivity extends AppCompatActivity
 
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
             drawer_txt_name.setText(HomeDrawerActivity.userName);
+            drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
+            drawer_txt_email.setText(HomeDrawerActivity.userName+"email.com");
 
         }
 

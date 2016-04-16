@@ -38,7 +38,7 @@ public class HomeDrawerActivity extends AppCompatActivity
     HomeAdapter homeAdapter;
     TextView drawer_txt_name;
     TextView drawer_txt_email;
-    public static String userName;
+    public static String userFullName;
     private UserProfile userProfile;
     private Calendar calendar;
     private View header;
@@ -88,8 +88,10 @@ public class HomeDrawerActivity extends AppCompatActivity
         prefeditor.commit();
         /***************/
         preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-        RunAPI runAPI = new RunAPI();
-        runAPI.execute();
+        if(Globals.IsConnected(this)) {
+            RunAPI runAPI = new RunAPI();
+            runAPI.execute();
+        }
         listViewHome = (ListView)findViewById(R.id.listViewHome);
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
         btnMessHome = (Button)findViewById(R.id.btnMessHome);
@@ -173,24 +175,19 @@ public class HomeDrawerActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.btnCoursHome:
                 intent = new Intent(this,CoursActivity.class);
-
-                //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 startActivity(intent);
                 break;
             case R.id.btnCalendHome:
                 intent = new Intent(this,CalendarActivity.class);
                 startActivity(intent);
-                //intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnMessHome:
                 intent = new Intent(this,MessageActivity.class);
                 startActivity(intent);
-                // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
             case R.id.btnContactHome:
                 intent = new Intent(this,ContactActivity.class);
                 startActivity(intent);
-                // intent.putExtra("****", "*****");//il faut etre remplit par les donnes relies
                 break;
         }
     }
@@ -250,13 +247,12 @@ public class HomeDrawerActivity extends AppCompatActivity
             listViewHome.setAdapter(homeAdapter);
             setTitle(userProfile.fullname);
 
-            userName = userProfile.fullname;
+            userFullName = userProfile.fullname;
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(userName);
+            drawer_txt_name.setText(userFullName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
-            //TODO: retrieve user's email address
-            drawer_txt_email.setText(userName + "@email.com");
-            // saving user's data to shared preferences file
+            String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+            drawer_txt_email.setText(userName);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt(Globals.KEY_USER_ID, userProfile.userid);
             editor.apply();
@@ -271,6 +267,7 @@ public class HomeDrawerActivity extends AppCompatActivity
                 webAPI.updateCours(userProfile.userid);
             }
             catch(IOException e){ }
+
             return userProfile;
         }
     }

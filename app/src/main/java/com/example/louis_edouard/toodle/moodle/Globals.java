@@ -1,5 +1,8 @@
 package com.example.louis_edouard.toodle.moodle;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.io.File;
@@ -20,7 +23,19 @@ import java.util.TimeZone;
 public class Globals {
     public final static String SHARED_PREFERENCES_NAME = "sharedPrefs";
     public final static String KEY_USER_TOKEN = "userToken";
+    public final static String KEY_USER_USERNAME = "userName";
+    public final static String KEY_USER_PASSWORD = "userPassword";
     public final static String KEY_USER_ID = "userID";
+
+    public static boolean IsConnected(Context c){
+        ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        //boolean isWifiConn = networkInfo.isConnected();
+        //networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        //boolean isMobileConn = networkInfo.isConnected();
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
 
     private static final int MEGABYTE = 1024 * 1024;
 

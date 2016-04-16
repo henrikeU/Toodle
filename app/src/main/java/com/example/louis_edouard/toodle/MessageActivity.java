@@ -50,6 +50,7 @@ public class MessageActivity extends AppCompatActivity
         View.OnClickListener, AdapterView.OnItemClickListener,
         CompoundButton.OnCheckedChangeListener{
     private View header;
+    SharedPreferences preferences;
     /************************/
     FloatingActionButton fabo;
     private ListView lvMessage;
@@ -98,6 +99,8 @@ public class MessageActivity extends AppCompatActivity
             if (actionBar != null) {actionBar.setTitle("ListView");
             }
         }
+
+        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
         messageAdaptor = new MessageAdaptor(this);
 
@@ -343,10 +346,10 @@ public class MessageActivity extends AppCompatActivity
             for(int i=0; i<lvMessagesize; i++) deleted.add(false);
             /***************delete*************/
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userName);
+            drawer_txt_name.setText(HomeDrawerActivity.userFullName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
-            //TODO: retrieve user's email address
-            drawer_txt_email.setText(HomeDrawerActivity.userName + "@email.com");
+            String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+            drawer_txt_email.setText(userName);
         }
     }
     /////////MMMMM*********M

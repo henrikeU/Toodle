@@ -3,7 +3,9 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="btn_login">Se connecter</string>
     <string name="txt_user_token_hint">Nom d\'utilisateur</string>
-    <string name="login_error_message">Le nom d\'utlisateur ou mot de passe fournit n\'est pas valide.</string>
+    <string name="error_api">Il semble y avoir un problème avec l\'API :(</string>
+    <string name="error_connectivity">Il semble y avoir un problème de connectivité :(\nAssurez-vous d\'être connecté à un réseau Wi-Fi avant de réessayer.</string>
+    <string name="error_login">Le nom d\'utlisateur ou mot de passe fournit n\'est pas valide.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -20,11 +22,11 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item>Accueille</item>
+        <item>Accueil</item>
         <item>Cours</item>
         <item>Calendrier</item>
         <item>Messagerie</item>
-        <item>Contacts</item>
+        <item>Contact</item>
     </string-array>
 
     <!--&lt;!&ndash; Nav Drawer List Item Icons &ndash;&gt;-->
@@ -43,11 +45,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="app_label">toodle</string>
+    <string name="app_label">Toodle</string>
     <string name="search_hint">search</string>
-    <string name="title_activity_cours_drawer">CoursDrawerActivity</string>
-    <string name="title_activity_message_drawer">MessageDrawerActivity</string>
-    <string name="title_activity_calendar_drawer">CalendarDrawerActivity</string>
-    <string name="title_activity_contact_drawer">ContactDrawerActivity</string>
+    <string name="title_activity_cours_drawer">Cours</string>
+    <string name="title_activity_message_drawer">Messagerie</string>
+    <string name="title_activity_calendar_drawer">Calendrier</string>
+    <string name="title_activity_contact_drawer">Contact</string>
 
 </resources>

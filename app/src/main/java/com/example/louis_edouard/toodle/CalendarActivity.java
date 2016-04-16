@@ -79,7 +79,6 @@ public class CalendarActivity extends AppCompatActivity
         header = (View)navigationView.getHeaderView(0);
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
-        setTitle("Calendrier");
 
         lvCalendar.setOnItemClickListener(this);
         /*
@@ -448,9 +447,7 @@ public class CalendarActivity extends AppCompatActivity
             for(int i=0; i<mListViewsize; i++) deleted.add(false);
 
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userName);
-            drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
-            drawer_txt_email.setText(HomeDrawerActivity.userName+"email.com");
+            drawer_txt_name.setText(HomeDrawerActivity.userFullName);
 
         }
 

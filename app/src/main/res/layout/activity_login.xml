@@ -53,7 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/login_error_message"
         android:id="@+id/txt_errorMsg"
         android:layout_below="@+id/btn_CreateProfil"
         android:layout_centerHorizontal="true"

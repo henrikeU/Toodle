@@ -33,13 +33,10 @@ public class ContactActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setTitle("Contacts");
         header = (View)navigationView.getHeaderView(0);
         drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-        drawer_txt_name.setText(HomeDrawerActivity.userName);
+        drawer_txt_name.setText(HomeDrawerActivity.userFullName);
         drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
-        //TODO: retrieve user's email address
-        drawer_txt_email.setText(HomeDrawerActivity.userName + "@email.com");
     }
 
     @Override

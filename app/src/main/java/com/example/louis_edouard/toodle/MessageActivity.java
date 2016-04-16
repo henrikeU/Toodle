@@ -72,6 +72,7 @@ public class MessageActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_drawer);
+        setTitle("Messagerie");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -356,7 +357,7 @@ public class MessageActivity extends AppCompatActivity
         public MessageAdaptor(Context mContext) {
             this.mContext = mContext;
             inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-            setTitle("Messagerie");
+
         }
 
 //        public MessageAdaptor(MessageActivity messageActivity) {

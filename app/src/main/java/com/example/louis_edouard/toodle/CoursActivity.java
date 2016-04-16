@@ -37,7 +37,6 @@ import com.daimajia.swipe.util.Attributes;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 import com.example.louis_edouard.toodle.moodle.Globals;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +62,7 @@ public class CoursActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cours_drawer);
+        setTitle("Cours");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -95,7 +95,7 @@ public class CoursActivity extends AppCompatActivity
 
         RunAPI run = new RunAPI();
         run.execute();
-        setTitle("Cours");
+
         lvCours.setOnItemClickListener(this);
         lvCours.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -163,7 +163,7 @@ public class CoursActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.setting_menu, menu);
         return true;
     }
     @Override
@@ -257,6 +257,8 @@ public class CoursActivity extends AppCompatActivity
             }
         }
     };
+
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,CoursContentActivity.class);
@@ -325,11 +327,12 @@ public class CoursActivity extends AppCompatActivity
         protected List<EnrolledCourse> doInBackground(String... params) {
             SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
             WebAPI web = new WebAPI(pref.getString(Globals.KEY_USER_TOKEN, null));
-
+/*
             try {
                 course = web.runCours(userId);
             }
             catch(IOException e){ }
+            */
             return course;
         }
 

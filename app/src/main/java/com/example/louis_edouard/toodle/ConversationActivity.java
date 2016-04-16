@@ -34,6 +34,7 @@ public class ConversationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+        setTitle("Conversation");
         pref= getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         userid = pref.getInt(Globals.KEY_USER_ID, 0);
 
@@ -55,7 +56,7 @@ public class ConversationActivity extends AppCompatActivity {
         LayoutInflater inflater;
         public ConversationAdaptor() {
             inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-            setTitle("Conversation");
+
         }
 
         @Override

@@ -48,7 +48,10 @@
         <activity
             android:name=".ContactActivity"
             android:label="@string/title_activity_contact_drawer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CalendarPrivateActivity" />
+        <activity android:name=".CalendarPublicActivity" />
+        <activity android:name=".CalendarAddEventActivity"></activity>
     </application>
 
 </manifest>

@@ -35,7 +35,7 @@ public class ContactActivity extends AppCompatActivity
 
         header = (View)navigationView.getHeaderView(0);
         drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-        drawer_txt_name.setText(HomeDrawerActivity.userFullName);
+        drawer_txt_name.setText(HomeActivity.userFullName);
         drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
     }
 
@@ -78,7 +78,7 @@ public class ContactActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_home) {
-            intent = new Intent(this,HomeDrawerActivity.class);
+            intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_course) {
             intent = new Intent(this,CoursActivity.class);

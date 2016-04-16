@@ -176,7 +176,7 @@ public class CalendarActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_home) {
-            intent = new Intent(this,HomeDrawerActivity.class);
+            intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_course) {
             intent = new Intent(this,CoursActivity.class);
@@ -399,11 +399,6 @@ public class CalendarActivity extends AppCompatActivity
         deleted.set(pos,isChecked);
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
     @Override
     public void onClick(View v) {
         Intent intent;
@@ -447,7 +442,7 @@ public class CalendarActivity extends AppCompatActivity
             for(int i=0; i<mListViewsize; i++) deleted.add(false);
 
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userFullName);
+            drawer_txt_name.setText(HomeActivity.userFullName);
 
         }
 

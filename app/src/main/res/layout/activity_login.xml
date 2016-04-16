@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_UserKey"
-        android:hint="@string/txt_user_token_hint"
+        android:hint="@string/hint_username"
         android:padding="5dp"
         android:singleLine="true"
         android:selectAllOnFocus="false"
@@ -40,7 +40,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_login"
+        android:text="@string/action_login"
         android:id="@+id/btn_CreateProfil"
         android:clickable="true"
         android:textColor="#ffffffff"

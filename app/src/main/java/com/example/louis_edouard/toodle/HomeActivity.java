@@ -1,7 +1,9 @@
 package com.example.louis_edouard.toodle;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,7 +22,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.CalendarEvent;
@@ -28,70 +32,61 @@ import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class HomeDrawerActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener, AdapterView.OnItemClickListener{
     ListView listViewHome;
     Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
-    SharedPreferences preferences;
-    HomeAdapter homeAdapter;
-    TextView drawer_txt_name;
-    TextView drawer_txt_email;
-    public static String userFullName;
+    TextView drawer_txt_name, drawer_txt_email;
+    View header;
+    private SharedPreferences preferences;
+    private ListViewAdapter listViewAdapter;
     private UserProfile userProfile;
     private Calendar calendar;
-    private View header;
+    public static String userFullName, userName;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_drawer);
-        //drawer menu
+        setContentView(R.layout.activity_home);
 
+        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        dbHelper = new DBHelper(this);
 
+        // drawer navigation
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        /************************/
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        /***********************/
         header = (View)navigationView.getHeaderView(0);
+        drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
+        drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
 
         //overflow menu
-        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         long now = System.currentTimeMillis();
-        long last = prefs.getLong("DerniereVisite", 0);
-
+        long last = preferences.getLong(Globals.KEY_LAST_CONNECTION, 0);
         long delta = (now - last)/1000;
-
-//        Toast.makeText(this, "Derniere visite il y a " + delta + " secnodes"
-//                , Toast.LENGTH_LONG).show();
         //mettre a jour la derniere visite
-        SharedPreferences.Editor prefeditor= prefs.edit();
-        prefeditor.putLong("derniereVisite",now);
-        prefeditor.apply();
-        prefeditor.commit();
-        /***************/
-        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = preferences.edit();;
+        prefEditor.putLong(Globals.KEY_LAST_CONNECTION, now);
+        prefEditor.apply();
+
+        String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+
         if(Globals.IsConnected(this)) {
             RunAPI runAPI = new RunAPI();
             runAPI.execute();
         }
+
         listViewHome = (ListView)findViewById(R.id.listViewHome);
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
         btnMessHome = (Button)findViewById(R.id.btnMessHome);
@@ -170,26 +165,24 @@ public class HomeDrawerActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        Intent intent;
+        Intent intent = new Intent();
 
         switch (v.getId()) {
             case R.id.btnCoursHome:
-                intent = new Intent(this,CoursActivity.class);
-                startActivity(intent);
+                intent.setClass(this,CoursActivity.class);
                 break;
             case R.id.btnCalendHome:
-                intent = new Intent(this,CalendarActivity.class);
-                startActivity(intent);
+                intent.setClass(this,CalendarActivity.class);
                 break;
             case R.id.btnMessHome:
-                intent = new Intent(this,MessageActivity.class);
-                startActivity(intent);
+                intent.setClass(this,MessageActivity.class);
                 break;
             case R.id.btnContactHome:
-                intent = new Intent(this,ContactActivity.class);
-                startActivity(intent);
+                intent.setClass(this,ContactActivity.class);
                 break;
         }
+
+        startActivity(intent);
     }
 
     @Override
@@ -200,41 +193,49 @@ public class HomeDrawerActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private class HomeAdapter extends BaseAdapter {
-        LayoutInflater inflaterHome;
-        public HomeAdapter() {
-            inflaterHome= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+    private class ListViewAdapter extends SimpleCursorAdapter {
+        LayoutInflater layoutInflater;
+        Context context;
+        private int layout;
+
+        protected ListViewAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+            this.context = context;
+            this.layout = layout;
+            layoutInflater= (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
-        public int getCount() {
-            return calendar.events.size();
+        public void bindView(View view, Context context, Cursor cursor) {
+            super.bindView(view, context, cursor);
+
+            int nameCol = cursor.getColumnIndex(DBHelper.EVENT_NAME);
+            String name = cursor.getString(nameCol);
+            TextView eventName = (TextView) view.findViewById(R.id.listitem_event_name);
+            eventName.setText(name);
+
+            String strEventTime = Globals.EventConvertDate(cursor.getInt(cursor.getColumnIndex(DBHelper.EVENT_TIMESTART)));
+            TextView eventTime = (TextView) view.findViewById(R.id.listitem_event_time);
+            eventTime.setText(strEventTime);
+
         }
 
         @Override
-        public Object getItem(int position) {
-            return null;
-        }
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            Cursor c = getCursor();
+            final LayoutInflater inflater = LayoutInflater.from(context);
+            View v = inflater.inflate(layout, parent, false);
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
+            int nameCol = c.getColumnIndex(DBHelper.EVENT_NAME);
+            String name = c.getString(nameCol);
+            TextView eventName = (TextView) v.findViewById(R.id.listitem_event_name);
+            eventName.setText(name);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View vHome = convertView;
-            if(vHome==null){
-                vHome=inflaterHome.inflate(android.R.layout.simple_list_item_1,parent,false);
-            }
+            String strEventTime = Globals.EventConvertDate(c.getInt(c.getColumnIndex(DBHelper.EVENT_TIMESTART)));
+            TextView eventTime = (TextView) v.findViewById(R.id.listitem_event_time);
+            eventTime.setText(strEventTime);
 
-            TextView text = (TextView)vHome.findViewById(android.R.id.text1);
-            text.setText(calendar.events.get(position).name);
-            //time.setText(Globals.ConvertDate(message.timecreated));
-            Log.d("time_test", calendar.events.get(position).timestart + "");
-            CalendarEvent calendarEvent = calendar.events.get(position);
-            Globals.EventConvertDate(calendarEvent.timestart);
-            return vHome;
+            return v;
         }
     }
 
@@ -243,15 +244,17 @@ public class HomeDrawerActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(UserProfile userProfile) {
             super.onPostExecute(userProfile);
-            homeAdapter = new HomeAdapter();
-            listViewHome.setAdapter(homeAdapter);
-            setTitle(userProfile.fullname);
-
             userFullName = userProfile.fullname;
-            drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
+            setTitle(userFullName);
+
+            Cursor c  = dbHelper.getAllFutureEvents();
+
+            String[] from = {DBHelper.KEY_ID, DBHelper.EVENT_NAME, DBHelper.EVENT_TIMESTART};
+            int[] to = {0, R.id.listitem_event_name, R.id.listitem_event_time };
+            listViewAdapter = new ListViewAdapter(HomeActivity.this, R.layout.listview_home, c, from, to, 0);
+            listViewHome.setAdapter(listViewAdapter);
+
             drawer_txt_name.setText(userFullName);
-            drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
-            String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
             drawer_txt_email.setText(userName);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt(Globals.KEY_USER_ID, userProfile.userid);
@@ -260,7 +263,7 @@ public class HomeDrawerActivity extends AppCompatActivity
 
         @Override
         protected UserProfile doInBackground(String... params) {
-            WebAPI webAPI = new WebAPI(HomeDrawerActivity.this, preferences.getString(Globals.KEY_USER_TOKEN, null));
+            WebAPI webAPI = new WebAPI(HomeActivity.this, preferences.getString(Globals.KEY_USER_TOKEN, null));
             try {
                 userProfile = webAPI.getUserProfile();
                 calendar = webAPI.getEvent();

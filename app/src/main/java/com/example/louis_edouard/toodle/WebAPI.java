@@ -83,12 +83,11 @@ public class WebAPI {
         String apifunction = "core_calendar_get_calendar_events";
         url = fullUrl(apifunction);
 
-        String json = getJSON();
-
-        // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Calendar> jsonAdapter = moshi.adapter(Calendar.class);
-        Calendar calendar = jsonAdapter.fromJson(json);
+        Calendar calendar = jsonAdapter.fromJson(getJSON());
+
+        dbHelper.addEvents(calendar.events);
 
         return calendar;
     }
@@ -119,13 +118,11 @@ public class WebAPI {
     }
 
     private RootMessage getMessage(int userId1, int userId2, int read) throws IOException {
-        String baseUrl = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
         String apifunction = "&wsfunction=core_message_get_messages";
+        url = fullUrl(apifunction) + "&useridto=" + userId1 + "&useridfrom=" + userId2 + "&read=" + read;
 
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<RootMessage> jsonAdapter = moshi.adapter(RootMessage.class);
-
-        url = baseUrl + apifunction + "&useridto=" + userId1 + "&useridfrom=" + userId2 + "&read=" + read + "&moodlewsrestformat=json";
 
         RootMessage message = jsonAdapter.fromJson(getJSON());
 
@@ -133,31 +130,28 @@ public class WebAPI {
     }
 
     public List<UserProfileSearch> getUser(List<Integer> userIds) throws IOException{
-        url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
         String apifunction = "&wsfunction=core_user_get_users_by_field";
-        String values ="";
+        String values = "";
         for(int i = 0; i< userIds.size(); i++)
             values += "values["+i+"]=" + userIds.get(i) + "&";
-        url += apifunction + "&field=id&" + values + "moodlewsrestformat=json";
-        Log.d("URL", url);
-        String json = getJSON();
+        url = fullUrl(apifunction) + "&field=id&" + values;
 
         Moshi moshi = new Moshi.Builder().build();
         Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
         JsonAdapter<List<UserProfileSearch>> jsonAdapter = moshi.adapter(userProfileSearchList);
-        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(json);
+        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
+
         return userProfileSearches;
     }
 
     public List<EnrolledCourse> getCourse(int userId)throws IOException{
         String apifunction = "&wsfunction=core_enrol_get_users_courses";
-        url += apifunction + "&userid=" + userId + "&moodlewsrestformat=json";
-        String json = getJSON();
-        Moshi moshi = new Moshi.Builder().build();
+        url = fullUrl(apifunction) + "&userid=" + userId;
 
+        Moshi moshi = new Moshi.Builder().build();
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
         JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
-        List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(json);
+        List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(getJSON());
 
         dbHelper.addCourses(enrolledCourses);
 
@@ -167,12 +161,11 @@ public class WebAPI {
     public int updateCours(int userId)throws IOException{
         String apifunction = "core_enrol_get_users_courses";
         url = fullUrl(apifunction) + "&userid=" + userId;
-        String json = getJSON();
-        Moshi moshi = new Moshi.Builder().build();
 
+        Moshi moshi = new Moshi.Builder().build();
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
         JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
-        List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(json);
+        List<EnrolledCourse> enrolledCourses  = jsonAdapter.fromJson(getJSON());
 
         int nb = dbHelper.addCourses(enrolledCourses);
 
@@ -198,13 +191,10 @@ public class WebAPI {
         String apifunction = "mod_forum_get_forums_by_courses";
         url = fullUrl(apifunction) + "&courseids[0]=" + courseid;
 
-        String json = getJSON();
-
-        // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         Type forumList = Types.newParameterizedType(List.class, Forum.class);
         JsonAdapter<List<Forum>> jsonAdapter = moshi.adapter(forumList);
-        List<Forum> forums = jsonAdapter.fromJson(json);
+        List<Forum> forums = jsonAdapter.fromJson(getJSON());
 
         return forums;
     }
@@ -213,12 +203,9 @@ public class WebAPI {
         String apifunction = "mod_forum_get_forum_discussions_paginated";
         url = fullUrl(apifunction) + "&forumid=" + forumid;
 
-        String json = getJSON();
-
-        // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<ForumDiscussion> jsonAdapter = moshi.adapter(ForumDiscussion.class);
-        ForumDiscussion forumDiscussion = jsonAdapter.fromJson(json);
+        ForumDiscussion forumDiscussion = jsonAdapter.fromJson(getJSON());
 
         return forumDiscussion;
     }
@@ -227,12 +214,9 @@ public class WebAPI {
         String apifunction = "mod_forum_get_forum_discussion_posts";
         url = fullUrl(apifunction) + "&discussionid=" + discussionid;
 
-        String json = getJSON();
-
-        // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<DiscussionPost> jsonAdapter = moshi.adapter(DiscussionPost.class);
-        DiscussionPost discussionPost = jsonAdapter.fromJson(json);
+        DiscussionPost discussionPost = jsonAdapter.fromJson(getJSON());
 
         return discussionPost;
 

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.louis_edouard.toodle.moodle.Calendar;
+import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.Course;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
 
@@ -19,7 +21,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "toodle.db";
-    static final int DB_VERSION = 5;
+    static final int DB_VERSION = 6;
     private static SQLiteDatabase db = null;
 
     // Common Column
@@ -43,6 +45,14 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String TBL_COURSEMODULE = "courseModule";
     static final String COURSEMODULE_NAME = "name";
 
+    // EVENT Table
+    static final String TBL_EVENT = "event";
+    static final String EVENT_NAME = "name";
+    static final String EVENT_DESCRIPTION = "description";
+    static final String EVENT_TYPE = "type";
+    static final String EVENT_TIMESTART = "timeStart";
+    static final String EVENT_TIMEDURATION = "timeDuration";
+
     // Table CREATE Statements
     // CourseContent table create statement
     static final String CREATE_TABLE_ENROLLEDCOURSE = "CREATE TABLE " + TBL_ENROLLEDCOURSE + "(" +
@@ -59,11 +69,18 @@ public class DBHelper extends SQLiteOpenHelper {
             COURSECONTENT_SUMMARY + " TEXT, " +
             KEY_ENROLLEDCOURSE_ID + " INTEGER, " +
             "FOREIGN KEY(" + KEY_ENROLLEDCOURSE_ID +") REFERENCES " + TBL_ENROLLEDCOURSE + "(" + KEY_ID + "))";
-
     // CourseModule table create statement
     static final String CREATE_TABLE_COURSEMODULE = "CREATE TABLE " + TBL_COURSEMODULE + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " +
             COURSEMODULE_NAME + " TEXT)";
+    // Event table create statement
+    static final String CREATE_TABLE_EVENT = "CREATE TABLE " + TBL_EVENT + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY, " +
+            EVENT_NAME + " TEXT, " +
+            EVENT_DESCRIPTION + " TEXT, " +
+            EVENT_TYPE + " TEXT, " +
+            EVENT_TIMESTART + " INTEGER, " +
+            EVENT_TIMEDURATION + " INTEGER DEFAULT 0)";
 
     public DBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
@@ -76,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ENROLLEDCOURSE);
         db.execSQL(CREATE_TABLE_COURSECONTENT);
         db.execSQL(CREATE_TABLE_COURSEMODULE);
+        db.execSQL(CREATE_TABLE_EVENT);
     }
 
     @Override
@@ -83,8 +101,18 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TBL_ENROLLEDCOURSE);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_COURSECONTENT);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_COURSEMODULE);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_EVENT);
         onCreate(db);
     }
+
+    /**
+     * TABLE Course Methods
+     * addCourses: add a list of course to the table
+     * deleteCourse: update the status of a course to 2 => DELETE
+     * archiveCourse: update the status of a course to 1 => ARCHIVE
+     * getCourse: return a course
+     * getAllCourses: return all courses where status is not 2 => DELETE
+     */
 
     public int addCourses(List<EnrolledCourse> enrolledCourses){
         int nb = 0;
@@ -130,4 +158,47 @@ public class DBHelper extends SQLiteOpenHelper {
         c = db.rawQuery("SELECT * FROM " + TBL_ENROLLEDCOURSE + " WHERE " + COURSE_STATUS + " != 2 ORDER BY " + KEY_ID + " DESC", null);
         return c;
     }
+
+    /**
+     * TABLE Event Methods
+     * addEvents: add a list of events to the table
+     * getAllEvents: return all events
+     * getAllFutureEvents: return all events that start after the current time
+     */
+
+    public int addEvents(List<CalendarEvent> calendarEvents){
+        int nb = 0;
+        CalendarEvent calendarEvent;
+        ContentValues contentValues = new ContentValues();
+
+        for(int i = 0; i < calendarEvents.size(); i++){
+            calendarEvent = calendarEvents.get(i);
+            contentValues.clear();
+            contentValues.put(KEY_ID, calendarEvent.id);
+            contentValues.put(EVENT_NAME, calendarEvent.name);
+            contentValues.put(EVENT_DESCRIPTION, calendarEvent.description);
+            contentValues.put(EVENT_TYPE, calendarEvent.eventtype);
+            contentValues.put(EVENT_TIMESTART, calendarEvent.timestart);
+            contentValues.put(EVENT_TIMEDURATION, calendarEvent.timeduration);
+            try {
+                db.insertOrThrow(TBL_EVENT, null, contentValues);
+                nb++;
+            }catch (SQLException e) {};
+        }
+        return nb;
+    }
+
+    public Cursor getAllEvents(){
+        Cursor c;
+        c = db.rawQuery("SELECT * FROM " + TBL_EVENT, null);
+        return c;
+    }
+
+    public Cursor getAllFutureEvents(){
+        Cursor c;
+        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART + " > strftime('%s', 'now')", null);
+        c.moveToFirst();
+        return c;
+    }
+
 }

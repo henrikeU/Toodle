@@ -21,10 +21,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -32,8 +30,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.swipe.SimpleSwipeListener;
-import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.SimpleCursorSwipeAdapter;
 import com.daimajia.swipe.implments.SwipeItemAdapterMangerImpl;
 import com.daimajia.swipe.implments.SwipeItemMangerImpl;
@@ -220,7 +216,7 @@ public class CoursActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_home) {
-            intent = new Intent(this,HomeDrawerActivity.class);
+            intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_course) {
             onBackPressed();
@@ -369,7 +365,7 @@ public class CoursActivity extends AppCompatActivity
             mAdapter.setMode(Attributes.Mode.Single);
 
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userFullName);
+            drawer_txt_name.setText(HomeActivity.userFullName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
             String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
             drawer_txt_email.setText(userName);

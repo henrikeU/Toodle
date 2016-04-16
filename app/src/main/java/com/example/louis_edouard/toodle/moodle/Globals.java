@@ -26,6 +26,7 @@ public class Globals {
     public final static String KEY_USER_USERNAME = "userName";
     public final static String KEY_USER_PASSWORD = "userPassword";
     public final static String KEY_USER_ID = "userID";
+    public final static String KEY_LAST_CONNECTION = "lastConnection";
 
     public static boolean IsConnected(Context c){
         ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -58,28 +59,33 @@ public class Globals {
     }
 
     public static String EventConvertDate(long unixSeconds){
-        Date now  = new Date();
-        long diff = now.getTime() - unixSeconds * 1000L;
-        Date date = new Date(diff); // *1000 is to convert seconds to milliseconds
+        long unixMillis = unixSeconds * 1000L;
+        long now = System.currentTimeMillis();
+        long diff = unixMillis - now;
+        Date date = new Date(diff);
 
-        long dayToSec = 24*3600;
-        long hourToSec= 3600;
-        long minToSec= 60;
+        long dayToMillis = 24 * 3600 * 1000L;
+        long hourToMillis = 3600 * 1000L;
+        long minToMillis = 60 * 1000L;
         SimpleDateFormat sdf;
         String unit;
-        if (unixSeconds > dayToSec) {
-            sdf = new SimpleDateFormat("dd");
-            unit = unixSeconds > 2 * dayToSec ? "days" : "day";
-        }else if (unixSeconds > hourToSec) {
+
+        if (diff > dayToMillis) {
+            Log.d("EVENTDATE", "jour");
+            sdf = new SimpleDateFormat("d");
+            unit = unixSeconds > 2 * dayToMillis ? "jours" : "jour";
+        }else if (diff > hourToMillis) {
+            Log.d("EVENTDATE", "heure");
             sdf = new SimpleDateFormat("HH");
-            unit = unixSeconds > 2 * hourToSec ? "hrs" : "hr";
+            unit = unixSeconds > 2 * hourToMillis ? "heures" : "heure";
         }else {
             sdf = new SimpleDateFormat("mm");
-            unit = unixSeconds > 2 * minToSec ? "mins" : "min";
+            unit = unixSeconds > 2 * minToMillis ? "minutes" : "minute";
         }
+
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formating (see comment at the bottom
         String formattedDate = sdf.format(date);
-        Log.d("time_test", formattedDate+" "+unit);
+        formattedDate += " " + unit;
         return formattedDate;
     }
 

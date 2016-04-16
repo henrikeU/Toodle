@@ -51,7 +51,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_send"
+        android:text="@string/action_send"
         android:id="@+id/btn_send_message"
         android:background="@drawable/button_rounded_corners"
         android:layout_gravity="center_horizontal"

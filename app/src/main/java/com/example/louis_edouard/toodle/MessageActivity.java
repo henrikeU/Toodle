@@ -193,7 +193,7 @@ public class MessageActivity extends AppCompatActivity
 
         Intent intent;
         if (id == R.id.nav_home) {
-            intent = new Intent(this,HomeDrawerActivity.class);
+            intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_course) {
             intent = new Intent(this,CoursActivity.class);
@@ -346,7 +346,7 @@ public class MessageActivity extends AppCompatActivity
             for(int i=0; i<lvMessagesize; i++) deleted.add(false);
             /***************delete*************/
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
-            drawer_txt_name.setText(HomeDrawerActivity.userFullName);
+            drawer_txt_name.setText(HomeActivity.userFullName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
             String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
             drawer_txt_email.setText(userName);

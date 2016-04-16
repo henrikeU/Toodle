@@ -7,8 +7,7 @@ public class CalendarEvent {
     public int id;
     public String name;
     public String description;
-    public int userid;
-    public int repeatid;
+    public String eventtype;
     public int timestart;
     public int timeduration;
 }

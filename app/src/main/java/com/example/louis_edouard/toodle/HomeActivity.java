@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,20 +22,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
-import com.example.louis_edouard.toodle.moodle.CalendarEvent;
-import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
-import java.util.ArrayList;
+
 import android.os.Handler;
 
 public class HomeActivity extends AppCompatActivity
@@ -301,7 +292,6 @@ public class HomeActivity extends AppCompatActivity
             try {
                 userProfile = webAPI.getUserProfile();
                 calendar = webAPI.getEvent(userProfile.userid);
-                webAPI.updateCours(userProfile.userid);
             }
             catch(IOException e){ }
 

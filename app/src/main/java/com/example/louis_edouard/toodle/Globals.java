@@ -1,4 +1,4 @@
-package com.example.louis_edouard.toodle.moodle;
+package com.example.louis_edouard.toodle;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

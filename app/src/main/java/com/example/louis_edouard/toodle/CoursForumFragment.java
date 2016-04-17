@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.louis_edouard.toodle.moodle.CalendarEvent;
-import com.example.louis_edouard.toodle.moodle.CourseContent;
 import com.example.louis_edouard.toodle.moodle.Forum;
-import com.example.louis_edouard.toodle.moodle.Globals;
 
 import java.io.IOException;
 import java.util.List;

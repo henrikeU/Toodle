@@ -37,7 +37,6 @@ import com.daimajia.swipe.interfaces.SwipeAdapterInterface;
 import com.daimajia.swipe.interfaces.SwipeItemMangerInterface;
 import com.daimajia.swipe.util.Attributes;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
-import com.example.louis_edouard.toodle.moodle.Globals;
 
 import java.io.IOException;
 import java.util.ArrayList;

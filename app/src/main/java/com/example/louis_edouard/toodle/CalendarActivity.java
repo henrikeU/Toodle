@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
-import com.example.louis_edouard.toodle.moodle.Globals;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -428,7 +427,7 @@ public class CalendarActivity extends AppCompatActivity
             //startActivity(mLastCallback);
         }
     }
-    public class RunAPI extends AsyncTask<String, Object, Calendar> {
+    private class RunAPI extends AsyncTask<String, Object, Calendar> {
 
         @Override
         protected void onPostExecute(Calendar calendar) {

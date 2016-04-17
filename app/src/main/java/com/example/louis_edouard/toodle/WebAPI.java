@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
+import com.example.louis_edouard.toodle.moodle.Contact;
+import com.example.louis_edouard.toodle.moodle.ContactRoot;
 import com.example.louis_edouard.toodle.moodle.CourseContent;
 import com.example.louis_edouard.toodle.moodle.Discussion;
 import com.example.louis_edouard.toodle.moodle.DiscussionPost;
@@ -20,6 +22,7 @@ import com.squareup.moshi.Types;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -109,6 +112,21 @@ public class WebAPI {
         return userProfile;
     }
 
+    public List<UserProfileSearch> getUser(List<Integer> userIds) throws IOException{
+        String apifunction = "&wsfunction=core_user_get_users_by_field";
+        String values = "";
+        for(int i = 0; i< userIds.size(); i++)
+            values += "values["+i+"]=" + userIds.get(i) + "&";
+        url = fullUrl(apifunction) + "&field=id&" + values;
+
+        Moshi moshi = new Moshi.Builder().build();
+        Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
+        JsonAdapter<List<UserProfileSearch>> jsonAdapter = moshi.adapter(userProfileSearchList);
+        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
+
+        return userProfileSearches;
+    }
+
     public RootMessage getMessages(int useridto) throws IOException {
         return getMessages(useridto, 0);
     }
@@ -131,21 +149,6 @@ public class WebAPI {
         RootMessage message = jsonAdapter.fromJson(getJSON());
 
         return message;
-    }
-
-    public List<UserProfileSearch> getUser(List<Integer> userIds) throws IOException{
-        String apifunction = "&wsfunction=core_user_get_users_by_field";
-        String values = "";
-        for(int i = 0; i< userIds.size(); i++)
-            values += "values["+i+"]=" + userIds.get(i) + "&";
-        url = fullUrl(apifunction) + "&field=id&" + values;
-
-        Moshi moshi = new Moshi.Builder().build();
-        Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
-        JsonAdapter<List<UserProfileSearch>> jsonAdapter = moshi.adapter(userProfileSearchList);
-        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
-
-        return userProfileSearches;
     }
 
     public List<EnrolledCourse> getCourse(int userId)throws IOException{
@@ -226,4 +229,22 @@ public class WebAPI {
 
     }
 
+    public ContactRoot getContacts() throws IOException{
+        String apifunction = "core_message_get_contacts";
+        url = fullUrl(apifunction);
+
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<ContactRoot> jsonAdapter = moshi.adapter(ContactRoot.class);
+        ContactRoot contactRoot = jsonAdapter.fromJson(getJSON());
+
+        List<Integer> userIds = new ArrayList<>();
+        for (Contact c: contactRoot.offline)
+            userIds.add(c.id);
+        for (Contact c: contactRoot.online)
+            userIds.add(c.id);
+
+        List<UserProfileSearch> users = getUser(userIds);
+        dbHelper.addContacts(users);
+        return contactRoot;
+    }
 }

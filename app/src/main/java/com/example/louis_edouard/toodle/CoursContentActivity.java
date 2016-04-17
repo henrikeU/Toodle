@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.louis_edouard.toodle.moodle.Globals;
-
 public class CoursContentActivity extends AppCompatActivity {
     TabLayout tabCoursContent;
     ViewPager pagerCoursContent;

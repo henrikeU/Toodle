@@ -12,6 +12,7 @@ import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.Course;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
+import com.example.louis_edouard.toodle.moodle.UserProfileSearch;
 
 import java.util.List;
 
@@ -21,25 +22,26 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "toodle.db";
-    static final int DB_VERSION = 6;
+    static final int DB_VERSION = 7;
     private static SQLiteDatabase db = null;
 
     // Common Column
     static final String KEY_ID = "_id";
 
     // ENROLLEDCOURSE Table
-    static final String TBL_ENROLLEDCOURSE = "enrolledCourse";
+    static final String TBL_COURSE = "course";
     static final String COURSE_SHORTNAME = "shortName";
     static final String COURSE_FULLNAME = "fullName";
     static final String COURSE_IDNUMBER = "idNumber";
     static final String COURSE_SUMMARY = "summary";
+    static final String COURSE_ISENROLLED = "isEnrolled";
     static final String COURSE_STATUS = "status";
 
     // COURSECONTENT Table
     static final String TBL_COURSECONTENT = "courseContent";
     static final String COURSECONTENT_NAME = "name";
     static final String COURSECONTENT_SUMMARY = "summary";
-    static final String KEY_ENROLLEDCOURSE_ID = TBL_ENROLLEDCOURSE + KEY_ID;
+    static final String KEY_ENROLLEDCOURSE_ID = TBL_COURSE + KEY_ID;
 
     // COURSEMODULE Table
     static final String TBL_COURSEMODULE = "courseModule";
@@ -53,26 +55,40 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String EVENT_TIMESTART = "timeStart";
     static final String EVENT_TIMEDURATION = "timeDuration";
 
+    // CONTACT Table
+    static final String TBL_CONTACT = "contact";
+    static final String CONTACT_FULLNAME = "fullName";
+    static final String CONTACT_EMAIL = "email";
+    static final String CONTACT_PHONE = "phone";
+    static final String CONTACT_ADDRESS = "address";
+    static final String CONTACT_CITY = "city";
+    static final String CONTACT_COUNTRY = "country";
+    static final String CONTACT_ISFAVORITE = "isFavorite";
+
     // Table CREATE Statements
     // CourseContent table create statement
-    static final String CREATE_TABLE_ENROLLEDCOURSE = "CREATE TABLE " + TBL_ENROLLEDCOURSE + "(" +
+    static final String CREATE_TABLE_COURSE = "CREATE TABLE " + TBL_COURSE + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " +
             COURSE_SHORTNAME + " TEXT, " +
             COURSE_FULLNAME + " TEXT, " +
             COURSE_IDNUMBER + " TEXT, " +
             COURSE_SUMMARY + " TEXT, " +
-            COURSE_STATUS + " INTEGER DEFAULT 0)";
+            COURSE_ISENROLLED + " BOOLEAN DEFAULT 1, " +
+            COURSE_STATUS + " TINYINT DEFAULT 0)";
+
     // CourseContent table create statement
     static final String CREATE_TABLE_COURSECONTENT = "CREATE TABLE " + TBL_COURSECONTENT + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " +
             COURSECONTENT_NAME + " TEXT, " +
             COURSECONTENT_SUMMARY + " TEXT, " +
             KEY_ENROLLEDCOURSE_ID + " INTEGER, " +
-            "FOREIGN KEY(" + KEY_ENROLLEDCOURSE_ID +") REFERENCES " + TBL_ENROLLEDCOURSE + "(" + KEY_ID + "))";
+            "FOREIGN KEY(" + KEY_ENROLLEDCOURSE_ID +") REFERENCES " + TBL_COURSE + "(" + KEY_ID + "))";
+
     // CourseModule table create statement
     static final String CREATE_TABLE_COURSEMODULE = "CREATE TABLE " + TBL_COURSEMODULE + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " +
             COURSEMODULE_NAME + " TEXT)";
+
     // Event table create statement
     static final String CREATE_TABLE_EVENT = "CREATE TABLE " + TBL_EVENT + "(" +
             KEY_ID + " INTEGER PRIMARY KEY, " +
@@ -82,6 +98,17 @@ public class DBHelper extends SQLiteOpenHelper {
             EVENT_TIMESTART + " INTEGER, " +
             EVENT_TIMEDURATION + " INTEGER DEFAULT 0)";
 
+    // Contact table create statement
+    static final String CREATE_TABLE_CONTACT = "CREATE TABLE " + TBL_CONTACT + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY, " +
+            CONTACT_FULLNAME + " TEXT, " +
+            CONTACT_EMAIL + " TEXT, " +
+            CONTACT_PHONE + " TEXT, " +
+            CONTACT_ADDRESS + " TEXT, " +
+            CONTACT_CITY + " TEXT, " +
+            CONTACT_COUNTRY + " TEXT, " +
+            CONTACT_ISFAVORITE + " BOOLEAN DEFAULT 0)";
+
     public DBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
         if(db == null) db = getWritableDatabase();
@@ -90,19 +117,39 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Log.d("SQL", query);
-        db.execSQL(CREATE_TABLE_ENROLLEDCOURSE);
+        db.execSQL(CREATE_TABLE_COURSE);
         db.execSQL(CREATE_TABLE_COURSECONTENT);
         db.execSQL(CREATE_TABLE_COURSEMODULE);
         db.execSQL(CREATE_TABLE_EVENT);
+        db.execSQL(CREATE_TABLE_CONTACT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TBL_ENROLLEDCOURSE);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_COURSE);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_COURSECONTENT);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_COURSEMODULE);
         db.execSQL("DROP TABLE IF EXISTS " + TBL_EVENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TBL_CONTACT);
         onCreate(db);
+    }
+
+    private Cursor getById(String table, String[] columns, long id){
+        Cursor c;
+
+        String whereClause = KEY_ID + "= ?";
+        String[] whereArgs = new String[]{ String.valueOf(id) };
+        c = db.query(table, columns, whereClause, whereArgs, null, null, null);
+
+        return c;
+    }
+
+    private Cursor getAll(String table) {
+        Cursor c;
+
+        c = db.rawQuery("SELECT * FROM " + table, null);
+
+        return c;
     }
 
     /**
@@ -114,21 +161,19 @@ public class DBHelper extends SQLiteOpenHelper {
      * getAllCourses: return all courses where status is not 2 => DELETE
      */
 
-    public int addCourses(List<EnrolledCourse> enrolledCourses){
+    public int addCourses(List<EnrolledCourse> Courses){
         int nb = 0;
-        EnrolledCourse enrolledCourse;
         ContentValues contentValues = new ContentValues();
 
-        for(int i = 0; i < enrolledCourses.size(); i++){
-            enrolledCourse = enrolledCourses.get(i);
+        for(EnrolledCourse course : Courses){
             contentValues.clear();
-            contentValues.put(KEY_ID, enrolledCourse.id);
-            contentValues.put(COURSE_SHORTNAME, enrolledCourse.shortname);
-            contentValues.put(COURSE_FULLNAME, enrolledCourse.fullname);
-            contentValues.put(COURSE_IDNUMBER, enrolledCourse.idnumber);
-            contentValues.put(COURSE_SUMMARY, enrolledCourse.summary);
+            contentValues.put(KEY_ID, course.id);
+            contentValues.put(COURSE_SHORTNAME, course.shortname);
+            contentValues.put(COURSE_FULLNAME, course.fullname);
+            contentValues.put(COURSE_IDNUMBER, course.idnumber);
+            contentValues.put(COURSE_SUMMARY, course.summary);
             try {
-                db.insertOrThrow(TBL_ENROLLEDCOURSE, null, contentValues);
+                db.insertWithOnConflict(TBL_COURSE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 nb++;
             }catch (SQLException e) {};
         }
@@ -144,18 +189,17 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COURSE_STATUS, status);
         String whereClause = KEY_ID + "=?";
         String[] whereArgs = new String[] { String.valueOf(id) };
-        db.update(TBL_ENROLLEDCOURSE, contentValues, whereClause, whereArgs);
+        db.update(TBL_COURSE, contentValues, whereClause, whereArgs);
     }
 
     public Cursor getCourse(long id) {
-        Cursor c;
-        c = db.query(TBL_ENROLLEDCOURSE, new String[]{KEY_ID, COURSE_SHORTNAME, COURSE_FULLNAME, COURSE_IDNUMBER }, KEY_ID + "= ?", new String[] { String.valueOf(id) }, null, null, null);
-        return c;
+        String[] columns = new String[]{ KEY_ID, COURSE_SHORTNAME, COURSE_FULLNAME, COURSE_IDNUMBER };
+        return getById(TBL_COURSE, columns, id);
     }
 
     public Cursor getAllCourses(){
         Cursor c;
-        c = db.rawQuery("SELECT * FROM " + TBL_ENROLLEDCOURSE + " WHERE " + COURSE_STATUS + " != 2 ORDER BY " + KEY_ID + " DESC", null);
+        c = db.rawQuery("SELECT * FROM " + TBL_COURSE + " WHERE " + COURSE_STATUS + " != 2 ORDER BY " + KEY_ID + " DESC", null);
         return c;
     }
 
@@ -166,20 +210,18 @@ public class DBHelper extends SQLiteOpenHelper {
      * getAllFutureEvents: return all events that start after the current time
      */
 
-    public int addEvents(List<CalendarEvent> calendarEvents){
+    public int addEvents(List<CalendarEvent> events){
         int nb = 0;
-        CalendarEvent calendarEvent;
         ContentValues contentValues = new ContentValues();
 
-        for(int i = 0; i < calendarEvents.size(); i++){
-            calendarEvent = calendarEvents.get(i);
+        for(CalendarEvent event : events) {
             contentValues.clear();
-            contentValues.put(KEY_ID, calendarEvent.id);
-            contentValues.put(EVENT_NAME, calendarEvent.name);
-            contentValues.put(EVENT_DESCRIPTION, calendarEvent.description);
-            contentValues.put(EVENT_TYPE, calendarEvent.eventtype);
-            contentValues.put(EVENT_TIMESTART, calendarEvent.timestart);
-            contentValues.put(EVENT_TIMEDURATION, calendarEvent.timeduration);
+            contentValues.put(KEY_ID, event.id);
+            contentValues.put(EVENT_NAME, event.name);
+            contentValues.put(EVENT_DESCRIPTION, event.description);
+            contentValues.put(EVENT_TYPE, event.eventtype);
+            contentValues.put(EVENT_TIMESTART, event.timestart);
+            contentValues.put(EVENT_TIMEDURATION, event.timeduration);
             try {
                 db.insertWithOnConflict(TBL_EVENT, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 nb++;
@@ -189,16 +231,52 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllEvents(){
-        Cursor c;
-        c = db.rawQuery("SELECT * FROM " + TBL_EVENT, null);
-        return c;
+        return getAll(TBL_EVENT);
     }
 
     public Cursor getAllFutureEvents(){
         Cursor c;
-        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART + " > strftime('%s', 'now') ORDER BY " + EVENT_TIMESTART, null);
+        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART +
+                " > strftime('%s', 'now') ORDER BY " + EVENT_TIMESTART + " LIMIT 10", null);
         c.moveToFirst();
         return c;
+    }
+
+    /**
+     * TABLE Event Methods
+     * addContacts: add a list of contact to the table
+     * getAllContacts: return all contact
+     */
+
+    public int addContacts(List<UserProfileSearch> users){
+        int nb = 0;
+        ContentValues contentValues = new ContentValues();
+
+        for(UserProfileSearch user : users){
+            contentValues.clear();
+            contentValues.put(KEY_ID, user.id);
+            contentValues.put(CONTACT_FULLNAME, user.fullname);
+            contentValues.put(CONTACT_EMAIL, user.email);
+            contentValues.put(CONTACT_PHONE, user.phone1);
+            contentValues.put(CONTACT_ADDRESS, user.address);
+            contentValues.put(CONTACT_CITY, user.city);
+            contentValues.put(CONTACT_COUNTRY, user.country);
+            try {
+                db.insertWithOnConflict(TBL_CONTACT, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                nb++;
+            }catch (SQLException e) {};
+        }
+        return nb;
+    }
+
+    public Cursor getContact(long id) {
+        Cursor c;
+        String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE };
+        return getById(TBL_CONTACT, columns, id);
+    }
+
+    public Cursor getAllContacts(){
+        return getAll(TBL_CONTACT);
     }
 
 }

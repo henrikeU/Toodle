@@ -11,7 +11,8 @@
         android:id="@+id/listitem_event_time"
         android:layout_gravity="center_horizontal|right"
         android:textSize="14sp"
-        android:textColor="#C40233" />
+        android:textStyle="bold"
+        android:textColor="@color/red_alert" />
 
     <TextView
         android:layout_width="match_parent"
@@ -19,13 +20,14 @@
         android:id="@+id/listitem_event_name"
         android:textSize="16sp"
         android:layout_marginTop="3dp"
-        android:textColor="#0000A0" />
+        android:textColor="#2B3856" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:text="description du event"
-        android:layout_height="wrap_content"
         android:id="@+id/listitem_event_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
 </LinearLayout>

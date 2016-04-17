@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -31,8 +30,14 @@ import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.Globals;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import android.os.Handler;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -48,12 +53,17 @@ public class HomeActivity extends AppCompatActivity
     public static String userFullName, userName;
     DBHelper dbHelper;
 
+    String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        token = preferences.getString(Globals.KEY_USER_TOKEN, null);
+        String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -80,11 +90,21 @@ public class HomeActivity extends AppCompatActivity
         prefEditor.putLong(Globals.KEY_LAST_CONNECTION, now);
         prefEditor.apply();
 
-        String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+        RunAPI runAPI = new RunAPI();
+        final Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                if(Globals.IsConnected(HomeActivity.this))
+                    new UpdateTask().execute();
+
+                handler.postDelayed(this, Globals.REFRESH_TIME);
+            }
+        };
 
         if(Globals.IsConnected(this)) {
-            RunAPI runAPI = new RunAPI();
             runAPI.execute();
+            handler.postDelayed(r, Globals.REFRESH_TIME);
         }
 
         listViewHome = (ListView)findViewById(R.id.listViewHome);
@@ -118,9 +138,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -209,15 +226,18 @@ public class HomeActivity extends AppCompatActivity
         public void bindView(View view, Context context, Cursor cursor) {
             super.bindView(view, context, cursor);
 
-            int nameCol = cursor.getColumnIndex(DBHelper.EVENT_NAME);
-            String name = cursor.getString(nameCol);
-            TextView eventName = (TextView) view.findViewById(R.id.listitem_event_name);
-            eventName.setText(name);
-
-            String strEventTime = Globals.EventConvertDate(cursor.getInt(cursor.getColumnIndex(DBHelper.EVENT_TIMESTART)));
+            long unixSeconds = cursor.getInt(cursor.getColumnIndex(DBHelper.EVENT_TIMESTART));
+            String strEventTime = Globals.EventConvertDate(unixSeconds);
             TextView eventTime = (TextView) view.findViewById(R.id.listitem_event_time);
             eventTime.setText(strEventTime);
 
+            String html = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
+            String streventDescription  = Globals.HtmlToText(html);
+            TextView eventDescription = (TextView) view.findViewById(R.id.listitem_event_description);
+            if(streventDescription.length() > 0)
+                eventDescription.setText(streventDescription);
+            else
+                eventDescription.setVisibility(View.GONE);
         }
 
         @Override
@@ -226,16 +246,30 @@ public class HomeActivity extends AppCompatActivity
             final LayoutInflater inflater = LayoutInflater.from(context);
             View v = inflater.inflate(layout, parent, false);
 
-            int nameCol = c.getColumnIndex(DBHelper.EVENT_NAME);
-            String name = c.getString(nameCol);
-            TextView eventName = (TextView) v.findViewById(R.id.listitem_event_name);
-            eventName.setText(name);
-
-            String strEventTime = Globals.EventConvertDate(c.getInt(c.getColumnIndex(DBHelper.EVENT_TIMESTART)));
-            TextView eventTime = (TextView) v.findViewById(R.id.listitem_event_time);
-            eventTime.setText(strEventTime);
-
             return v;
+        }
+    }
+
+    private class UpdateTask extends AsyncTask<String, Object, Calendar> {
+
+        @Override
+        protected void onPostExecute(Calendar calendar) {
+            super.onPostExecute(calendar);
+            Cursor c  = dbHelper.getAllFutureEvents();
+            listViewAdapter.changeCursor(c);
+            listViewAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        protected Calendar doInBackground(String... params) {
+            WebAPI webAPI = new WebAPI(HomeActivity.this, token);
+            try {
+                calendar = webAPI.getEvent(userProfile.userid);
+                webAPI.updateCours(userProfile.userid);
+            }
+            catch(IOException e){ }
+
+            return calendar;
         }
     }
 
@@ -249,8 +283,8 @@ public class HomeActivity extends AppCompatActivity
 
             Cursor c  = dbHelper.getAllFutureEvents();
 
-            String[] from = {DBHelper.KEY_ID, DBHelper.EVENT_NAME, DBHelper.EVENT_TIMESTART};
-            int[] to = {0, R.id.listitem_event_name, R.id.listitem_event_time };
+            String[] from = {DBHelper.KEY_ID, DBHelper.EVENT_NAME, DBHelper.EVENT_DESCRIPTION, DBHelper.EVENT_TIMESTART};
+            int[] to = {0, R.id.listitem_event_name, R.id.listitem_event_description, R.id.listitem_event_time };
             listViewAdapter = new ListViewAdapter(HomeActivity.this, R.layout.listview_home, c, from, to, 0);
             listViewHome.setAdapter(listViewAdapter);
 
@@ -263,10 +297,10 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected UserProfile doInBackground(String... params) {
-            WebAPI webAPI = new WebAPI(HomeActivity.this, preferences.getString(Globals.KEY_USER_TOKEN, null));
+            WebAPI webAPI = new WebAPI(HomeActivity.this, token);
             try {
                 userProfile = webAPI.getUserProfile();
-                calendar = webAPI.getEvent();
+                calendar = webAPI.getEvent(userProfile.userid);
                 webAPI.updateCours(userProfile.userid);
             }
             catch(IOException e){ }

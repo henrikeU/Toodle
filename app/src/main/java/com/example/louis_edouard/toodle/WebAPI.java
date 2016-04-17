@@ -79,9 +79,13 @@ public class WebAPI {
         return token;
     }
 
-    public Calendar getEvent() throws IOException{
+    public Calendar getEvent(int userid) throws IOException{
+        List<EnrolledCourse> enrolledCourses = getCourse(userid);
         String apifunction = "core_calendar_get_calendar_events";
-        url = fullUrl(apifunction);
+        String values = "";
+        for(int i = 0; i< enrolledCourses.size(); i++)
+            values += "events[eventids]["+i+"]=" + enrolledCourses.get(i).id + "&";
+        url = fullUrl(apifunction) + "&" + values;
 
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Calendar> jsonAdapter = moshi.adapter(Calendar.class);

@@ -181,7 +181,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(EVENT_TIMESTART, calendarEvent.timestart);
             contentValues.put(EVENT_TIMEDURATION, calendarEvent.timeduration);
             try {
-                db.insertOrThrow(TBL_EVENT, null, contentValues);
+                db.insertWithOnConflict(TBL_EVENT, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 nb++;
             }catch (SQLException e) {};
         }
@@ -196,7 +196,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getAllFutureEvents(){
         Cursor c;
-        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART + " > strftime('%s', 'now')", null);
+        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART + " > strftime('%s', 'now') ORDER BY " + EVENT_TIMESTART, null);
         c.moveToFirst();
         return c;
     }

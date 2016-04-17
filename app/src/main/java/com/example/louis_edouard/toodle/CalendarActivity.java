@@ -453,7 +453,7 @@ public class CalendarActivity extends AppCompatActivity
 
             WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
             try {
-                calendar = webAPI.getEvent();
+                calendar = webAPI.getEvent(preferences.getInt(Globals.KEY_USER_ID, 0));
             }
             catch(IOException e){ }
 

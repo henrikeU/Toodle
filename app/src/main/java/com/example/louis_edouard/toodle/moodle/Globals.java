@@ -4,6 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.SimpleCursorAdapter;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,6 +33,8 @@ public class Globals {
     public final static String KEY_USER_ID = "userID";
     public final static String KEY_LAST_CONNECTION = "lastConnection";
 
+    public final static int REFRESH_TIME = 5 * 60 * 1000; // 5 minutes
+
     public static boolean IsConnected(Context c){
         ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
         //NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -39,6 +46,12 @@ public class Globals {
     }
 
     private static final int MEGABYTE = 1024 * 1024;
+
+    public static String HtmlToText(String html){
+        Document doc = Jsoup.parseBodyFragment(html);
+        Element body = doc.body();
+        return body.text().trim();
+    }
 
     public static String ConvertDate(long unixSeconds){
         Date now  = new Date();
@@ -71,21 +84,18 @@ public class Globals {
         String unit;
 
         if (diff > dayToMillis) {
-            Log.d("EVENTDATE", "jour");
             sdf = new SimpleDateFormat("d");
             unit = unixSeconds > 2 * dayToMillis ? "jours" : "jour";
         }else if (diff > hourToMillis) {
-            Log.d("EVENTDATE", "heure");
-            sdf = new SimpleDateFormat("HH");
+            sdf = new SimpleDateFormat("H");
             unit = unixSeconds > 2 * hourToMillis ? "heures" : "heure";
         }else {
-            sdf = new SimpleDateFormat("mm");
+            sdf = new SimpleDateFormat("m");
             unit = unixSeconds > 2 * minToMillis ? "minutes" : "minute";
         }
 
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formating (see comment at the bottom
-        String formattedDate = sdf.format(date);
-        formattedDate += " " + unit;
+        String formattedDate = "..." + sdf.format(date) + " " + unit;
         return formattedDate;
     }
 

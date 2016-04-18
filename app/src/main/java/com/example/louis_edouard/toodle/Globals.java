@@ -72,31 +72,28 @@ public class Globals {
     }
 
     public static String EventConvertDate(long unixSeconds){
-        long unixMillis = unixSeconds * 1000L;
-        long now = System.currentTimeMillis();
-        long diff = unixMillis - now;
-        Date date = new Date(diff);
 
-        long dayToMillis = 24 * 3600 * 1000L;
-        long hourToMillis = 3600 * 1000L;
+        long now = System.currentTimeMillis();
+        long diff = unixSeconds * 1000L - now;
         long minToMillis = 60 * 1000L;
-        SimpleDateFormat sdf;
-        String unit;
+        long hourToMillis = minToMillis * 60;
+        long dayToMillis = hourToMillis * 24;
+
+        String time, unit;
 
         if (diff > dayToMillis) {
-            sdf = new SimpleDateFormat("d");
-            unit = unixSeconds > 2 * dayToMillis ? "jours" : "jour";
+            time = String.valueOf(diff / dayToMillis);
+            unit = diff > 2 * dayToMillis ? "jours" : "jour";
         }else if (diff > hourToMillis) {
-            sdf = new SimpleDateFormat("H");
-            unit = unixSeconds > 2 * hourToMillis ? "heures" : "heure";
+            time = String.valueOf(diff / hourToMillis);
+            unit = diff > (2 * hourToMillis) ? "heures" : "heure";
         }else {
-            sdf = new SimpleDateFormat("m");
-            unit = unixSeconds > 2 * minToMillis ? "minutes" : "minute";
+            time = String.valueOf(diff / minToMillis);
+            unit = diff > 2 * minToMillis ? "minutes" : "minute";
         }
 
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formating (see comment at the bottom
-        String formattedDate = "..." + sdf.format(date) + " " + unit;
-        return formattedDate;
+        String formattedTime = "..." + time + " " + unit;
+        return formattedTime;
     }
 
     public static void DownloadFile(String fileURL, File directory){

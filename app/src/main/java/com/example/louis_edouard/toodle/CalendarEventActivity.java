@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CalendarPublicActivity extends AppCompatActivity {
+public class CalendarEventActivity extends AppCompatActivity {
     TextView date, hours, location,remind, subject, description,disponible, participant;
     Button ls, invite;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_public);
+        setContentView(R.layout.activity_calendar_event);
 
         date = (TextView)findViewById(R.id.txt_clndr_public_date);
         hours = (TextView)findViewById(R.id.txt_clndr_public_hours);

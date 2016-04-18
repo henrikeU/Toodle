@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.louis_edouard.toodle">
+    package="com.example.louis_edouard.toodle" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/title_app"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        android:theme="@style/AppTheme" >
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,13 +21,11 @@
         <activity android:name=".DetailsActivity" />
         <activity
             android:name=".CoursContentActivity"
-            android:parentActivityName=".CoursActivity">
+            android:parentActivityName=".CoursActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CoursActivity" />
         </activity>
-        <activity android:name=".SendMessageActivity" />
-        <activity android:name=".ConversationActivity" />
         <activity android:name=".Preference" />
         <activity
             android:name=".HomeActivity"
@@ -37,20 +36,24 @@
             android:label="@string/title_activity_cours"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MessageActivity"
-            android:label="@string/title_activity_message"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CalendarEventActivity" />
+        <activity android:name=".CalendarAddEventActivity" />
+        <activity
+            android:name=".MessageActivity"
+            android:label="@string/title_activity_message"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SendMessageActivity" />
+        <activity android:name=".ConversationActivity" />
         <activity
             android:name=".ContactActivity"
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CalendarPrivateActivity" />
-        <activity android:name=".CalendarPublicActivity" />
-        <activity android:name=".CalendarAddEventActivity"></activity>
+        <activity android:name=".ContactProfileActivity"
+            android:label="@string/title_activity_contact_profile"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

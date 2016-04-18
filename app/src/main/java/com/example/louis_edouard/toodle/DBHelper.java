@@ -135,19 +135,29 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private Cursor getById(String table, String[] columns, long id){
-        Cursor c;
-
         String whereClause = KEY_ID + "= ?";
         String[] whereArgs = new String[]{ String.valueOf(id) };
-        c = db.query(table, columns, whereClause, whereArgs, null, null, null);
+        Cursor c = db.query(table, columns, whereClause, whereArgs, null, null, null);
 
         return c;
     }
 
-    private Cursor getAll(String table) {
-        Cursor c;
+    private Cursor getById(String table, long id, String orderColumn){
+        String query = "SELECT * FROM " + table + " WHERE " + KEY_ID + " = " + id;
+        if(orderColumn != null)
+            query += " ORDER BY " + orderColumn;
 
-        c = db.rawQuery("SELECT * FROM " + table, null);
+        Cursor c = db.rawQuery(query, null);
+
+        return c;
+    }
+
+    private Cursor getAll(String table, String orderColumn) {
+        String query = "SELECT * FROM " + table;
+        if(orderColumn != null)
+            query += " ORDER BY " + orderColumn;
+
+        Cursor c = db.rawQuery(query, null);
 
         return c;
     }
@@ -231,7 +241,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllEvents(){
-        return getAll(TBL_EVENT);
+        return getAll(TBL_EVENT, null);
     }
 
     public Cursor getAllFutureEvents(){
@@ -270,13 +280,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getContact(long id) {
-        Cursor c;
         String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE };
         return getById(TBL_CONTACT, columns, id);
     }
 
     public Cursor getAllContacts(){
-        return getAll(TBL_CONTACT);
+        return getAll(TBL_CONTACT, CONTACT_FULLNAME);
     }
 
 }

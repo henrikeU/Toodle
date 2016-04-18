@@ -40,6 +40,10 @@
     <string name="title_activity_message">Messagerie</string>
     <string name="title_activity_calendar">Calendrier</string>
     <string name="title_activity_contact">Contacts</string>
+    <string name="title_activity_contact_profile">Profil</string>
     <string name="title_activity_preference">Preference</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

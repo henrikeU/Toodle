@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -26,14 +27,14 @@ import com.example.louis_edouard.toodle.moodle.ContactRoot;
 import java.io.IOException;
 
 public class ContactActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
     View header;
     TextView drawer_txt_name, drawer_txt_email;
     ListView listView;
     ListViewAdapter adapter;
     SharedPreferences preferences;
     DBHelper dbHelper;
-    private ContactRoot root;
+    public static ContactRoot root;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,8 @@ public class ContactActivity extends AppCompatActivity
 
         listView = (ListView) findViewById(R.id.listViewContact);
 
+        listView.setOnItemClickListener(this);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,6 +64,13 @@ public class ContactActivity extends AppCompatActivity
 
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(this, ContactProfileActivity.class);
+        intent.putExtra(ContactProfileActivity.ARG_POSITION, position);
+        startActivity(intent);
     }
 
     private class ListViewAdapter extends SimpleCursorAdapter {

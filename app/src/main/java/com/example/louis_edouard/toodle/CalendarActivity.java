@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
+import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -382,7 +383,7 @@ public class CalendarActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, CalendarPrivateActivity.class);
+        Intent intent = new Intent(this, CalendarEvent.class);
 //        intent.putExtra("USER_ID_FROM", rootMessage.messages.get(position).useridfrom);
 //        intent.putExtra("USER_ID_TO", rootMessage.messages.get(position).useridto);
         startActivity(intent);
@@ -402,9 +403,6 @@ public class CalendarActivity extends AppCompatActivity
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.btn_clndr_private_list:
-                //TODO
-                break;
             case R.id.btn_clndr_public_invite:
                 //TODO
                 break;

@@ -33,7 +33,7 @@ public class Globals {
     public final static String KEY_USER_ID = "userID";
     public final static String KEY_LAST_CONNECTION = "lastConnection";
 
-    public final static int REFRESH_TIME = 5 * 60 * 1000; // 5 minutes
+    public final static int REFRESH_TIME = 1 * 60 * 1000; // fast refresh (30 sec)
 
     public static boolean IsConnected(Context c){
         ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);

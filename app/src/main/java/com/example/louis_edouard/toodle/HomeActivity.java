@@ -43,7 +43,6 @@ public class HomeActivity extends AppCompatActivity
     private Calendar calendar;
     public static String userFullName, userName;
     DBHelper dbHelper;
-
     String token;
 
     @Override
@@ -53,7 +52,7 @@ public class HomeActivity extends AppCompatActivity
 
         preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         token = preferences.getString(Globals.KEY_USER_TOKEN, null);
-        String userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
+        userName = preferences.getString(Globals.KEY_USER_USERNAME, null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

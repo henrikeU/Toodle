@@ -226,8 +226,8 @@ public class CoursActivity extends AppCompatActivity
             intent = new Intent(this,MessageActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_contact) {
-//            intent = new Intent(this,ContactActivity.class);
-//            startActivity(intent);
+            intent = new Intent(this,ContactActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
             intent = new Intent(this, SendMessageActivity.class);
             startActivity(intent);
@@ -285,7 +285,6 @@ public class CoursActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), "item clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,CoursContentActivity.class);
 
         EnrolledCourse chosenCourse = mAdapter.getItem(position);

@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -101,68 +102,15 @@ public class MessageActivity extends AppCompatActivity
 
         preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
-        messageAdaptor = new MessageAdaptor(this);
+        messageAdaptor = new MessageAdaptor();
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         userId = pref.getInt(Globals.KEY_USER_ID, 0);
         RunAPI runAPI = new RunAPI();
         runAPI.execute();
-        setTitle("Messagrie");
+        setTitle("Messagerie");
         lvMessage.setOnItemClickListener(this);
 
-        /****************delete*************/
-        lvMessage.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.e("ListView", "OnTouch");
-                return false;
-            }
-        });
-
-        lvMessage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-                checkBox.setChecked(!checkBox.isChecked());
-                onClick(checkBox);
-                /////////  -->
-                messageAdaptor.setDeleteMode(lvMessage);
-                mInActionMode = !mInActionMode;
-                updateActionMode();
-                ///////// <--
-                if (mActiveActionMode != null)
-                    return false;
-                mActiveActionMode = startActionMode(mLastCallback);
-                view.setSelected(true);
-                return true;
-            }
-        });
-
-        lvMessage.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.e("ListView", "onScrollStateChanged");
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
-
-        lvMessage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("ListView", "onItemSelected:" + position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.e("ListView", "onNothingSelected:");
-            }
-        });
-        /****************delete*************/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
     }
@@ -334,16 +282,9 @@ public class MessageActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(RootMessage message){
             super.onPostExecute(message);
-            //messageAdaptor = new MessageAdaptor();
+            messageAdaptor = new MessageAdaptor();
             lvMessage.setAdapter(messageAdaptor);
 
-            /***************delete*************/
-            messageAdaptor.setMode(Attributes.Mode.Single);
-            lvMessagesize = rootMessage.messages.size();
-            deleteMode = false;
-            deleted = new ArrayList<Boolean>();
-            for(int i=0; i<lvMessagesize; i++) deleted.add(false);
-            /***************delete*************/
             drawer_txt_name = (TextView)header.findViewById(R.id.drawer_txt_name);
             drawer_txt_name.setText(HomeActivity.userFullName);
             drawer_txt_email = (TextView)header.findViewById(R.id.drawer_txt_email);
@@ -351,151 +292,202 @@ public class MessageActivity extends AppCompatActivity
             drawer_txt_email.setText(userName);
         }
     }
-    /////////MMMMM*********M
-    private class MessageAdaptor extends BaseSwipeAdapter {
-        private Context mContext;
-        private LayoutInflater inflater;
-
-        public MessageAdaptor(Context mContext) {
-            this.mContext = mContext;
-            inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        }
-
-//        public MessageAdaptor(MessageActivity messageActivity) {
+//    /////////MMMMM*********M
+//    private class MessageAdaptor extends BaseSwipeAdapter {
+//        private Context mContext;
+//        private LayoutInflater inflater;
+//
+//        public MessageAdaptor(Context mContext) {
+//            this.mContext = mContext;
+//            inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+//
 //        }
-
-        /***************delete*************/
-        public void afficheMode(ListView lv) {
-            for (int i = 0; i < lv.getChildCount(); i++) {
-                //Log.d("xyz", "getting child " + i);
-                View v = lv.getChildAt(i);
-                CheckBox cb = (CheckBox) v.findViewById(R.id.checkBox);
-                if (deleteMode) {
-                    cb.setVisibility(View.VISIBLE);
-                } else {
-                    cb.setVisibility(View.GONE);
-                }
-            }
-        }
-
-        public void setDeleteMode(ListView lv) {
-            if( deleteMode==false ) {
-                deleteMode=true;
-                afficheMode(lv);
-            }else {
-                // si on veut on toggle
-
-                deleteMode=false;
-                afficheMode(lv);
-
-            }
-        }
-
-        @Override
-        public int getSwipeLayoutResourceId(int position) {
-            return R.id.swipeMessage;
-        }
-
-        /**
-         * generate a new view item.
-         * Never bind SwipeListener or fill values here, every item has a chance to fill value or bind
-         * listeners in fillValues.
-         * to fill it in {@code fillValues} method.
-         *
-         * @param position
-         * @param parent
-         * @return
-         */
-        @Override
-        public View generateView(int position, ViewGroup parent) {
-            View v=LayoutInflater.from(mContext).inflate(R.layout.listview_message, null);
-            if (v == null) {
-                v=LayoutInflater.from(mContext).inflate(R.layout.listview_message, null); // pour recuperer un layout et le mettre dans un view
-            }
-            /*******************************/
-
-            CheckBox cb=(CheckBox)v.findViewById(R.id.checkBox);
-
-            if( deleteMode ) {
-                cb.setVisibility(View.VISIBLE);
-            }else{
-                cb.setVisibility(View.GONE);
-            }
-            cb.setOnCheckedChangeListener(null);
-            Log.d("xyz", "setting checkbox " + position + " to deleted=" + deleted.get(position));
-            cb.setChecked(deleted.get(position));
-            cb.setTag(new Integer(position));
-//            cb.setOnClickListener(MainActivity.this);
-            cb.setOnCheckedChangeListener(MessageActivity.this);
-
-            // v.setOnLongClickListener(CoursActivity.this);
-
-            SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
-            swipeLayout.addSwipeListener(new SimpleSwipeListener() {
-                @Override
-                public void onOpen(SwipeLayout layout) {
-                    //YoYo.with(Techniques.SlideInRight).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
-                }
-            });
-
-            v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-            /*****************************/
-
-            TextView person = (TextView)v.findViewById(R.id.txt_message_person);
-            TextView time = (TextView)v.findViewById(R.id.txt_message_time);
-            TextView description = (TextView)v.findViewById(R.id.txt_message_description);
-
-            Message message = rootMessage.messages.get(position);
-            person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
-            description.setText(rootMessage.messages.get(position).text);
-            time.setText(Globals.ConvertDate(message.timecreated));
-            if(message.timeread == 0 && message.useridfrom != userId){
-                description.setTextColor(Color.BLUE);
-                time.setTextColor(Color.DKGRAY);
-                time.setTypeface(null, Typeface.BOLD);
-            }
-
-            return v;
-        }
-
-        /**
-         * fill values or bind listeners to the view.
-         *
-         * @param position
-         * @param convertView
-         */
-        @Override
-        public void fillValues(int position, View convertView) {
-            TextView t = (TextView)convertView.findViewById(R.id.position);
-            TextView t1 =(TextView)convertView.findViewById(R.id.trash);
-//            String title = rootMessage.messages.get(position).usertofullname + " - " + rootMessage.messages.get(position).userfromfullname;
-//            t.setText(title);
-            // t1.setText(rootMessage.messages.get(position).usertofullname);
-        }
-        /***************delete*************/
-
-        @Override
-        public int getCount() {
-            return rootMessage.messages.size();
-        }
-
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
+//
+////        public MessageAdaptor(MessageActivity messageActivity) {
+////        }
+//
+//        /***************delete*************/
+//        public void afficheMode(ListView lv) {
+//            for (int i = 0; i < lv.getChildCount(); i++) {
+//                //Log.d("xyz", "getting child " + i);
+//                View v = lv.getChildAt(i);
+//                CheckBox cb = (CheckBox) v.findViewById(R.id.checkBox);
+//                if (deleteMode) {
+//                    cb.setVisibility(View.VISIBLE);
+//                } else {
+//                    cb.setVisibility(View.GONE);
+//                }
+//            }
+//        }
+//
+//        public void setDeleteMode(ListView lv) {
+//            if( deleteMode==false ) {
+//                deleteMode=true;
+//                afficheMode(lv);
+//            }else {
+//                // si on veut on toggle
+//
+//                deleteMode=false;
+//                afficheMode(lv);
+//
+//            }
+//        }
+//
+//        @Override
+//        public int getSwipeLayoutResourceId(int position) {
+//            return R.id.swipeMessage;
+//        }
+//
+//        /**
+//         * generate a new view item.
+//         * Never bind SwipeListener or fill values here, every item has a chance to fill value or bind
+//         * listeners in fillValues.
+//         * to fill it in {@code fillValues} method.
+//         *
+//         * @param position
+//         * @param parent
+//         * @return
+//         */
+//        @Override
+//        public View generateView(int position, ViewGroup parent) {
+//            View v=LayoutInflater.from(mContext).inflate(R.layout.listview_message, null);
+//            if (v == null) {
+//                v=LayoutInflater.from(mContext).inflate(R.layout.listview_message, null); // pour recuperer un layout et le mettre dans un view
+//            }
+//            /*******************************/
+//
+//            CheckBox cb=(CheckBox)v.findViewById(R.id.checkBox);
+//
+//            if( deleteMode ) {
+//                cb.setVisibility(View.VISIBLE);
+//            }else{
+//                cb.setVisibility(View.GONE);
+//            }
+//            cb.setOnCheckedChangeListener(null);
+//            Log.d("xyz", "setting checkbox " + position + " to deleted=" + deleted.get(position));
+//            cb.setChecked(deleted.get(position));
+//            cb.setTag(new Integer(position));
+////            cb.setOnClickListener(MainActivity.this);
+//            cb.setOnCheckedChangeListener(MessageActivity.this);
+//
+//            // v.setOnLongClickListener(CoursActivity.this);
+//
+//            SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
+//            swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+//                @Override
+//                public void onOpen(SwipeLayout layout) {
+//                    //YoYo.with(Techniques.SlideInRight).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
+//                }
+//            });
+//
+//            v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//
+//
+//            /*****************************/
+//
+//            TextView person = (TextView)v.findViewById(R.id.txt_message_person);
+//            TextView time = (TextView)v.findViewById(R.id.txt_message_time);
+//            TextView description = (TextView)v.findViewById(R.id.txt_message_description);
+//
+//            Message message = rootMessage.messages.get(position);
+//            person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
+//            description.setText(rootMessage.messages.get(position).text);
+//            time.setText(Globals.ConvertDate(message.timecreated));
+//            if(message.timeread == 0 && message.useridfrom != userId){
+//                description.setTextColor(Color.BLUE);
+//                time.setTextColor(Color.DKGRAY);
+//                time.setTypeface(null, Typeface.BOLD);
+//            }
+//
+//            return v;
+//        }
+//
+//        /**
+//         * fill values or bind listeners to the view.
+//         *
+//         * @param position
+//         * @param convertView
+//         */
+//        @Override
+//        public void fillValues(int position, View convertView) {
+//            TextView t = (TextView)convertView.findViewById(R.id.position);
+//            TextView t1 =(TextView)convertView.findViewById(R.id.trash);
+////            String title = rootMessage.messages.get(position).usertofullname + " - " + rootMessage.messages.get(position).userfromfullname;
+////            t.setText(title);
+//            // t1.setText(rootMessage.messages.get(position).usertofullname);
+//        }
+//        /***************delete*************/
+//
+//        @Override
+//        public int getCount() {
+//            return rootMessage.messages.size();
+//        }
+//
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return null;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//    }
+private class MessageAdaptor extends BaseAdapter {
+    LayoutInflater inflater;
+    public MessageAdaptor() {
+        inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        setTitle("Messagerie");
     }
+
+    @Override
+    public int getCount() {
+        return rootMessage.messages.size();
+    }
+
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View v = convertView;
+        if (v == null) {
+            v = inflater.inflate(R.layout.listview_message, parent, false); // pour recuperer un layout et le mettre dans un view
+        }
+        //pour changer le color au fond des photos
+
+        TextView person = (TextView)v.findViewById(R.id.txt_message_person);
+        TextView time = (TextView)v.findViewById(R.id.txt_message_time);
+        TextView description = (TextView)v.findViewById(R.id.txt_message_description);
+
+
+        //String title = fullname.LineupItems.get(position).Title;
+        Message message = rootMessage.messages.get(position);
+        person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
+        description.setText(rootMessage.messages.get(position).text);
+        time.setText(Globals.ConvertDate(message.timecreated));
+        if(message.timeread == 0 && message.useridfrom != userId){
+            description.setTextColor(Color.BLUE);
+            time.setTextColor(Color.DKGRAY);
+            time.setTypeface(null, Typeface.BOLD);
+        }
+
+        return v;
+    }
+}
 }

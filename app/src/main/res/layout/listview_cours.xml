@@ -49,9 +49,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/item_selector"
-        android:padding="10dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
 
         <CheckBox
             android:layout_width="match_parent"
@@ -63,23 +66,16 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".1">
+            android:layout_height="match_parent"
+            android:layout_weight=".1"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/position"
+                android:id="@+id/position" android:text="testubg"
                 android:textColor="#111e5a" />
-
-            <TextView
-                android:id="@+id/text_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:tag="Hover"
-                android:layout_marginTop="5dp"
-                android:text="Vous avez 2 nouvelles notifications" />
 
         </LinearLayout>
 

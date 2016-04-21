@@ -9,76 +9,48 @@
 
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Plan du cours"
-            android:id="@+id/txt_frag_cours_fich_plan"
-            android:layout_gravity="left|top" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#111e5a"
-            android:id="@+id/txt_frag_cours_fich_prof"
-            android:layout_weight="0.05"
-            android:layout_marginTop="20dp"
-            android:padding="5dp"
-            android:textIsSelectable="false" />
+        <TextView android:text="Professeur" android:paddingLeft="5dp" android:textSize="18dp" android:textColor="#625D5D"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/txt_frag_cours_fich_prof" android:paddingLeft="10dp" android:textColor="#000"
+            android:layout_width="match_parent" android:textSize="18dp" android:layout_height="wrap_content" />
+        <TextView android:text="Démonstrateur" android:paddingLeft="5dp" android:textSize="18dp" android:textColor="#625D5D"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/txt_frag_cours_fich_demo" android:paddingLeft="10dp" android:textColor="#000"
+            android:layout_width="match_parent" android:textSize="18dp" android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#eee"
         android:layout_marginTop="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:padding="5dp"
-            android:text="Horaire"
-            android:id="@+id/txt_frag_cours_fich_hours"
-            android:background="#ccc"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Théorie"
-            android:id="@+id/txt_frag_cours_fich_theo"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp" />
+        <TextView android:text="HORAIRE" android:paddingLeft="10dp" android:layout_marginTop="10dp" android:textSize="18dp" android:textColor="#1569c7"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/txt_frag_cours_fich_theoDys"
-            android:layout_marginLeft="40dp" />
+        <TextView android:text="Théorie" android:paddingLeft="5dp" android:textSize="18dp" android:textColor="#625D5D"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/txt_frag_cours_fich_theoDys" android:paddingLeft="10dp" android:textColor="#000"
+            android:layout_width="match_parent" android:textSize="18dp" android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Travaux Pratiques"
-            android:id="@+id/txt_frag_cours_fich_tp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp" />
+        <TextView android:text="Travaux pratiques" android:paddingLeft="5dp" android:textSize="18dp" android:textColor="#625D5D"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/txt_frag_cours_fich_tpDys" android:paddingLeft="10dp" android:textColor="#000"
+            android:layout_width="match_parent" android:textSize="18dp" android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/txt_frag_cours_fich_tpDys"
-            android:layout_marginLeft="40dp"/>
     </LinearLayout>
+    <Button
+        android:layout_width="match_parent" android:layout_marginTop="20dp"
+        android:layout_height="wrap_content" android:textSize="18dp" android:textColor="#fff"
+        android:text="Plan de cours" android:background="@drawable/button_rounded_corners"
+        android:id="@+id/btn_plan_cours" />
 </LinearLayout>

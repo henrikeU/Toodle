@@ -9,5 +9,6 @@ public class CourseModule {
     public int id;
     public String url;
     public String name;
+    public String description;
     public List<CourseModuleContent> contents;
 }

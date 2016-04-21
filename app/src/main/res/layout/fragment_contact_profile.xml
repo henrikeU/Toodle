@@ -20,18 +20,29 @@
     <TextView android:id="@+id/profile_email" android:paddingLeft="10dp" android:textColor="#000"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
     <TextView android:text="Telephone" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
+    android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+    android:textStyle="bold"/>
+    <TextView android:id="@+id/profile_phone" android:paddingLeft="10dp" android:textColor="#000"
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView android:text="Cellulaire" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
         android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
         android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_phone" android:padding="5dp" android:textColor="#000"
+    <TextView android:id="@+id/profile_cell" android:paddingLeft="10dp" android:textColor="#000"
         android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="ADRESSE" android:paddingLeft="10dp" android:textSize="18dp" android:textColor="#1569c7"
+    <TextView android:text="ADRESSE" android:paddingLeft="10dp" android:layout_marginTop="10dp" android:textSize="18dp" android:textColor="#1569c7"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
     <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
-    <TextView android:id="@+id/profile_address" android:padding="5dp"
+    <TextView android:text="Numéro civique, rue" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/profile_address" android:paddingLeft="10dp" android:textColor="#000"
         android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:id="@+id/profile_city" android:padding="5dp"
+    <TextView android:text="Ville" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/profile_city" android:paddingLeft="10dp" android:textColor="#000"
         android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:id="@+id/profile_country" android:padding="5dp"
+    <TextView android:id="@+id/profile_country" android:paddingLeft="10dp" android:textColor="#000"
         android:layout_width="match_parent" android:layout_height="wrap_content" />
 
 </LinearLayout>

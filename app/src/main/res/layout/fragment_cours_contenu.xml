@@ -4,27 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.louis_edouard.toodle.CoursContenuFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/textview_alert"
-            android:layout_marginTop="20dp" />
-
         <ExpandableListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/expandableListView_pastWeeks"
-         />
+            android:id="@+id/expandableListView_pastWeeks" />
 
     </LinearLayout>
-
 </FrameLayout>

@@ -14,6 +14,7 @@
         <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,7 +40,6 @@
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CalendarEventActivity" />
         <activity android:name=".CalendarAddEventActivity" />
         <activity
             android:name=".MessageActivity"
@@ -51,9 +51,10 @@
             android:name=".ContactActivity"
             android:label="@string/title_activity_contact"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ContactProfileActivity"
+        <activity
+            android:name=".ContactProfileActivity"
             android:label="@string/title_activity_contact_profile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

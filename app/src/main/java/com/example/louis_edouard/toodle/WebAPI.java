@@ -1,6 +1,7 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Context;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
@@ -55,9 +56,12 @@ public class WebAPI {
     }
 
     private String getJSON() throws IOException{
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
+
         String json = response.body().string();
         return json;
     }
@@ -87,8 +91,10 @@ public class WebAPI {
         String apifunction = "core_calendar_get_calendar_events";
         String values = "";
         for(int i = 0; i< enrolledCourses.size(); i++)
-            values += "events[eventids]["+i+"]=" + enrolledCourses.get(i).id + "&";
+            values += "events[courseids]["+i+"]=" + enrolledCourses.get(i).id + "&";
         url = fullUrl(apifunction) + "&" + values;
+
+        url = url.substring(0, url.length() - 1);
 
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Calendar> jsonAdapter = moshi.adapter(Calendar.class);
@@ -140,7 +146,7 @@ public class WebAPI {
     }
 
     private RootMessage getMessage(int userId1, int userId2, int read) throws IOException {
-        String apifunction = "&wsfunction=core_message_get_messages";
+        String apifunction = "core_message_get_messages";
         url = fullUrl(apifunction) + "&useridto=" + userId1 + "&useridfrom=" + userId2 + "&read=" + read;
 
         Moshi moshi = new Moshi.Builder().build();
@@ -151,10 +157,16 @@ public class WebAPI {
         return message;
     }
 
-    public List<EnrolledCourse> getCourse(int userId)throws IOException{
-        String apifunction = "&wsfunction=core_enrol_get_users_courses";
-        url = fullUrl(apifunction) + "&userid=" + userId;
+    public void postMessage(int userId, String message) throws IOException{
+        String apifunction = "core_message_send_instant_messages";
+        url = fullUrl(apifunction) + "&messages[0][touserid]=" + userId + "&messages[0][text]=" + message;
 
+        getJSON();
+    }
+
+    public List<EnrolledCourse> getCourse(int userId)throws IOException{
+        String apifunction = "core_enrol_get_users_courses";
+        url = fullUrl(apifunction) + "&userid=" + userId;
         Moshi moshi = new Moshi.Builder().build();
         Type enrolledCourseList = Types.newParameterizedType(List.class, EnrolledCourse.class);
         JsonAdapter<List<EnrolledCourse>> jsonAdapter = moshi.adapter(enrolledCourseList);
@@ -180,16 +192,14 @@ public class WebAPI {
     }
 
     public List<CourseContent> getCourseContent(int courseId) throws IOException {
-        String apifunction = "&wsfunction=core_course_get_contents";
-        url += apifunction + "&courseid=" + courseId + "&moodlewsrestformat=json";
-
-        String json = getJSON();
+        String apifunction = "core_course_get_contents";
+        url = fullUrl(apifunction) + "&courseid=" + courseId;
 
         // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         Type courseContentList = Types.newParameterizedType(List.class, CourseContent.class);
         JsonAdapter<List<CourseContent>> jsonAdapter = moshi.adapter(courseContentList);
-        List<CourseContent> courseContents = jsonAdapter.fromJson(json);
+        List<CourseContent> courseContents = jsonAdapter.fromJson(getJSON());
 
         return courseContents;
     }

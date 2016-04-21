@@ -52,6 +52,7 @@ public class ContactProfileActivity extends AppCompatActivity {
             user.fullname = c.getString(c.getColumnIndex(DBHelper.CONTACT_FULLNAME));
             user.email = c.getString(c.getColumnIndex(DBHelper.CONTACT_EMAIL));
             user.phone1 = c.getString(c.getColumnIndex(DBHelper.CONTACT_PHONE));
+            user.phone2 = c.getString(c.getColumnIndex(DBHelper.CONTACT_CELL));
             user.address = c.getString(c.getColumnIndex(DBHelper.CONTACT_ADDRESS));
             user.city = c.getString(c.getColumnIndex(DBHelper.CONTACT_CITY));
             contacts.add(user);
@@ -74,7 +75,7 @@ public class ContactProfileActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             UserProfileSearch contact = contacts.get(position);
-            return ContactProfileFragment.newInstance(contact.fullname, contact.email, contact.phone1, contact.address, contact.city);
+            return ContactProfileFragment.newInstance(contact.fullname, contact.email, contact.phone1, contact.phone2, contact.address, contact.city);
         }
 
         @Override
@@ -82,10 +83,6 @@ public class ContactProfileActivity extends AppCompatActivity {
             return contacts.size();
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "lol";
-        }
     }
 
 }

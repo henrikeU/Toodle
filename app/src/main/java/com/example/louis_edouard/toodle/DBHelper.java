@@ -22,7 +22,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "toodle.db";
-    static final int DB_VERSION = 7;
+    static final int DB_VERSION = 8;
     private static SQLiteDatabase db = null;
 
     // Common Column
@@ -60,6 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String CONTACT_FULLNAME = "fullName";
     static final String CONTACT_EMAIL = "email";
     static final String CONTACT_PHONE = "phone";
+    static final String CONTACT_CELL = "cell";
     static final String CONTACT_ADDRESS = "address";
     static final String CONTACT_CITY = "city";
     static final String CONTACT_COUNTRY = "country";
@@ -104,6 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
             CONTACT_FULLNAME + " TEXT, " +
             CONTACT_EMAIL + " TEXT, " +
             CONTACT_PHONE + " TEXT, " +
+            CONTACT_CELL + " TEXT, " +
             CONTACT_ADDRESS + " TEXT, " +
             CONTACT_CITY + " TEXT, " +
             CONTACT_COUNTRY + " TEXT, " +
@@ -183,7 +185,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(COURSE_IDNUMBER, course.idnumber);
             contentValues.put(COURSE_SUMMARY, course.summary);
             try {
-                db.insertWithOnConflict(TBL_COURSE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                db.insertOrThrow(TBL_COURSE, null, contentValues);
                 nb++;
             }catch (SQLException e) {};
         }
@@ -223,7 +225,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public int addEvents(List<CalendarEvent> events){
         int nb = 0;
         ContentValues contentValues = new ContentValues();
-
+        //db.execSQL("DELETE FROM " + TBL_EVENT);
         for(CalendarEvent event : events) {
             contentValues.clear();
             contentValues.put(KEY_ID, event.id);
@@ -241,6 +243,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllEvents(){
+
         return getAll(TBL_EVENT, null);
     }
 
@@ -268,6 +271,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(CONTACT_FULLNAME, user.fullname);
             contentValues.put(CONTACT_EMAIL, user.email);
             contentValues.put(CONTACT_PHONE, user.phone1);
+            contentValues.put(CONTACT_CELL, user.phone2);
             contentValues.put(CONTACT_ADDRESS, user.address);
             contentValues.put(CONTACT_CITY, user.city);
             contentValues.put(CONTACT_COUNTRY, user.country);
@@ -280,7 +284,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getContact(long id) {
-        String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE };
+        String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_CELL };
         return getById(TBL_CONTACT, columns, id);
     }
 

@@ -1,11 +1,13 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.CourseContent;
+import com.example.louis_edouard.toodle.moodle.CourseModule;
 
 import java.io.IOException;
 import java.util.List;
 
 
 public class CoursContenuFragment extends Fragment implements AdapterView.OnItemClickListener {
-    TextView alert;
     ExpandableListView pastWeeks;
     PastWeekAdapter pastWeekAdapter;
     List<CourseContent> courseContents;
@@ -33,9 +35,6 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v =inflater.inflate(R.layout.fragment_cours_contenu,container,false);
-        alert = (TextView)v.findViewById(R.id.textview_alert);
-        //TODO: getting information from API for these text views above
-        alert.setText("Du nouveau contenu!");
 
         pastWeeks = (ExpandableListView)v.findViewById(R.id.expandableListView_pastWeeks);
         RunAPI run = new RunAPI();
@@ -94,8 +93,8 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
         }
 
         @Override
-        public Object getChild(int groupPosition, int childPosition) {
-            return courseContents.get(groupPosition).modules.get(childPosition).name;
+        public CourseModule getChild(int groupPosition, int childPosition) {
+            return courseContents.get(groupPosition).modules.get(childPosition);
         }
 
         @Override
@@ -121,14 +120,18 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
                 convertView = infalInflater.inflate(R.layout.list_group, null);
             }
             TextView lblListHeader = (TextView)convertView.findViewById(R.id.lblListHeader);
-            lblListHeader.setTypeface(null, Typeface.BOLD);
             lblListHeader.setText(headerTitle);
+            if(isExpanded)
+                lblListHeader.setTypeface(null, Typeface.BOLD);
+            else
+                lblListHeader.setTypeface(null, Typeface.NORMAL);
+
             return convertView;
         }
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            final String childText = (String) getChild(groupPosition, childPosition);
+            final CourseModule module =getChild(groupPosition, childPosition);
 
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -136,8 +139,15 @@ public class CoursContenuFragment extends Fragment implements AdapterView.OnItem
             }
 
             TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
+            TextView txtListDescription = (TextView) convertView.findViewById(R.id.lblListDescription);
 
-            txtListChild.setText(childText);
+            txtListChild.setText(module.name);
+            if (module.description == null)
+                txtListDescription.setVisibility(View.GONE);
+            else{
+                txtListDescription.setVisibility(View.VISIBLE);
+                txtListDescription.setText(Globals.HtmlToText(module.description));
+            }
             return convertView;
         }
 

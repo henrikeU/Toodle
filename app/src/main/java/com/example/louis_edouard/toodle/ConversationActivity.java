@@ -2,18 +2,22 @@ package com.example.louis_edouard.toodle;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.louis_edouard.toodle.moodle.Calendar;
 import com.example.louis_edouard.toodle.moodle.Message;
 import com.example.louis_edouard.toodle.moodle.RootMessage;
 
@@ -21,11 +25,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ConversationActivity extends AppCompatActivity {
+public class ConversationActivity extends AppCompatActivity implements View.OnClickListener {
 
     ListView listViewConversation;
     EditText editText;
     RootMessage rootMessage;
+    Button btnSend;
     int userid,  useridFrom, useridTo;
     ConversationAdaptor conversationAdaptor;
     SharedPreferences pref;
@@ -40,15 +45,28 @@ public class ConversationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         useridFrom  = intent.getIntExtra("USER_ID_FROM", 0);
         useridTo  = intent.getIntExtra("USER_ID_TO", 0);
-
-        //Log.d("USER_FROM_FULLNAME", userfullnameFrom);
-
+        Log.d("USER", useridTo + "");
         listViewConversation = (ListView)findViewById(R.id.listView_Conversation);
         editText = (EditText)findViewById(R.id.editText_Message);
+        btnSend = (Button)findViewById(R.id.btn_send);
+
+        btnSend.setOnClickListener(this);
 
         RunAPI runApi = new RunAPI();
         runApi.execute();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        WebAPI web = new WebAPI(pref.getString(Globals.KEY_USER_TOKEN, null));
+        try {
+            web.postMessage(useridTo, editText.getText().toString());
+            editText.setText("");
+            UpdateTask updateTask = new UpdateTask();
+            updateTask.execute();
+        }
+        catch(IOException e){ }
     }
 
     private class ConversationAdaptor extends BaseAdapter {
@@ -114,6 +132,35 @@ public class ConversationActivity extends AppCompatActivity {
         }
     }
 
+    private class UpdateTask extends AsyncTask<String, Object, RootMessage> {
+
+        @Override
+        protected void onPostExecute(RootMessage message) {
+            super.onPostExecute(message);
+            conversationAdaptor.notifyDataSetChanged();
+            listViewConversation.setSelection(conversationAdaptor.getCount() - 1);
+        }
+
+        @Override
+        protected RootMessage doInBackground(String... params) {
+            WebAPI web = new WebAPI(pref.getString(Globals.KEY_USER_TOKEN, null));
+
+            try {
+                rootMessage = web.getMessages(useridFrom, useridTo);
+                Comparator<Message> comparator = new Comparator<Message>() {
+                    @Override
+                    public int compare(Message lhs, Message rhs) {
+                        return lhs.timecreated - rhs.timecreated;
+                    }
+                };
+                Collections.sort(rootMessage.messages, comparator);
+            }
+            catch(IOException e){ }
+
+            return rootMessage;
+        }
+    }
+
     private class RunAPI extends AsyncTask<String, Object, RootMessage> {
         @Override
         protected RootMessage doInBackground(String... params) {
@@ -140,6 +187,7 @@ public class ConversationActivity extends AppCompatActivity {
             super.onPostExecute(message);
             conversationAdaptor = new ConversationAdaptor();
             listViewConversation.setAdapter(conversationAdaptor);
+            listViewConversation.setSelection(conversationAdaptor.getCount() - 1);
         }
     }
 }

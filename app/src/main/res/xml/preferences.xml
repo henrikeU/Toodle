@@ -5,34 +5,25 @@
 
     <PreferenceCategory
         android:key="miseajour"
-        android:title="Mise à jour"
+        android:title="Réglages"
         android:layout="@xml/preference_catagory">
         <EditTextPreference
-            android:defaultValue="10"
-            android:key="savetime"
+            android:defaultValue="5"
+            android:key="refreshtime"
             android:numeric="integer"
-            android:title="Persistence"
-            android:summary="A combien de jour on remonte dans le passe?"/>
+            android:title="Délai de synchronisation (min)"
+            android:summary="Après combien de temps l'application se synchronise?"/>
         <CheckBoxPreference
             android:key="autoupdate"
-            android:title="Automatique"
-            android:summary="Mis a jour automatique"/>
-        <EditTextPreference
-            android:defaultValue="10"
-            android:dependency="autoupdate"
-            android:key="intervallewifi"
-            android:numeric="integer"
-            android:title="Intervalle (wifi)"
-            android:summary="Quelle intervalles (en minutes) entre mis a jour,
-            lorsque le wifi est disponible"/>
-        <EditTextPreference
-            android:defaultValue="10"
-            android:dependency="autoupdate"
-            android:key="intervallemobile"
-            android:numeric="integer"
-            android:title="Intervalle (Pas de wifi)"
-            android:summary="Quelle intervalles (en minutes) entre mis a jour,
-            lorsque le wifi n'est disponible"/>
+            android:title="Mise à jour uniquement par le Wi-Fi"
+            android:summary="Afin de réduire les frais de données de votre forfait téléphonque."/>
+
+        <ListPreference android:key="sort_contact" android:defaultValue="0"
+            android:title="Tri des contacts"
+            android:entries="@array/sortContact"
+            android:entryValues="@array/sortContactValue">
+        </ListPreference>
+
 
 
     </PreferenceCategory>

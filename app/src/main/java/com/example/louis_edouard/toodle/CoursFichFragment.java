@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class CoursFichFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
-    TextView coursPlan, prof, theoDys, tpDys;
+    TextView prof, demo, theoDys, tpDys;
+    Button btnPlanCours;
     List<CourseContent> courseContents;
     @Nullable
     @Override
@@ -34,12 +36,12 @@ public class CoursFichFragment extends Fragment implements View.OnClickListener,
         //****Pour mettre le text_fragment sur chaque fragmenet suivi de ce qu'on a fait sur MainActivity from here to "return"
         View v = inflater.inflate(R.layout.fragment_cours_fich,container,false);
 
-        coursPlan = (TextView)v.findViewById(R.id.txt_frag_cours_fich_plan);
         prof = (TextView)v.findViewById(R.id.txt_frag_cours_fich_prof);
+        demo = (TextView)v.findViewById(R.id.txt_frag_cours_fich_demo);
         theoDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_theoDys);
         tpDys = (TextView)v.findViewById(R.id.txt_frag_cours_fich_tpDys);
-
-        coursPlan.setOnClickListener(this);
+        btnPlanCours = (Button)v.findViewById(R.id.btn_plan_cours);
+        btnPlanCours.setOnClickListener(this);
 
         RunAPI run = new RunAPI();
         run.execute();
@@ -75,6 +77,7 @@ public class CoursFichFragment extends Fragment implements View.OnClickListener,
             String html = courseContents.get(0).summary;
             Document doc = Jsoup.parseBodyFragment(html);
             Element teacher  = doc.getElementsByClass("teacher").first();
+            Element demonstrator  = doc.getElementsByClass("demonstrator").first();
             Elements theories = doc.getElementsByClass("theorie");
             Elements tps = doc.getElementsByClass("horaire-tp");
             String horaireTheorie = "";
@@ -86,6 +89,7 @@ public class CoursFichFragment extends Fragment implements View.OnClickListener,
                 horaireTp += horaire.text() + "\n";
             }
             prof.setText(teacher.text());
+            demo.setText(demonstrator.text());
             theoDys.setText(horaireTheorie.substring(0, horaireTheorie.length() - 1));
             tpDys.setText(horaireTp.substring(0, horaireTp.length() - 1));
 

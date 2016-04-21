@@ -9,6 +9,7 @@ public class UserProfileSearch {
     public String email;
     public String address;
     public String phone1;
+    public String phone2;
     public String city;
     public String country;
 }

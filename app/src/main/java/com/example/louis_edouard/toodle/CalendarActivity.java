@@ -52,13 +52,15 @@ public class CalendarActivity extends AppCompatActivity
     private boolean mInActionMode;
     private View header;
     TextView drawer_txt_name;
-    TextView drawer_txt_email;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,18 +83,12 @@ public class CalendarActivity extends AppCompatActivity
         runAPI.execute();
 
         lvCalendar.setOnItemClickListener(this);
-        /*
-        lvCalendar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.e("ListView", "OnTouch");
-                return false;
-            }
-        });
+
         lvCalendar.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+//                Log.d("LISTENING", "YES");
                 CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
                 checkBox.setChecked(!checkBox.isChecked());
                 onClick(checkBox);
@@ -108,31 +104,6 @@ public class CalendarActivity extends AppCompatActivity
                 return true;
             }
         });
-
-        lvCalendar.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.e("ListView", "onScrollStateChanged");
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
-
-        lvCalendar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("ListView", "onItemSelected:" + position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.e("ListView", "onNothingSelected:");
-            }
-        });
-        */
     }
 
     @Override
@@ -383,10 +354,7 @@ public class CalendarActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, CalendarEvent.class);
-//        intent.putExtra("USER_ID_FROM", rootMessage.messages.get(position).useridfrom);
-//        intent.putExtra("USER_ID_TO", rootMessage.messages.get(position).useridto);
-        startActivity(intent);
+        Toast.makeText(getApplicationContext(), "position: " + position, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -445,10 +413,8 @@ public class CalendarActivity extends AppCompatActivity
 
         @Override
         protected Calendar doInBackground(String... params) {
-            // recuperer le token de l'utilisateur
-            SharedPreferences preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
-            WebAPI webAPI = new WebAPI(preferences.getString(Globals.KEY_USER_TOKEN, null));
+            WebAPI webAPI = new WebAPI(CalendarActivity.this, preferences.getString(Globals.KEY_USER_TOKEN, null));
             try {
                 calendar = webAPI.getEvent(preferences.getInt(Globals.KEY_USER_ID, 0));
             }

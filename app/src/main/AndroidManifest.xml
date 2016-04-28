@@ -55,8 +55,6 @@
             android:name=".ContactProfileActivity"
             android:label="@string/title_activity_contact_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CalendarDetailsActivity" >
-        </activity>
         <activity android:name=".CalendarEventActivity" >
         </activity>
     </application>

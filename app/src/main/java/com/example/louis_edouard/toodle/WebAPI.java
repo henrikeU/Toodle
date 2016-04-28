@@ -105,6 +105,16 @@ public class WebAPI {
         return calendar;
     }
 
+    public void postEvent(String name, String description, long timeStart, int timeDuration) throws IOException{
+        String apifunction = "core_calendar_create_calendar_events";
+        url = fullUrl(apifunction) + "&events[0][name]=" + name +
+                                     "&events[0][description]=" + description +
+                                     "&events[0][timestart]=" + timeStart +
+                                     "&events[0][timeduration]=" + timeDuration;
+
+        getJSON();
+    }
+
     public UserProfile getUserProfile() throws IOException {
         String apifunction = "core_webservice_get_site_info";
         url = fullUrl(apifunction);

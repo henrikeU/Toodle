@@ -144,6 +144,12 @@ public class CalendarActivity extends AppCompatActivity
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         Intent intent = new Intent(CalendarActivity.this, CalendarEventActivity.class);
+
+        Cursor c = listAdapter.getChild(groupPosition, childPosition);
+        String title = c.getString(c.getColumnIndex(DBHelper.EVENT_NAME));
+        String description = c.getString(c.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
+        intent.putExtra(CalendarEventActivity.ARG_TITLE, title);
+        intent.putExtra(CalendarEventActivity.ARG_DESCRIPTION, description);
         startActivity(intent);
         return true;
     }
@@ -225,7 +231,13 @@ public class CalendarActivity extends AppCompatActivity
         protected Cursor getChildrenCursor(Cursor groupCursor) {
             String day = groupCursor.getString(groupCursor.getColumnIndex("testing"));
             Cursor c = dbHelper.getEventsByMonth(day);
+
             return c;
+        }
+
+        @Override
+        public Cursor getChild(int groupPosition, int childPosition) {
+            return super.getChild(groupPosition, childPosition);
         }
 
         @Override

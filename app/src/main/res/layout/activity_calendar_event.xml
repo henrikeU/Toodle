@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.louis_edouard.toodle.CalendarEventActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
-</RelativeLayout>
+    <TextView android:text="GENERAL" android:paddingLeft="10dp" android:textSize="18dp" android:textColor="#1569c7"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
+    <TextView android:text="Titre" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/event_title" android:paddingLeft="10dp" android:textColor="#000"
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView android:text="Description" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
+        android:textStyle="bold"/>
+    <TextView android:id="@+id/event_description" android:paddingLeft="10dp" android:textColor="#000"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+</LinearLayout>

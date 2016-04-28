@@ -427,7 +427,6 @@ public class CoursActivity extends AppCompatActivity
 
             cb.setChecked(deleted.get(position));
             cb.setTag(new Integer(position));
-//            cb.setOnClickListener(MainActivity.this);
             cb.setOnCheckedChangeListener(CoursActivity.this);
 
 //            v.setOnLongClickListener(CoursActivity.this);

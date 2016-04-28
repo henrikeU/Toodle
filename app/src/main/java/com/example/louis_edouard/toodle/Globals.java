@@ -3,6 +3,7 @@ package com.example.louis_edouard.toodle;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.SimpleCursorAdapter;
 
@@ -19,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -33,7 +35,7 @@ public class Globals {
     public final static String KEY_USER_ID = "userID";
     public final static String KEY_LAST_CONNECTION = "lastConnection";
 
-    public final static int REFRESH_TIME = 1 * 60 * 1000; // fast refresh (30 sec)
+    public final static int REFRESH_TIME = 5 * 60 * 1000; // refresh rate(5 min)
 
     public static boolean IsConnected(Context c){
         ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -67,6 +69,7 @@ public class Globals {
         else
             sdf = new SimpleDateFormat("yyyy-MM-dd"); // the format of your date
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formatting (see comment at the bottom
+
         String formattedDate = sdf.format(date);
         return formattedDate;
     }
@@ -96,9 +99,10 @@ public class Globals {
         return formattedTime;
     }
 
-    public static void DownloadFile(String fileURL, File directory){
-        try{
-            URL url = new URL(fileURL);
+    public static void downloadFile(String fileUrl, File directory){
+        try {
+
+            URL url = new URL(fileUrl);
             HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
             urlConnection.connect();
 
@@ -108,15 +112,35 @@ public class Globals {
 
             byte[] buffer = new byte[MEGABYTE];
             int bufferLength = 0;
-            while ((bufferLength = inputStream.read(buffer)) > 0)
+            while((bufferLength = inputStream.read(buffer))>0 ){
                 fileOutputStream.write(buffer, 0, bufferLength);
-
+            }
             fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (FileNotFoundException e){}
-        catch (MalformedURLException e){}
-        catch (IOException e){}
     }
+
+    /* Checks if external storage is available for read and write */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static int dayOfWeek(Date date){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
+    }
+
 }
 
 

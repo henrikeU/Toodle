@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/position" android:text="testubg"
+                android:id="@+id/position"
                 android:textColor="#111e5a" />
 
         </LinearLayout>

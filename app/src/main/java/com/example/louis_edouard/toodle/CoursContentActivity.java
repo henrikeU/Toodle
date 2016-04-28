@@ -47,11 +47,6 @@ public class CoursContentActivity extends AppCompatActivity {
             super(fm);
         }
 
-        /**
-         * Return the Fragment associated with a specified position.
-         *
-         * @param position
-         */
         @Override
         public Fragment getItem(int position) {
             CoursFichFragment fich = new CoursFichFragment();
@@ -68,9 +63,6 @@ public class CoursContentActivity extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * Return the number of views available.
-         */
         @Override
         public int getCount() {
             return nbTab;

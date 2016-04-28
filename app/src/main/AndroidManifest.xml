@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
         <activity android:name=".DetailsActivity" />
         <activity
             android:name=".CoursContentActivity"
@@ -55,6 +55,10 @@
             android:name=".ContactProfileActivity"
             android:label="@string/title_activity_contact_profile"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CalendarDetailsActivity" >
+        </activity>
+        <activity android:name=".CalendarEventActivity" >
+        </activity>
     </application>
 
 </manifest>

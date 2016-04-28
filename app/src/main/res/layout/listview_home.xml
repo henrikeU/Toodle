@@ -5,18 +5,15 @@
     android:padding="5dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/listitem_event_time"
         android:layout_gravity="center_horizontal|right"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:textSize="14sp" android:textStyle="bold"
         android:textColor="@color/red_alert" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
         android:id="@+id/listitem_event_name"
         android:textSize="16sp"
         android:layout_marginTop="3dp"
@@ -24,10 +21,8 @@
 
     <TextView
         android:id="@+id/listitem_event_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textSize="14sp"
-        android:singleLine="true"
-        android:ellipsize="end" />
+        android:singleLine="true" android:ellipsize="end" />
 </LinearLayout>

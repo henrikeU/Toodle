@@ -1,17 +1,25 @@
 package com.example.louis_edouard.toodle;
 
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Token;
 
+import java.io.File;
 import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {

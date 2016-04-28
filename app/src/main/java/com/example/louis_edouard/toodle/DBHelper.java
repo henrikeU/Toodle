@@ -247,6 +247,26 @@ public class DBHelper extends SQLiteOpenHelper {
         return getAll(TBL_EVENT, null);
     }
 
+    public Cursor getEventsByMonth(String mDate) {
+        Cursor c;
+
+        c = db.rawQuery("SELECT _id, name, description, strftime('%H:%M', timeStart, 'unixepoch', 'localtime') eventStart, " +
+                "strftime('%H:%M', timeStart + timeDuration, 'unixepoch', 'localtime') eventEnd " + "FROM " + TBL_EVENT +
+                " WHERE date(timeStart, 'unixepoch', 'localtime') = date('" + mDate + "')", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    public Cursor getEventsByMonth() {
+        Cursor c;
+
+        c = db.rawQuery("SELECT date(timeStart, 'unixepoch', 'localtime') testing, _id FROM " + TBL_EVENT + " GROUP BY testing", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
     public Cursor getAllFutureEvents(){
         Cursor c;
         c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART +

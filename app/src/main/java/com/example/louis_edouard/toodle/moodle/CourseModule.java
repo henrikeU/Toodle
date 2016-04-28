@@ -10,5 +10,6 @@ public class CourseModule {
     public String url;
     public String name;
     public String description;
+    public String modname;
     public List<CourseModuleContent> contents;
 }

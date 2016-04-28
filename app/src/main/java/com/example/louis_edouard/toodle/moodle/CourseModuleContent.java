@@ -8,5 +8,7 @@ public class CourseModuleContent {
     public String filename;
     public String filepath;
     public String fileurl;
-
+    public int userid;
+    public int timemodified;
+    public int timecreated;
 }

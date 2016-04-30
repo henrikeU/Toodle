@@ -24,7 +24,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
+import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
+import com.example.louis_edouard.toodle.viewModel.CalendarEventVM;
 
 import java.io.IOException;
 
@@ -88,13 +90,13 @@ public class HomeActivity extends AppCompatActivity
                 if(Globals.IsConnected(HomeActivity.this))
                     new UpdateTask().execute();
 
-                handler.postDelayed(this, Globals.REFRESH_TIME);
+                handler.postDelayed(this, Globals.EVENT_REFRESH_TIME);
             }
         };
 
         if(Globals.IsConnected(this)) {
             runAPI.execute();
-            handler.postDelayed(r, Globals.REFRESH_TIME);
+            handler.postDelayed(r, Globals.EVENT_REFRESH_TIME);
         }
 
         listViewHome = (ListView)findViewById(R.id.listViewHome);
@@ -194,9 +196,13 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this,DetailsActivity.class);
-        String home = calendar.events.get(position).name;
-        intent.putExtra("home",home);
+        Intent intent = new Intent(this, CalendarEventActivity.class);
+        CalendarEventVM event = listViewAdapter.getItem(position);
+        intent.putExtra(CalendarEventActivity.ARG_NAME, event.name);
+        intent.putExtra(CalendarEventActivity.ARG_DESCRIPTION, event.description);
+        intent.putExtra(CalendarEventActivity.ARG_TIMESTART, event.timeStart);
+        intent.putExtra(CalendarEventActivity.ARG_TIMEEND, event.timeEnd);
+        intent.putExtra(CalendarEventActivity.ARG_DATE, event.date);
         startActivity(intent);
     }
 
@@ -238,6 +244,20 @@ public class HomeActivity extends AppCompatActivity
 
             return v;
         }
+
+        @Override
+        public CalendarEventVM getItem(int position) {
+            Cursor c = getCursor();
+            CalendarEventVM event = new CalendarEventVM();
+            event.id = c.getInt(c.getColumnIndex(DBHelper.KEY_ID));
+            event.name = c.getString(c.getColumnIndex(DBHelper.EVENT_NAME));
+            event.description = c.getString(c.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
+            event.unixDateTime = c.getInt(c.getColumnIndex(DBHelper.EVENT_TIMESTART));
+            event.date = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATDATE));
+            event.timeStart = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATTIMESTART));
+            event.timeEnd = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATTIMEEND));
+            return event;
+        }
     }
 
     private class UpdateTask extends AsyncTask<String, Object, Calendar> {
@@ -269,7 +289,6 @@ public class HomeActivity extends AppCompatActivity
         protected void onPostExecute(UserProfile userProfile) {
             super.onPostExecute(userProfile);
             userFullName = userProfile.fullname;
-            setTitle(userFullName);
 
             Cursor c  = dbHelper.getAllFutureEvents();
 

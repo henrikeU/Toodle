@@ -19,9 +19,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -35,7 +38,10 @@ public class Globals {
     public final static String KEY_USER_ID = "userID";
     public final static String KEY_LAST_CONNECTION = "lastConnection";
 
-    public final static int REFRESH_TIME = 5 * 60 * 1000; // refresh rate(5 min)
+    public final static int EVENT_REFRESH_TIME = 5 * 60 * 1000; // refresh time (5 min)
+    public final static int CONVERSATION_REFRESH_TIME = 5 * 1000; // refresh time (5 sec)
+
+    private static final int MEGABYTE = 1024 * 1024;
 
     public static boolean IsConnected(Context c){
         ConnectivityManager connMgr = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -46,8 +52,6 @@ public class Globals {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
-
-    private static final int MEGABYTE = 1024 * 1024;
 
     public static String HtmlToText(String html){
         Document doc = Jsoup.parseBodyFragment(html);
@@ -139,6 +143,23 @@ public class Globals {
         c.setTime(date);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         return dayOfWeek;
+    }
+
+    public static String toLongDateString(Context c, String strDate){
+        String[] tabDate  = strDate.split("-");
+        String weekDay = "";
+        String month = c.getResources().getStringArray(R.array.months)[Integer.parseInt(tabDate[1])];
+        String day = tabDate[2];
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
+        Date date;
+        try {
+            date = dateFormat.parse(strDate);
+            weekDay = c.getResources().getStringArray(R.array.weekDays)[dayOfWeek(date) - 1];
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        String formattedDate = weekDay + " " + day + " " + month.toLowerCase();
+        return formattedDate;
     }
 
 }

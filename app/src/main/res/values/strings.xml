@@ -11,9 +11,11 @@
 
     <!--Alert messages-->
     <string name="alert_title_SDcard_missing">Carte SD absente</string>
-    <string name="alert_message_SDcard_missing">Le document n\'a pu être téléchargé car aucun carte SD n\'a été trouvé sur votre téléphone</string>
+    <string name="alert_message_SDcard_missing">Le document n\'a pu être téléchargé car aucun carte SD n\'a été trouvé sur votre téléphone.</string>
     <string name="alert_title_PDFreader_missing">Lecteur PDF absent</string>
-    <string name="alert_message_PDFreader_missing">Le PDF n\'a pu être lu car aucun lecteur de PDF (app) n\'a été trouvé sur votre téléphone</string>
+    <string name="alert_message_PDFreader_missing">Le PDF n\'a pu être lu car aucun lecteur de PDF (app) n\'a été trouvé sur votre téléphone.</string>
+    <string name="alert_title_contact_invalid">Contact inconnu</string>
+    <string name="alert_message_contact_invalid">Le nom du destinataire ne figure pas dans votre liste de contacts.</string>
 
     <!-- Action text-->
     <string name="action_archive">Archiver</string>
@@ -42,7 +44,7 @@
 
     <!-- Titles -->
     <string name="title_app">Toodle</string>
-    <string name="title_activity_home">HomeDrawerActivity</string>
+    <string name="title_activity_home">Évenements à venir</string>
     <string name="title_activity_cours">Cours</string>
     <string name="title_activity_message">Messagerie</string>
     <string name="title_activity_calendar">Calendrier</string>

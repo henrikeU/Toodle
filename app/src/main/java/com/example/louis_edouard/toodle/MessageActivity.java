@@ -119,8 +119,9 @@ public class MessageActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, ConversationActivity.class);
-        intent.putExtra("USER_ID_FROM", rootMessage.messages.get(position).useridfrom);
-        intent.putExtra("USER_ID_TO", rootMessage.messages.get(position).useridto);
+        Message message =  rootMessage.messages.get(position);
+        int userIdTo = message.useridto == userId ? message.useridfrom : message.useridto;
+        intent.putExtra("USER_ID_TO", userIdTo);
         startActivity(intent);
     }
 

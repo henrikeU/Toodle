@@ -11,6 +11,7 @@ import com.example.louis_edouard.toodle.moodle.CourseContent;
 import com.example.louis_edouard.toodle.moodle.Discussion;
 import com.example.louis_edouard.toodle.moodle.DiscussionPost;
 import com.example.louis_edouard.toodle.moodle.EnrolledCourse;
+import com.example.louis_edouard.toodle.moodle.EnrolledUser;
 import com.example.louis_edouard.toodle.moodle.Forum;
 import com.example.louis_edouard.toodle.moodle.ForumDiscussion;
 import com.example.louis_edouard.toodle.moodle.RootMessage;
@@ -75,7 +76,7 @@ public class WebAPI {
     }
 
     public Token getToken(String username, String password) throws IOException{
-        url = "http://54.209.183.244/moodle/login/token.php?username="+username+"&password=" + password +"&service=moodle_mobile_app";
+        url = "http://54.209.183.244/moodle/login/token.php?username="+username+"&password=" + password +"&service=TService";
 
         String json = getJSON();
         // parse JSON content from the string
@@ -129,7 +130,7 @@ public class WebAPI {
     }
 
     public List<UserProfileSearch> getUser(List<Integer> userIds) throws IOException{
-        String apifunction = "&wsfunction=core_user_get_users_by_field";
+        String apifunction = "core_user_get_users_by_field";
         String values = "";
         for(int i = 0; i< userIds.size(); i++)
             values += "values["+i+"]=" + userIds.get(i) + "&";
@@ -141,6 +142,49 @@ public class WebAPI {
         List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
 
         return userProfileSearches;
+    }
+
+    public UserProfileSearch getUserByEmail(CharSequence email) throws IOException{
+        String apifunction = "core_user_get_users_by_field";
+        url = fullUrl(apifunction) + "&field=email&values[0]=" + email;
+
+        Moshi moshi = new Moshi.Builder().build();
+        Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
+        JsonAdapter<List<UserProfileSearch>> jsonAdapter = moshi.adapter(userProfileSearchList);
+        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
+
+        return userProfileSearches == null || userProfileSearches.size() == 0 ? null: userProfileSearches.get(0);
+    }
+
+    public UserProfileSearch getUserByUserName(CharSequence userName) throws IOException{
+        String apifunction = "core_user_get_users_by_field";
+        url = fullUrl(apifunction) + "&field=username&values[0]=" + userName;
+
+        Moshi moshi = new Moshi.Builder().build();
+        Type userProfileSearchList = Types.newParameterizedType(List.class, UserProfileSearch.class);
+        JsonAdapter<List<UserProfileSearch>> jsonAdapter = moshi.adapter(userProfileSearchList);
+        List<UserProfileSearch> userProfileSearches  = jsonAdapter.fromJson(getJSON());
+
+        return userProfileSearches == null || userProfileSearches.size() == 0 ? null: userProfileSearches.get(0);
+    }
+
+    public List<EnrolledUser> getUserByCourse(int userId) throws IOException{
+        String apifunction = "core_enrol_get_enrolled_users";
+        List<EnrolledCourse> courses = getCourse(userId);
+        List<EnrolledUser> enrolledUsers = new ArrayList<EnrolledUser>();
+        for(EnrolledCourse course : courses) {
+            url = fullUrl(apifunction) + "&courseid=" + course.id;
+            Moshi moshi = new Moshi.Builder().build();
+            Type enrolledUserList = Types.newParameterizedType(List.class, EnrolledUser.class);
+            JsonAdapter<List<EnrolledUser>> jsonAdapter = moshi.adapter(enrolledUserList);
+            List<EnrolledUser> users  = jsonAdapter.fromJson(getJSON());
+            for(EnrolledUser user:users){
+                if(!enrolledUsers.contains(user))
+                    enrolledUsers.add(user);
+            }
+        }
+
+        return enrolledUsers;
     }
 
     public RootMessage getMessages(int useridto) throws IOException {

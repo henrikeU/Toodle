@@ -146,10 +146,17 @@ public class CalendarActivity extends AppCompatActivity
         Intent intent = new Intent(CalendarActivity.this, CalendarEventActivity.class);
 
         Cursor c = listAdapter.getChild(groupPosition, childPosition);
-        String title = c.getString(c.getColumnIndex(DBHelper.EVENT_NAME));
-        String description = c.getString(c.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
-        intent.putExtra(CalendarEventActivity.ARG_TITLE, title);
-        intent.putExtra(CalendarEventActivity.ARG_DESCRIPTION, description);
+        String eventName = c.getString(c.getColumnIndex(DBHelper.EVENT_NAME));
+        String eventDescription = c.getString(c.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
+        String eventDate = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATDATE));
+        String eventTimeStart = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATTIMESTART));
+        String eventTimeEnd = c.getString(c.getColumnIndex(DBHelper.EVENT_FORMATTIMEEND));
+        intent.putExtra(CalendarEventActivity.ARG_NAME, eventName);
+        intent.putExtra(CalendarEventActivity.ARG_DESCRIPTION, eventDescription);
+        intent.putExtra(CalendarEventActivity.ARG_DATE, eventDate);
+        intent.putExtra(CalendarEventActivity.ARG_TIMESTART, eventTimeStart);
+        intent.putExtra(CalendarEventActivity.ARG_TIMEEND, eventTimeEnd);
+
         startActivity(intent);
         return true;
     }
@@ -172,8 +179,8 @@ public class CalendarActivity extends AppCompatActivity
         protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
             super.bindChildView(view, context, cursor, isLastChild);
             TextView text = (TextView)view.findViewById(R.id.txt_event_hours);
-            String eventStart = cursor.getString(cursor.getColumnIndex("eventStart"));
-            String eventEnd = cursor.getString(cursor.getColumnIndex("eventEnd"));
+            String eventStart = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_FORMATTIMESTART));
+            String eventEnd = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_FORMATTIMEEND));
             String formattedTime =  eventStart.equals(eventEnd) ? eventStart : eventStart + " - " + eventEnd;
             text.setText(formattedTime);
             TextView txtEventDescription = (TextView)view.findViewById(R.id.txt_event_description);
@@ -191,19 +198,8 @@ public class CalendarActivity extends AppCompatActivity
         protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
             super.bindGroupView(view, context, cursor, isExpanded);
             String weekDay = "";
-            String strDate = cursor.getString(cursor.getColumnIndex("testing"));
-            String[] tabDate  = strDate.split("-");
-            String month = getResources().getStringArray(R.array.months)[Integer.parseInt(tabDate[1])];
-            String day = tabDate[2];
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
-            Date date;
-            try {
-                date = dateFormat.parse(strDate);
-                weekDay = getResources().getStringArray(R.array.weekDays)[Globals.dayOfWeek(date) - 1];
-            }catch (ParseException e){
-                e.printStackTrace();
-            }
-            String formattedDate = weekDay + " " + day + " " + month.toLowerCase();
+            String strDate = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_FORMATDATE));
+            String formattedDate = Globals.toLongDateString(mContext, strDate);
             TextView textView = (TextView) view.findViewById(R.id.list_calendar_groupHeader);
             textView.setText(formattedDate);
 
@@ -229,7 +225,7 @@ public class CalendarActivity extends AppCompatActivity
 
         @Override
         protected Cursor getChildrenCursor(Cursor groupCursor) {
-            String day = groupCursor.getString(groupCursor.getColumnIndex("testing"));
+            String day = groupCursor.getString(groupCursor.getColumnIndex(DBHelper.EVENT_FORMATDATE));
             Cursor c = dbHelper.getEventsByMonth(day);
 
             return c;
@@ -252,9 +248,10 @@ public class CalendarActivity extends AppCompatActivity
         protected void onPostExecute(Calendar calendar) {
             super.onPostExecute(calendar);
             Cursor c  = dbHelper.getEventsByMonth();
-            String[] groupFrom = {DBHelper.KEY_ID, "testing" };
+            String[] groupFrom = {DBHelper.KEY_ID, DBHelper.EVENT_FORMATDATE };
             int[] groupTo = { 0, R.id.list_calendar_groupHeader };
-            String[] childFrom = {DBHelper.KEY_ID, "eventStart", DBHelper.EVENT_NAME, DBHelper.EVENT_DESCRIPTION };
+            String[] childFrom = {DBHelper.KEY_ID, DBHelper.EVENT_FORMATTIMESTART, DBHelper.EVENT_NAME,
+                    DBHelper.EVENT_DESCRIPTION };
             int[] childTo = {0, R.id.txt_event_hours, R.id.txt_event_title, R.id.txt_event_description };
 
             listAdapter = new CalendarAdapter(CalendarActivity.this, c, R.layout.list_group_calendar, groupFrom, groupTo,

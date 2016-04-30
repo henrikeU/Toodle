@@ -54,6 +54,10 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String EVENT_TYPE = "type";
     static final String EVENT_TIMESTART = "timeStart";
     static final String EVENT_TIMEDURATION = "timeDuration";
+    // dynamic fields
+    static final String EVENT_FORMATDATE = "eventDate";
+    static final String EVENT_FORMATTIMESTART = "eventTimeStart";
+    static final String EVENT_FORMATTIMEEND = "eventTimeEnd";
 
     // CONTACT Table
     static final String TBL_CONTACT = "contact";
@@ -247,12 +251,34 @@ public class DBHelper extends SQLiteOpenHelper {
         return getAll(TBL_EVENT, null);
     }
 
+    public Cursor getAllFutureEvents() {
+        Cursor c;
+
+        String[] columns = new String[]{ KEY_ID, EVENT_NAME, EVENT_DESCRIPTION, EVENT_TYPE, EVENT_TIMESTART,
+                                        "date(" + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATDATE,
+                                        "strftime('%H:%M', " + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMESTART,
+                                        "strftime('%H:%M', " + EVENT_TIMESTART + " + " + EVENT_TIMEDURATION + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMEEND};
+        String whereClause = EVENT_TIMESTART + " > strftime('%s', 'now')";
+        String[] whereArgs = new String[] { EVENT_TIMESTART };
+        String orderBy = EVENT_TIMESTART;
+        String limit = "10";
+        c = db.query(TBL_EVENT, columns, whereClause, null, null, null, orderBy, limit);
+
+        c.moveToFirst();
+
+        return c;
+    }
+
     public Cursor getEventsByMonth(String mDate) {
         Cursor c;
 
-        c = db.rawQuery("SELECT _id, name, description, strftime('%H:%M', timeStart, 'unixepoch', 'localtime') eventStart, " +
-                "strftime('%H:%M', timeStart + timeDuration, 'unixepoch', 'localtime') eventEnd " + "FROM " + TBL_EVENT +
-                " WHERE date(timeStart, 'unixepoch', 'localtime') = date('" + mDate + "')", null);
+        String[] columns = new String[]{ KEY_ID, EVENT_NAME, EVENT_DESCRIPTION, EVENT_TYPE, EVENT_TIMESTART,
+                "date(" + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATDATE,
+                "strftime('%H:%M', " + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMESTART,
+                "strftime('%H:%M', " + EVENT_TIMESTART + " + " + EVENT_TIMEDURATION + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMEEND};
+        String whereClause = "date(" + EVENT_TIMESTART + ", 'unixepoch', 'localtime') = date('" + mDate + "')";
+        String orderBy = EVENT_TIMESTART;
+        c = db.query(TBL_EVENT, columns, whereClause, null, null, null, orderBy, null);
         c.moveToFirst();
 
         return c;
@@ -261,17 +287,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getEventsByMonth() {
         Cursor c;
 
-        c = db.rawQuery("SELECT date(timeStart, 'unixepoch', 'localtime') testing, _id FROM " + TBL_EVENT + " GROUP BY testing", null);
+       // c = db.rawQuery("SELECT date(timeStart, 'unixepoch', 'localtime') testing, _id FROM " + TBL_EVENT + " GROUP BY testing", null);
+        String[] columns = new String[]{ KEY_ID, EVENT_NAME, EVENT_DESCRIPTION, EVENT_TYPE, EVENT_TIMESTART,
+                "date(" + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATDATE,
+                "strftime('%H:%M', " + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMESTART,
+                "strftime('%H:%M', " + EVENT_TIMESTART + " + " + EVENT_TIMEDURATION + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMEEND};
+        String groupBy = EVENT_FORMATDATE;
+        String orderBy = EVENT_TIMESTART;
+        c = db.query(TBL_EVENT, columns, null, null, groupBy, null, orderBy, null);
         c.moveToFirst();
 
-        return c;
-    }
-
-    public Cursor getAllFutureEvents(){
-        Cursor c;
-        c = db.rawQuery("SELECT * FROM " + TBL_EVENT + " WHERE " + EVENT_TIMESTART +
-                " > strftime('%s', 'now') ORDER BY " + EVENT_TIMESTART + " LIMIT 10", null);
-        c.moveToFirst();
         return c;
     }
 
@@ -306,6 +331,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getContact(long id) {
         String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_CELL };
         return getById(TBL_CONTACT, columns, id);
+    }
+
+    public Cursor filterContact(CharSequence str) {
+        Cursor c;
+        String[] columns = new String[]{ KEY_ID, CONTACT_FULLNAME, CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_CELL };
+        String whereClause = CONTACT_FULLNAME + " LIKE ? ";
+        String[]  whereArgs = { "%" + str + "%"};
+        c = db.query(TBL_CONTACT, columns, whereClause, whereArgs, null, null, null);
+        c.moveToFirst();
+        return c;
     }
 
     public Cursor getAllContacts(){

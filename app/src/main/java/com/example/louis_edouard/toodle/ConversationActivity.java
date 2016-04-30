@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,9 +32,10 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
     EditText editText;
     RootMessage rootMessage;
     Button btnSend;
-    int userid,  useridFrom, useridTo;
+    int userid,  useridTo;
     ConversationAdaptor conversationAdaptor;
     SharedPreferences pref;
+    boolean canGoBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +45,31 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
         userid = pref.getInt(Globals.KEY_USER_ID, 0);
 
         Intent intent = getIntent();
-        useridFrom  = intent.getIntExtra("USER_ID_FROM", 0);
         useridTo  = intent.getIntExtra("USER_ID_TO", 0);
-        Log.d("USER", useridTo + "");
+        canGoBack = intent.getBooleanExtra("BACK", true);
         listViewConversation = (ListView)findViewById(R.id.listView_Conversation);
         editText = (EditText)findViewById(R.id.editText_Message);
         btnSend = (Button)findViewById(R.id.btn_send);
 
         btnSend.setOnClickListener(this);
 
-        RunAPI runApi = new RunAPI();
-        runApi.execute();
+        RunAPI runAPI = new RunAPI();
+
+        final Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                if(Globals.IsConnected(ConversationActivity.this))
+                    new UpdateTask().execute();
+
+                handler.postDelayed(this, Globals.CONVERSATION_REFRESH_TIME);
+            }
+        };
+
+        if(Globals.IsConnected(this)) {
+            runAPI.execute();
+            handler.postDelayed(r, Globals.CONVERSATION_REFRESH_TIME);
+        }
 
     }
 
@@ -66,7 +82,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             UpdateTask updateTask = new UpdateTask();
             updateTask.execute();
         }
-        catch(IOException e){ }
+        catch(IOException e){ e.printStackTrace(); }
     }
 
     private class ConversationAdaptor extends BaseAdapter {
@@ -118,17 +134,18 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                 chatbuble.setBackgroundDrawable(getResources().getDrawable(R.drawable.chatbubble_incoming));
                 layout.setPadding(0, 0, 40, 0);
             }
-            //layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            person.setText(message.useridfrom == userId ? message.usertofullname : message.userfromfullname);
-//            description.setText(rootMessage.messages.get(position).text);
-//            time.setText(Globals.ConvertDate(message.timecreated));
-//            if(message.timeread == 0 && message.useridfrom != userId){
-//                description.setTextColor(Color.BLUE);
-//                time.setTextColor(Color.DKGRAY);
-//                time.setTypeface(null, Typeface.BOLD);
-//            }
 
             return v;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(canGoBack)
+            super.onBackPressed();
+        else {
+            Intent i= new Intent(this, MessageActivity.class);
+            startActivity(i);
         }
     }
 
@@ -146,7 +163,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             WebAPI web = new WebAPI(pref.getString(Globals.KEY_USER_TOKEN, null));
 
             try {
-                rootMessage = web.getMessages(useridFrom, useridTo);
+                rootMessage = web.getMessages(userid, useridTo);
                 Comparator<Message> comparator = new Comparator<Message>() {
                     @Override
                     public int compare(Message lhs, Message rhs) {
@@ -168,7 +185,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
             WebAPI web = new WebAPI(pref.getString(Globals.KEY_USER_TOKEN, null));
 
             try {
-                rootMessage = web.getMessages(useridFrom, useridTo);
+                rootMessage = web.getMessages(userid, useridTo);
                 Comparator<Message> comparator = new Comparator<Message>() {
                     @Override
                     public int compare(Message lhs, Message rhs) {

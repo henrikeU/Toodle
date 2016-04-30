@@ -8,17 +8,47 @@
     android:orientation="vertical"
     tools:context="com.example.louis_edouard.toodle.CalendarEventActivity">
 
-    <TextView android:text="GENERAL" android:paddingLeft="10dp" android:textSize="18dp" android:textColor="#1569c7"
+    <TextView android:text="DESCRIPTION" android:paddingLeft="10dp" android:textSize="18dp" android:textColor="#1569c7"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
     <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
-    <TextView android:text="Titre" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/event_title" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="Description" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/event_description" android:paddingLeft="10dp" android:textColor="#000"
+
+    <TextView android:text="Nom" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/event_title"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textSize="17dp" android:textColor="#000"/>
+
+    <TextView android:text="Détails" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/event_description"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="DATE ET LIEU" android:textSize="18dp" android:textColor="#1569c7"
+        android:paddingLeft="10dp" android:layout_marginTop="10dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
+
+    <TextView android:text="Date" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp" />
+    <TextView android:id="@+id/event_date"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Heure" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp" />
+    <TextView android:id="@+id/event_time"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Lieu" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp" />
+    <TextView android:id="@+id/event_location"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
 </LinearLayout>

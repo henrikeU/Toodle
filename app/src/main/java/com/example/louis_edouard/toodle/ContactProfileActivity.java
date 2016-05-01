@@ -35,7 +35,7 @@ public class ContactProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_contact_profile));
+
 
         Intent intent = getIntent();
         int currentPosition = intent.getIntExtra(ARG_POSITION, 0);

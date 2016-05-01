@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class SendMessageActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String ARG_NAME = "name";
     AutoCompleteTextView destinataire;
     EditText message;
     Button btnSend;
@@ -44,12 +45,16 @@ public class SendMessageActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
 
+        Intent intent = getIntent();
+        String mName = intent.getStringExtra(ARG_NAME);
+
         userIdTo = 0;
         userFullNameTo = "";
         destinataire = (AutoCompleteTextView)findViewById(R.id.sendMessage_recipient);
         message = (EditText)findViewById(R.id.sendMessage_message);
         btnSend = (Button)findViewById(R.id.sendMessage_btnSend);
 
+        destinataire.setText(mName);
         preferences = getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         webAPI = new WebAPI(this, preferences.getString(Globals.KEY_USER_TOKEN, null));
         dbHelper = new DBHelper(this);

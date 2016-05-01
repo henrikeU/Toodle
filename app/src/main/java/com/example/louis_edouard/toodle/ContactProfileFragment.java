@@ -1,28 +1,32 @@
 package com.example.louis_edouard.toodle;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class ContactProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class ContactProfileFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_NAME = "name";
     private static final String ARG_EMAIL = "email";
     private static final String ARG_PHONE = "phone";
     private static final String ARG_CELL = "cell";
     private static final String ARG_ADDRESS = "address";
     private static final String ARG_CITY = "city";
-    private static final String ARG_POSITION = "position";
 
     // TODO: Rename and change types of parameters
-    private int mParam1;
     private String mName, mEmail, mPhone, mCell, mAddress, mCity;
+    private TextView name, email, phone, cell, address, city;
+    private Button btnSend;
 
     // TODO: Rename and change types and number of parameters
     public static ContactProfileFragment newInstance(String name, String email, String phone, String cell, String address, String city) {
@@ -46,7 +50,6 @@ public class ContactProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_POSITION);
             mName = getArguments().getString(ARG_NAME);
             mEmail = getArguments().getString(ARG_EMAIL);
             mPhone = getArguments().getString(ARG_PHONE);
@@ -59,20 +62,77 @@ public class ContactProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_contact_profile, container, false);
-        TextView name = (TextView)v.findViewById(R.id.profile_name);
-        TextView email = (TextView)v.findViewById(R.id.profile_email);
-        TextView phone = (TextView)v.findViewById(R.id.profile_phone);
-        TextView cell = (TextView)v.findViewById(R.id.profile_cell);
-        TextView address = (TextView)v.findViewById(R.id.profile_address);
-        TextView city = (TextView)v.findViewById(R.id.profile_city);
+
+        name = (TextView)v.findViewById(R.id.profile_name);
+        email = (TextView)v.findViewById(R.id.profile_email);
+        phone = (TextView)v.findViewById(R.id.profile_phone);
+        cell = (TextView)v.findViewById(R.id.profile_cell);
+        address = (TextView)v.findViewById(R.id.profile_address);
+        city = (TextView)v.findViewById(R.id.profile_city);
+        btnSend = (Button)v.findViewById(R.id.contactProfile_btnSend);
+
         name.setText(mName);
-        email.setText(mEmail);
-        phone.setText(mPhone);
-        cell.setText(mCell);
-        address.setText(mAddress);
-        city.setText(mCity);
+        email.setText(mEmail == null ? "N/A" : mEmail);
+        phone.setText(mPhone == null ? "N/A" : mPhone);
+        cell.setText(mCell == null ? "N/A" : mCell);
+        address.setText(mAddress == null ? "N/A" : mAddress);
+        city.setText(mCity == null ? "N/A" : mCity);
+        phone.setOnClickListener(this);
+        cell.setOnClickListener(this);
+        email.setOnClickListener(this);
+        btnSend.setOnClickListener(this);
+
         return v;
+
     }
 
 
+    @Override
+    public void onClick(View v) {
+        if(v == email && mEmail != null){
+            if(Globals.isMailClientPresent(getActivity())) {
+                try {
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.setType("message/rfc822");
+                    sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(Intent.createChooser(sendIntent, null));
+                } catch (ActivityNotFoundException activityException) {
+                    Log.e("Sending an email", "Mail failed", activityException);
+                }
+            } else {
+                AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+                dialog.setTitle(getResources().getString(R.string.alert_title_mailApp_missing));
+                dialog.setMessage(getResources().getString(R.string.alert_message_mailApp_missing));
+                dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        }
+        if(v == cell && mCell != null){
+            callContact(mCell);
+        }
+        if(v == phone && mPhone != null){
+           callContact(mPhone);
+        }
+        if(v == btnSend) {
+            Intent intent = new Intent(getActivity(), SendMessageActivity.class);
+            intent.putExtra(SendMessageActivity.ARG_NAME, mName);
+            startActivity(intent);
+        }
+    }
+
+    public void callContact(String number){
+        try {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:"+ number));
+            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(callIntent);
+        } catch (ActivityNotFoundException activityException) {
+            Log.e("Calling a Phone Number", "Call failed", activityException);
+        }
+    }
 }

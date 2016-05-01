@@ -16,6 +16,10 @@
     <string name="alert_message_PDFreader_missing">Le PDF n\'a pu être lu car aucun lecteur de PDF (app) n\'a été trouvé sur votre téléphone.</string>
     <string name="alert_title_contact_invalid">Contact inconnu</string>
     <string name="alert_message_contact_invalid">Le nom du destinataire ne figure pas dans votre liste de contacts.</string>
+    <string name="alert_title_mailApp_missing">Application mail absent</string>
+    <string name="alert_message_mailApp_missing">Aucune application courriel n\'a été trouvé sur votre téléphone. Veuillez utiliser la messagerie Toodle pour envoyer votre message.</string>
+    <string name="alert_title_connectivity_missing">Connexion non disponible</string>
+    <string name="alert_message_connectivity_missing">Aucune connexion n\'est accessible pour le moment. Assurez-vous d\'être connecté à un réseau Wi-Fi avant de réessayer.</string>
 
     <!-- Action text-->
     <string name="action_archive">Archiver</string>

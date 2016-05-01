@@ -1,6 +1,8 @@
 package com.example.louis_edouard.toodle;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -72,8 +74,22 @@ public class MessageActivity extends AppCompatActivity
         lvMessage = (ListView)findViewById(R.id.lvMessage);
         lvMessage.setOnItemClickListener(this);
 
-        RunAPI runAPI = new RunAPI();
-        runAPI.execute();
+        if(Globals.IsConnected(this)) {
+            RunAPI runAPI = new RunAPI();
+            runAPI.execute();
+        }
+        else {
+            AlertDialog dialog = new AlertDialog.Builder(this).create();
+            dialog.setTitle(getResources().getString(R.string.alert_title_connectivity_missing));
+            dialog.setMessage(getResources().getString(R.string.alert_message_connectivity_missing));
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 
     @Override

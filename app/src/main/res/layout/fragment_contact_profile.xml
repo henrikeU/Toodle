@@ -9,40 +9,55 @@
     <TextView android:text="PERSONNEL" android:paddingLeft="10dp" android:textSize="18dp" android:textColor="#1569c7"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
     <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
-    <TextView android:text="Nom complet" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_name" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="Adresse courriel" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_email" android:paddingLeft="10dp" android:textColor="#000"
+
+    <TextView android:text="Nom complet" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
-    <TextView android:text="Telephone" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-    android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-    android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_phone" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="Cellulaire" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_cell" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_name"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Adresse courriel" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_email"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Telephone" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_phone"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Cellulaire" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_cell"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
     <TextView android:text="ADRESSE" android:paddingLeft="10dp" android:layout_marginTop="10dp" android:textSize="18dp" android:textColor="#1569c7"
         android:layout_width="wrap_content" android:layout_height="wrap_content" />
     <ImageView android:src="@drawable/profile_section" android:layout_width="match_parent" android:layout_height="5dp"/>
-    <TextView android:text="Numéro civique, rue" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_address" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:text="Ville" android:paddingLeft="5dp" android:textSize="16dp" android:textColor="#625D5D"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="2dp"
-        android:textStyle="bold"/>
-    <TextView android:id="@+id/profile_city" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
-    <TextView android:id="@+id/profile_country" android:paddingLeft="10dp" android:textColor="#000"
-        android:layout_width="match_parent" android:layout_height="wrap_content" />
 
+    <TextView android:text="Numéro civique, rue" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_address"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <TextView android:text="Ville" android:textSize="16dp" android:textColor="#625D5D" android:textStyle="bold"
+        android:layout_marginTop="5dp" android:layout_marginBottom="1dp" android:paddingLeft="5dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <TextView android:id="@+id/profile_city"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:paddingLeft="10dp" android:textColor="#000" android:textSize="17dp" />
+
+    <Button android:id="@+id/contactProfile_btnSend"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Envoyer un message" android:textColor="#fff"
+        android:background="@drawable/button_rounded_corners" />
 </LinearLayout>

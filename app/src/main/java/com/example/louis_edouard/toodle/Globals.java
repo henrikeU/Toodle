@@ -1,6 +1,9 @@
 package com.example.louis_edouard.toodle;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -24,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -162,6 +166,17 @@ public class Globals {
         return formattedDate;
     }
 
+    public static boolean isMailClientPresent(Context c){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        final PackageManager packageManager = c.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
+
+        if(list.size() == 0)
+            return false;
+        else
+            return true;
+    }
 }
 
 

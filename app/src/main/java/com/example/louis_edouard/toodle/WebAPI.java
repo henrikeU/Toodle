@@ -44,13 +44,11 @@ public class WebAPI {
     public WebAPI(){}
 
     public  WebAPI(String token){
-        //url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=aa0c0e61965d7e3dc54c6fc8906fe442&wsfunction=core_course_get_courses&moodlewsrestformat=json";
         this.token = token;
         url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
     }
 
     public  WebAPI(Context context, String token){
-        //url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=aa0c0e61965d7e3dc54c6fc8906fe442&wsfunction=core_course_get_courses&moodlewsrestformat=json";
         this.token = token;
         url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
         dbHelper = new DBHelper(context);
@@ -79,7 +77,6 @@ public class WebAPI {
         url = "http://54.209.183.244/moodle/login/token.php?username="+username+"&password=" + password +"&service=TService";
 
         String json = getJSON();
-        // parse JSON content from the string
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Token> jsonAdapter = moshi.adapter(Token.class);
         Token token = jsonAdapter.fromJson(json);

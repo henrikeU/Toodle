@@ -1,14 +1,9 @@
 package com.example.louis_edouard.toodle;
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +14,6 @@ import android.widget.Toast;
 
 import com.example.louis_edouard.toodle.moodle.Token;
 
-import java.io.File;
 import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,6 +30,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // get last credentials used to login
         preferences = getApplicationContext().getSharedPreferences(Globals.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
         old_username = preferences.getString(Globals.KEY_USER_USERNAME, null);
         old_password = preferences.getString(Globals.KEY_USER_PASSWORD, null);
@@ -47,7 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         txtUserName.setText(old_username);
         txtPassword.setText(old_password);
-
         btnLogin.setOnClickListener(this);
     }
 
@@ -56,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         username = txtUserName.getText().toString();
         password = txtPassword.getText().toString();
 
+        // check if phone is connected to the internet
         if(Globals.IsConnected(this)) {
             RunAPI runAPI = new RunAPI();
             runAPI.execute();
@@ -70,10 +66,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public class RunAPI extends AsyncTask<String, Object, Token>{
+    public class RunAPI extends AsyncTask<String, Object, Token> {
         @Override
         protected void onPostExecute(Token token) {
             super.onPostExecute(token);
+
             if (token == null) {
                 txtErrorMsg.setVisibility(View.VISIBLE);
                 txtErrorMsg.setText(getResources().getText(R.string.error_api));
@@ -85,7 +82,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             else {
                 txtErrorMsg.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                // saving user's data to shared preferences file
+
+                // save user's credentials in preferences
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(Globals.KEY_USER_TOKEN, token.token);
                 editor.putString(Globals.KEY_USER_USERNAME, username);
@@ -101,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             WebAPI webAPI = new WebAPI();
 
             try { token = webAPI.getToken(username, password); }
-            catch(IOException e){ }
+            catch(IOException e){ e.printStackTrace(); }
 
             return token;
         }

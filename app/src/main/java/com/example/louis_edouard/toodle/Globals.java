@@ -82,7 +82,7 @@ public class Globals {
         return formattedDate;
     }
 
-    public static String EventConvertDate(long unixSeconds){
+    public static String timeRemaining(long unixSeconds){
 
         long now = System.currentTimeMillis();
         long diff = unixSeconds * 1000L - now;

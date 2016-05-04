@@ -9,11 +9,18 @@
     tools:context="com.example.louis_edouard.toodle.HomeActivity"
     tools:showIn="@layout/app_bar_home_drawer">
 
-    <ListView android:id="@+id/listViewHome"
+    <LinearLayout android:layout_weight=".4" android:orientation="vertical" android:layout_marginBottom="5dp"
         android:layout_width="match_parent" android:layout_height="match_parent"
-        android:longClickable="false"
-        android:background="@drawable/listview_border"
-        android:layout_weight=".4" />
+        android:background="@drawable/listview_border">
+
+        <ListView android:id="@+id/listViewHome"
+            android:layout_width="match_parent" android:layout_height="match_parent" android:longClickable="false" />
+
+        <TextView android:id="@+id/listEmpty_text"
+            android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"
+            android:text="Aucun évènement à venir" android:textSize="20dp"  android:textColor="#000"
+            android:gravity="center" />
+    </LinearLayout>
 
     <LinearLayout android:id="@+id/linearLayout"
         android:orientation="horizontal"

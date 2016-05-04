@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.louis_edouard.toodle.moodle.Calendar;
-import com.example.louis_edouard.toodle.moodle.CalendarEvent;
 import com.example.louis_edouard.toodle.moodle.UserProfile;
 import com.example.louis_edouard.toodle.viewModel.CalendarEventVM;
 
@@ -34,18 +34,22 @@ import android.os.Handler;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, AdapterView.OnItemClickListener{
+        View.OnClickListener, AdapterView.OnItemClickListener {
+    // widgets
     ListView listViewHome;
-    Button btnCoursHome,btnMessHome,btnCalendHome,btnTousHome;
-    TextView drawer_txt_name, drawer_txt_email;
+    Button btnCoursHome, btnMessHome, btnCalendHome, btnTousHome;
+    TextView drawer_txt_name, drawer_txt_email, empty;
     View header;
+    // variables
     private SharedPreferences preferences;
-    private ListViewAdapter listViewAdapter;
+    private EventAdapter adapterEvent;
     private UserProfile userProfile;
     private Calendar calendar;
     public static String userFullName, userName;
     DBHelper dbHelper;
     String token;
+    final Handler handler = new Handler();
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +87,7 @@ public class HomeActivity extends AppCompatActivity
         prefEditor.apply();
 
         RunAPI runAPI = new RunAPI();
-        final Handler handler = new Handler();
-        final Runnable r = new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
                 if(Globals.IsConnected(HomeActivity.this))
@@ -96,10 +99,11 @@ public class HomeActivity extends AppCompatActivity
 
         if(Globals.IsConnected(this)) {
             runAPI.execute();
-            handler.postDelayed(r, Globals.EVENT_REFRESH_TIME);
+            handler.postDelayed(runnable, Globals.EVENT_REFRESH_TIME);
         }
 
         listViewHome = (ListView)findViewById(R.id.listViewHome);
+        empty = (TextView) findViewById(R.id.listEmpty_text);
         btnCoursHome = (Button)findViewById(R.id.btnCoursHome);
         btnMessHome = (Button)findViewById(R.id.btnMessHome);
         btnCalendHome = (Button)findViewById(R.id.btnCalendHome);
@@ -109,6 +113,12 @@ public class HomeActivity extends AppCompatActivity
         btnCalendHome.setOnClickListener(this);
         btnTousHome.setOnClickListener(this);
         listViewHome.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
     }
 
     @Override
@@ -132,7 +142,6 @@ public class HomeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.preference) {
             Intent intent = new Intent(this,Preference.class);
             startActivity(intent);
@@ -197,21 +206,23 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, CalendarEventActivity.class);
-        CalendarEventVM event = listViewAdapter.getItem(position);
+
+        CalendarEventVM event = adapterEvent.getItem(position);
         intent.putExtra(CalendarEventActivity.ARG_NAME, event.name);
         intent.putExtra(CalendarEventActivity.ARG_DESCRIPTION, event.description);
         intent.putExtra(CalendarEventActivity.ARG_TIMESTART, event.timeStart);
         intent.putExtra(CalendarEventActivity.ARG_TIMEEND, event.timeEnd);
         intent.putExtra(CalendarEventActivity.ARG_DATE, event.date);
+
         startActivity(intent);
     }
 
-    private class ListViewAdapter extends SimpleCursorAdapter {
+    private class EventAdapter extends SimpleCursorAdapter {
         LayoutInflater layoutInflater;
         Context context;
         private int layout;
 
-        protected ListViewAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+        protected EventAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
             super(context, layout, c, from, to, flags);
             this.context = context;
             this.layout = layout;
@@ -223,13 +234,14 @@ public class HomeActivity extends AppCompatActivity
             super.bindView(view, context, cursor);
 
             long unixSeconds = cursor.getInt(cursor.getColumnIndex(DBHelper.EVENT_TIMESTART));
-            String strEventTime = Globals.EventConvertDate(unixSeconds);
+            String strEventTime = Globals.timeRemaining(unixSeconds);
             TextView eventTime = (TextView) view.findViewById(R.id.listitem_event_time);
             eventTime.setText(strEventTime);
 
             String html = cursor.getString(cursor.getColumnIndex(DBHelper.EVENT_DESCRIPTION));
             String streventDescription  = Globals.HtmlToText(html);
             TextView eventDescription = (TextView) view.findViewById(R.id.listitem_event_description);
+
             if(streventDescription.length() > 0)
                 eventDescription.setText(streventDescription);
             else
@@ -266,8 +278,8 @@ public class HomeActivity extends AppCompatActivity
         protected void onPostExecute(Calendar calendar) {
             super.onPostExecute(calendar);
             Cursor c  = dbHelper.getAllFutureEvents();
-            listViewAdapter.changeCursor(c);
-            listViewAdapter.notifyDataSetChanged();
+            adapterEvent.changeCursor(c);
+            adapterEvent.notifyDataSetChanged();
         }
 
         @Override
@@ -293,9 +305,10 @@ public class HomeActivity extends AppCompatActivity
             Cursor c  = dbHelper.getAllFutureEvents();
 
             String[] from = {DBHelper.KEY_ID, DBHelper.EVENT_NAME, DBHelper.EVENT_DESCRIPTION, DBHelper.EVENT_TIMESTART};
-            int[] to = {0, R.id.listitem_event_name, R.id.listitem_event_description, R.id.listitem_event_time };
-            listViewAdapter = new ListViewAdapter(HomeActivity.this, R.layout.listview_home, c, from, to, 0);
-            listViewHome.setAdapter(listViewAdapter);
+            int[] to = {0, R.id.listitem_event_name, R.id.listitem_event_description, R.id.listitem_event_time};
+            adapterEvent = new EventAdapter(HomeActivity.this, R.layout.listview_home, c, from, to, 0);
+            listViewHome.setEmptyView(empty);
+            listViewHome.setAdapter(adapterEvent);
 
             drawer_txt_name.setText(userFullName);
             drawer_txt_email.setText(userName);

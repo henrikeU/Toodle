@@ -246,10 +246,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return nb;
     }
 
-    public Cursor getAllEvents(){
-
-        return getAll(TBL_EVENT, null);
-    }
+    public Cursor getAllEvents(){ return getAll(TBL_EVENT, null);  }
 
     public Cursor getAllFutureEvents() {
         Cursor c;
@@ -287,7 +284,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getEventsByMonth() {
         Cursor c;
 
-       // c = db.rawQuery("SELECT date(timeStart, 'unixepoch', 'localtime') testing, _id FROM " + TBL_EVENT + " GROUP BY testing", null);
         String[] columns = new String[]{ KEY_ID, EVENT_NAME, EVENT_DESCRIPTION, EVENT_TYPE, EVENT_TIMESTART,
                 "date(" + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATDATE,
                 "strftime('%H:%M', " + EVENT_TIMESTART + ", 'unixepoch', 'localtime') AS " + EVENT_FORMATTIMESTART,
@@ -301,7 +297,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * TABLE Event Methods
+     * TABLE Contact Methods
      * addContacts: add a list of contact to the table
      * getAllContacts: return all contact
      */

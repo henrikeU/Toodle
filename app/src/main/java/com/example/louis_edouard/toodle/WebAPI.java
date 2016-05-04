@@ -36,7 +36,7 @@ import okhttp3.Response;
  */
 public class WebAPI {
     public String url;
-    public final String baseUrl = "http://54.209.183.244/moodle/webservice/rest/server.php?";
+    public final String baseUrl = "http://54.243.8.145/moodle/webservice/rest/server.php?";
     private String token;
     public int id;
     DBHelper dbHelper = null;
@@ -45,12 +45,12 @@ public class WebAPI {
 
     public  WebAPI(String token){
         this.token = token;
-        url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
+        url = "http://54.243.8.145/moodle/webservice/rest/server.php?wstoken=" + token;
     }
 
     public  WebAPI(Context context, String token){
         this.token = token;
-        url = "http://54.209.183.244/moodle/webservice/rest/server.php?wstoken=" + token;
+        url = "http://54.243.8.145/moodle/webservice/rest/server.php?wstoken=" + token;
         dbHelper = new DBHelper(context);
     }
 
@@ -74,7 +74,7 @@ public class WebAPI {
     }
 
     public Token getToken(String username, String password) throws IOException{
-        url = "http://54.209.183.244/moodle/login/token.php?username="+username+"&password=" + password +"&service=TService";
+        url = "http://54.243.8.145/moodle/login/token.php?username="+username+"&password=" + password +"&service=TService";
 
         String json = getJSON();
         Moshi moshi = new Moshi.Builder().build();
